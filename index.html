@@ -686,20 +686,32 @@
             messagingSenderId: "754696890996",
             appId: "1:754696890996:web:f10a719c0b647fce66ff21"
         };
-        firebase.initializeApp(firebaseConfig);
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const db = firebase.firestore();
+        db.settings({ experimentalAutoDetectLongPolling: true });
         const usersCol = db.collection('arahkarier_users');
 
         const STUDENT_REQUIRED_PASS = 'ARAH KARIER';
         const ADMIN_USERNAME = 'Cera';
         const ADMIN_PASSWORD = '123456';
-        const WA_GURU_BK_NUMBER = '6285809012879'; // Ganti nomor WA Guru BK
+        const WA_GURU_BK_NUMBER = '6285809012879';
         const MAX_USERS = 100;
         const SESSION_STU_KEY = 'ak_cloud_session_stu';
         const SESSION_ADM_KEY = 'ak_cloud_session_adm';
 
         let currentStudentEmail = null, currentStudentData = null, kenaliSyncedForEmail = null;
         let cachedAdminUsers = [], currentInspectEmail = null, unsubStudent = null, unsubAdmin = null;
+
+        function formatFirebaseError(err) {
+            const code = err?.code || '';
+            if (code === 'permission-denied') return 'Akses Firestore ditolak (permission-denied). Buka Firebase Console → Firestore Database → tab Rules, ubah ke "allow read, write: if true;" lalu klik Publish.';
+            if (code === 'not-found' || code === 'failed-precondition') return 'Firestore Database belum dibuat di proyek arah-karier. Buat Firestore Database (Start in test mode) di Firebase Console.';
+            if (code === 'unavailable') return 'Tidak dapat menjangkau server Firebase. Periksa koneksi internet atau matikan VPN/AdBlock.';
+            return `Gagal terhubung ke Firebase (${code || err?.message || 'error tidak diketahui'}).`;
+        }
 
         const pesanPiko = [
             "Bingung pilih jurusan itu wajar banget! Pelan-pelan kita urai bareng ya!",
@@ -746,7 +758,7 @@
         function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
         function createEmptyRecord(email) { return { email: email.trim().toLowerCase(), allowed: true, joinedAt: new Date().toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}), kenaliDiri: null, comparisons: [], plans: [], consultations: [] }; }
         function normalizeRecord(email, d = {}) { return { email: email || d.email || '', allowed: d.allowed !== false, joinedAt: d.joinedAt || '-', kenaliDiri: d.kenaliDiri || null, comparisons: Array.isArray(d.comparisons)?d.comparisons:[], plans: Array.isArray(d.plans)?d.plans:[], consultations: Array.isArray(d.consultations)?d.consultations:[] }; }
-        function showToast(msg) { const el = document.getElementById('toastEl'); el.innerText = msg; el.classList.add('show'); clearTimeout(window._t); window._t = setTimeout(()=>el.classList.remove('show'), 3200); }
+        function showToast(msg) { const el = document.getElementById('toastEl'); el.innerText = msg; el.classList.add('show'); clearTimeout(window._t); window._t = setTimeout(()=>el.classList.remove('show'), 4200); }
 
         function resetAllStudentForms() {
             kenaliSyncedForEmail = null;
@@ -764,15 +776,23 @@
         }
 
         async function saveCurrentStudentToCloud() {
-            if (!currentStudentEmail || !currentStudentData) return;
+            if (!currentStudentEmail || !currentStudentData) return false;
             try {
-                await usersCol.doc(currentStudentEmail).update({
+                await usersCol.doc(currentStudentEmail).set({
+                    email: currentStudentEmail,
+                    allowed: currentStudentData.allowed !== false,
+                    joinedAt: currentStudentData.joinedAt || '-',
                     kenaliDiri: currentStudentData.kenaliDiri,
                     comparisons: currentStudentData.comparisons,
                     plans: currentStudentData.plans,
                     consultations: currentStudentData.consultations
-                });
-            } catch (e) { showToast('Gagal menyinkronkan ke Firebase.'); }
+                }, { merge: true });
+                return true;
+            } catch (err) {
+                console.error('Firebase save error:', err);
+                showToast(formatFirebaseError(err));
+                return false;
+            }
         }
 
         function switchAuthTab(m) {
@@ -800,8 +820,9 @@
                     if (snap.data().allowed === false) { showAuthAlert('studentAlert', 'Akses akun ini sedang dinonaktifkan oleh Admin BK.', 'error'); return; }
                     record = normalizeRecord(email, snap.data());
                 } else {
-                    const activeSnap = await usersCol.where('allowed', '==', true).get();
-                    if (activeSnap.size >= MAX_USERS) { showAuthAlert('studentAlert', `Kuota penuh (${MAX_USERS} siswa). Hubungi Admin BK.`, 'error'); return; }
+                    const allSnap = await usersCol.get();
+                    const activeCount = allSnap.docs.filter(d => d.data().allowed !== false).length;
+                    if (activeCount >= MAX_USERS) { showAuthAlert('studentAlert', `Kuota penuh (${MAX_USERS} siswa). Hubungi Admin BK.`, 'error'); return; }
                     record = createEmptyRecord(email);
                     await usersCol.doc(email).set(record);
                 }
@@ -809,7 +830,8 @@
                 document.getElementById('formStudentLogin').reset();
                 launchStudentApp(email, record);
             } catch (err) {
-                showAuthAlert('studentAlert', 'Gagal terhubung ke Firebase. Pastikan Firestore aktif & internet tersambung.', 'error');
+                console.error('Firebase login error:', err);
+                showAuthAlert('studentAlert', formatFirebaseError(err), 'error');
             } finally { btn.disabled = false; btn.innerText = 'Mulai Rencanakan Masa Depanmu'; }
         }
 
@@ -840,6 +862,9 @@
                 if (!doc.exists || doc.data().allowed === false) { forceLogoutByAdmin(); return; }
                 currentStudentData = normalizeRecord(email, doc.data());
                 renderStudentAll();
+            }, err => {
+                console.error('Student snapshot error:', err);
+                showToast(formatFirebaseError(err));
             });
         }
 
@@ -874,6 +899,11 @@
                 cachedAdminUsers = snap.docs.map(doc => normalizeRecord(doc.id, doc.data()));
                 renderAdminDashboard();
                 if (currentInspectEmail) renderInspectModal();
+            }, err => {
+                console.error('Admin snapshot error:', err);
+                const msg = formatFirebaseError(err);
+                showToast(msg);
+                document.getElementById('admMonitorList').innerHTML = `<div class="alert-box error" style="display:block;">${esc(msg)}</div>`;
             });
         }
 
@@ -907,7 +937,8 @@
                   kekuatan = document.getElementById('kdKekuatan').value.trim(), kembang = document.getElementById('kdKembang').value.trim();
             if (!minat && !aktivitas && !kekuatan && !kembang) { showToast('Isi minimal satu pertanyaan refleksi dulu ya!'); return; }
             currentStudentData.kenaliDiri = { minat: minat||'-', aktivitas: aktivitas||'-', kekuatan: kekuatan||'-', kembang: kembang||'-', updatedAt: new Date().toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}) };
-            renderStudentAll(); await saveCurrentStudentToCloud(); showToast('Refleksi Kenali Diri tersimpan!');
+            renderStudentAll();
+            if (await saveCurrentStudentToCloud()) showToast('Refleksi Kenali Diri tersimpan ke Firebase!');
         }
 
         function filterExplore(cat, btn) { document.querySelectorAll('#exploreFilters .pill-btn').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); renderExplore(cat); }
@@ -932,7 +963,8 @@
                 biaya: document.getElementById('cmpBiaya').value.trim()||'-', tenggat: document.getElementById('cmpTenggat').value.trim()||'-',
                 info: document.getElementById('cmpInfo').value.trim()||'-'
             });
-            e.target.reset(); renderStudentAll(); await saveCurrentStudentToCloud(); showToast('Pilihan ditambahkan ke perbandingan!');
+            e.target.reset(); renderStudentAll();
+            if (await saveCurrentStudentToCloud()) showToast('Pilihan ditambahkan ke perbandingan!');
         }
         async function deleteComparison(id) { currentStudentData.comparisons = currentStudentData.comparisons.filter(c=>c.id!==id); renderStudentAll(); await saveCurrentStudentToCloud(); }
 
@@ -943,7 +975,8 @@
                 tenggat: document.getElementById('plnTenggat').value, dukungan: document.getElementById('plnDukungan').value.trim()||'Mandiri',
                 alternatif: document.getElementById('plnAlternatif').value.trim()||'Belum dicatat', done: false
             });
-            e.target.reset(); renderStudentAll(); await saveCurrentStudentToCloud(); showToast('Rencana langkah tersimpan!');
+            e.target.reset(); renderStudentAll();
+            if (await saveCurrentStudentToCloud()) showToast('Rencana langkah tersimpan!');
         }
         async function togglePlanStatus(id) { const p = currentStudentData.plans.find(x=>x.id===id); if(p) p.done=!p.done; renderStudentAll(); await saveCurrentStudentToCloud(); }
         async function deletePlan(id) { currentStudentData.plans = currentStudentData.plans.filter(x=>x.id!==id); renderStudentAll(); await saveCurrentStudentToCloud(); }
@@ -975,14 +1008,23 @@
                 metode: document.getElementById('cnsMetode').value, waktu: document.getElementById('cnsWaktu').value.trim(),
                 catatan: document.getElementById('cnsCatatan').value.trim(), consent: true, status: 'Menunggu'
             });
-            e.target.reset(); renderStudentAll(); await saveCurrentStudentToCloud(); showToast('Permintaan konsultasi terkirim ke Guru BK!');
+            e.target.reset(); renderStudentAll();
+            if (await saveCurrentStudentToCloud()) showToast('Permintaan konsultasi terkirim ke Guru BK!');
         }
 
         function renderStudentAll() {
             const u = currentStudentData; if (!u) return;
             const steps = (u.kenaliDiri?1:0) + (u.comparisons.length?1:0) + (u.plans.length?1:0) + (u.consultations.length?1:0);
+            const hints = [
+                'Langkah pertama: Coba isi refleksi ringan di menu Kenali Diri yuk!',
+                'Bagus! Lanjutkan dengan membandingkan 2–3 jalur di Bandingkan Pilihan.',
+                'Hebat! Sekarang ubah pilihanmu jadi aksi nyata di Rencana Langkah.',
+                'Hampir lengkap! Kamu bisa diskusikan rencanamu lewat Konsultasi BK.',
+                'Luar biasa! Semua tahap eksplorasi sudah kamu jalani.'
+            ];
             document.getElementById('progBarFill').style.width = `${steps*25}%`;
             document.getElementById('progPercentText').innerText = `${steps*25}% Selesai`;
+            document.getElementById('progHintText').innerText = hints[steps];
             document.getElementById('sumRefleksi').innerText = u.kenaliDiri ? 'Sudah' : 'Belum';
             document.getElementById('sumBanding').innerText = u.comparisons.length;
             document.getElementById('sumRencana').innerText = u.plans.length;
@@ -1022,19 +1064,32 @@
         // ADMIN
         async function adminAddStudent(e) {
             e.preventDefault();
+            const btn = document.getElementById('btnAdmAdd');
             const email = document.getElementById('admNewEmail').value.trim().toLowerCase();
-            const existing = await usersCol.doc(email).get();
-            if (existing.exists) { showToast('Email sudah terdaftar.'); return; }
-            if (cachedAdminUsers.filter(u=>u.allowed!==false).length >= MAX_USERS) { showToast('Kuota penuh.'); return; }
-            await usersCol.doc(email).set(createEmptyRecord(email));
-            e.target.reset(); showToast(`Akses ${email} ditambahkan.`);
+            btn.disabled = true; btn.innerText = 'Menyimpan...';
+            try {
+                const existing = await usersCol.doc(email).get();
+                if (existing.exists) { showToast('Email sudah terdaftar.'); return; }
+                if (cachedAdminUsers.filter(u=>u.allowed!==false).length >= MAX_USERS) { showToast('Kuota penuh.'); return; }
+                await usersCol.doc(email).set(createEmptyRecord(email));
+                e.target.reset(); showToast(`Akses ${email} ditambahkan.`);
+            } catch (err) {
+                console.error(err); showToast(formatFirebaseError(err));
+            } finally { btn.disabled = false; btn.innerText = 'Tambahkan Akses'; }
         }
-        async function adminToggleAccess(email, allow) { await usersCol.doc(email).update({ allowed: allow }); showToast(allow?'Akses diaktifkan.':'Akses dinonaktifkan.'); }
-        async function adminDeleteStudent(email) { if(!confirm(`Hapus permanen akun ${email}?`)) return; if(currentInspectEmail===email) closeModal('inspectModal'); await usersCol.doc(email).delete(); showToast('Akun dihapus.'); }
+        async function adminToggleAccess(email, allow) {
+            try { await usersCol.doc(email).update({ allowed: allow }); showToast(allow?'Akses diaktifkan.':'Akses dinonaktifkan.'); }
+            catch (err) { showToast(formatFirebaseError(err)); }
+        }
+        async function adminDeleteStudent(email) {
+            if(!confirm(`Hapus permanen akun ${email}?`)) return;
+            try { if(currentInspectEmail===email) closeModal('inspectModal'); await usersCol.doc(email).delete(); showToast('Akun dihapus.'); }
+            catch (err) { showToast(formatFirebaseError(err)); }
+        }
         async function adminUpdateConsultStatus(email, id, status) {
             const u = cachedAdminUsers.find(x=>x.email===email); if(!u) return;
-            await usersCol.doc(email).update({ consultations: u.consultations.map(c=>c.id===id?{...c,status}:c) });
-            showToast(`Status diubah ke ${status}.`);
+            try { await usersCol.doc(email).update({ consultations: u.consultations.map(c=>c.id===id?{...c,status}:c) }); showToast(`Status diubah ke ${status}.`); }
+            catch (err) { showToast(formatFirebaseError(err)); }
         }
 
         function openInspectModal(email) { currentInspectEmail = email; switchInspectTab('kenali'); renderInspectModal(); document.getElementById('inspectModal').classList.add('open'); }
@@ -1065,7 +1120,7 @@
             document.getElementById('admQuotaLabel').innerText = `${active.length}/${MAX_USERS}`;
 
             const qMon = (document.getElementById('admSearchMonitor')?.value||'').toLowerCase();
-            document.getElementById('admMonitorList').innerHTML = users.filter(u=>!qMon||u.email.includes(qMon)).map((u,i)=>`
+            document.getElementById('admMonitorList').innerHTML = users.filter(u=>!qMon||u.email.toLowerCase().includes(qMon)).map((u,i)=>`
                 <div class="row-card ${u.allowed===false?'blocked':''}">
                     <div><strong>${i+1}. ${esc(u.email)}</strong> <span class="tag ${u.allowed!==false?'tag-green':'tag-red'}">${u.allowed!==false?'Aktif':'Dinonaktifkan'}</span> <span class="tag tag-navy">Kenali Diri: ${u.kenaliDiri?'Sudah':'Belum'}</span><p style="font-size:12px;color:var(--text-sub);margin-top:3px;">Bandingkan: ${u.comparisons.length} • Rencana: ${u.plans.length} • Konsultasi: ${u.consultations.length}</p></div>
                     <button class="btn btn-navy btn-sm" onclick="openInspectModal('${esc(u.email)}')">Cek Progres</button>
@@ -1078,7 +1133,7 @@
                 </div>`).join('') || `<p style="text-align:center;padding:20px;color:var(--text-muted);">Belum ada konsultasi masuk.</p>`;
 
             const qAcc = (document.getElementById('admSearchAccess')?.value||'').toLowerCase();
-            document.getElementById('admAccessList').innerHTML = users.filter(u=>!qAcc||u.email.includes(qAcc)).map(u=>`
+            document.getElementById('admAccessList').innerHTML = users.filter(u=>!qAcc||u.email.toLowerCase().includes(qAcc)).map(u=>`
                 <div class="row-card ${u.allowed===false?'blocked':''}">
                     <div><strong>${esc(u.email)}</strong> <span class="tag ${u.allowed!==false?'tag-green':'tag-red'}">${u.allowed!==false?'Aktif':'Dinonaktifkan'}</span><p style="font-size:12px;color:var(--text-sub);">Terdaftar: ${esc(u.joinedAt)}</p></div>
                     <div style="display:flex;gap:7px;flex-wrap:wrap;"><button class="btn btn-pastel btn-sm" onclick="openInspectModal('${esc(u.email)}')">Cek Progres</button>${u.allowed!==false?`<button class="btn btn-danger-soft btn-sm" onclick="adminToggleAccess('${esc(u.email)}',false)">Nonaktifkan</button>`:`<button class="btn btn-success-soft btn-sm" onclick="adminToggleAccess('${esc(u.email)}',true)">Aktifkan</button>`}<button class="btn btn-outline btn-sm" onclick="adminDeleteStudent('${esc(u.email)}')">Hapus</button></div>
@@ -1092,7 +1147,7 @@
                 try {
                     const snap = await usersCol.doc(saved).get();
                     if (snap.exists && snap.data().allowed!==false) { launchStudentApp(saved, snap.data()); return; }
-                } catch(e){}
+                } catch(e){ console.error(e); }
                 localStorage.removeItem(SESSION_STU_KEY);
             }
             switchAuthTab('student');
