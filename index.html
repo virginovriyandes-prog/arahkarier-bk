@@ -1,0 +1,2462 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arah Karier — Media Bimbingan Karier Kelas XII SMA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* === TEMA PLAYFUL MODERN: NAVY BLUE, BIRU PASTEL & WARM AMBER === */
+        :root {
+            --navy-950: #0F2544;
+            --navy-900: #183B6B;
+            --navy-800: #25528F;
+            --navy-700: #396EB5;
+            --pastel-50: #F2F8FF;
+            --pastel-100: #E2F0FE;
+            --pastel-200: #C6E2FC;
+            --pastel-300: #9ACBF9;
+            --gold-400: #FFC55A;
+            --gold-500: #F4A938;
+            --gold-600: #D88B1C;
+            --gold-100: #FFF5E0;
+            --blush: #FF8FA3;
+            --wa-green: #22C55E;
+            --wa-dark: #15803D;
+            --surface: #FFFFFF;
+            --text-main: #162B47;
+            --text-sub: #546B87;
+            --text-muted: #7F95B0;
+            --border: #D8E8F8;
+            --success: #16A34A;
+            --success-bg: #E8F9EE;
+            --danger: #E11D48;
+            --danger-bg: #FFF0F3;
+            --radius-xl: 28px;
+            --radius-lg: 22px;
+            --radius-md: 16px;
+            --shadow-soft: 0 10px 28px rgba(24, 59, 107, 0.08);
+            --shadow-hover: 0 16px 36px rgba(24, 59, 107, 0.14);
+            --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        }
+
+        h1, h2, h3, h4, .brand-name {
+            font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: -0.015em;
+        }
+
+        body {
+            background-color: var(--pastel-50);
+            background-image:
+                radial-gradient(circle at 8% 12%, rgba(154, 203, 249, 0.38) 0%, transparent 32%),
+                radial-gradient(circle at 92% 18%, rgba(255, 197, 90, 0.22) 0%, transparent 28%),
+                radial-gradient(circle at 85% 88%, rgba(198, 226, 252, 0.45) 0%, transparent 35%);
+            color: var(--text-main);
+            min-height: 100vh;
+            line-height: 1.55;
+        }
+
+        button, input, select, textarea { font-family: inherit; }
+
+        /* === ANIMASI KARAKTER & INTERAKSI === */
+        @keyframes floatY {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-9px); }
+        }
+        @keyframes floatCloud {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(6px, -6px); }
+        }
+        @keyframes wiggleChar {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-8deg) scale(1.08); }
+            55% { transform: rotate(8deg) scale(1.08); }
+            80% { transform: rotate(-4deg) scale(1.03); }
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: translateY(12px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .float-piko { animation: floatY 3.4s ease-in-out infinite; }
+        .float-lumi { animation: floatCloud 4.2s ease-in-out infinite; }
+        .wiggle-now { animation: wiggleChar 0.55s var(--bounce) !important; }
+
+        .ico {
+            width: 17px; height: 17px; stroke: currentColor; fill: none;
+            stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0;
+        }
+
+        /* === HALAMAN LOGIN (PLAYFUL SPLIT CARD) === */
+        #auth-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+        }
+
+        .auth-shell {
+            width: 100%;
+            max-width: 940px;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 32px;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 24px 60px rgba(24, 59, 107, 0.15);
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            overflow: hidden;
+            animation: popIn 0.45s var(--bounce);
+        }
+
+        .auth-visual {
+            background: linear-gradient(155deg, #183B6B 0%, #245291 58%, #3B76C4 100%);
+            padding: 40px 32px;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-visual::before, .auth-visual::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .auth-visual::before {
+            width: 220px; height: 220px;
+            background: rgba(154, 203, 249, 0.16);
+            top: -70px; left: -60px;
+        }
+        .auth-visual::after {
+            width: 190px; height: 190px;
+            background: rgba(255, 197, 90, 0.18);
+            bottom: -60px; right: -50px;
+        }
+
+        .auth-chip {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            padding: 6px 15px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            z-index: 2;
+        }
+
+        .character-stage {
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 14px;
+            z-index: 2;
+        }
+
+        .speech-pill {
+            background: #FFFFFF;
+            color: var(--navy-950);
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 12.5px;
+            font-weight: 700;
+            box-shadow: 0 10px 24px rgba(15, 37, 68, 0.22);
+            margin-bottom: 16px;
+            max-width: 300px;
+            z-index: 2;
+        }
+
+        .auth-visual h1 { font-size: 30px; margin-bottom: 8px; z-index: 2; }
+        .auth-visual p { font-size: 13.5px; color: var(--pastel-100); max-width: 310px; z-index: 2; }
+
+        .auth-form-pane {
+            padding: 38px 36px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #FFFFFF;
+        }
+
+        .role-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            background: var(--pastel-100);
+            padding: 5px;
+            border-radius: 16px;
+            margin-bottom: 22px;
+        }
+
+        .role-tab {
+            border: none;
+            background: transparent;
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 13.5px;
+            font-weight: 800;
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: all 0.25s var(--bounce);
+        }
+
+        .role-tab.active {
+            background: var(--navy-900);
+            color: #FFFFFF;
+            box-shadow: 0 6px 16px rgba(24, 59, 107, 0.22);
+        }
+
+        .auth-panel { display: none; }
+        .auth-panel.active { display: block; animation: popIn 0.3s ease; }
+
+        .alert-box {
+            display: none;
+            padding: 11px 14px;
+            border-radius: 14px;
+            font-size: 12.5px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+        .alert-box.error { display: block; background: var(--danger-bg); color: var(--danger); border: 1.5px solid #FECDD3; }
+        .alert-box.success { display: block; background: var(--success-bg); color: var(--success); border: 1.5px solid #BBF7D0; }
+
+        .field { margin-bottom: 14px; }
+        .field label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 800;
+            color: var(--navy-900);
+            margin-bottom: 5px;
+        }
+        .input-wrap { position: relative; display: flex; align-items: center; }
+
+        .field input, .field select, .field textarea {
+            width: 100%;
+            padding: 11px 15px;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            background: var(--pastel-50);
+            color: var(--text-main);
+            font-size: 13.5px;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .field input:focus, .field select:focus, .field textarea:focus {
+            border-color: var(--navy-700);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 4px rgba(57, 110, 181, 0.14);
+        }
+        .field textarea { resize: vertical; min-height: 86px; }
+
+        .pwd-toggle {
+            position: absolute; right: 12px; background: none; border: none;
+            color: var(--text-muted); cursor: pointer; padding: 4px; display: flex;
+        }
+        .pwd-toggle:hover { color: var(--navy-900); }
+
+        .info-tip {
+            background: var(--pastel-100);
+            border: 1.5px dashed var(--pastel-300);
+            color: var(--navy-900);
+            padding: 10px 13px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        /* === TOMBOL TAKTIL === */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 15px;
+            font-size: 13.5px;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s var(--bounce), box-shadow 0.2s ease;
+            text-decoration: none;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:active { transform: translateY(1px); }
+
+        .btn-navy {
+            background: linear-gradient(135deg, #245291, var(--navy-900));
+            color: #FFFFFF;
+            border-bottom: 4px solid var(--navy-950);
+            box-shadow: 0 8px 18px rgba(24, 59, 107, 0.22);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+            color: var(--navy-950);
+            border-bottom: 4px solid var(--gold-600);
+            box-shadow: 0 8px 18px rgba(244, 169, 56, 0.28);
+        }
+
+        .btn-wa {
+            background: linear-gradient(135deg, #2EE573, var(--wa-green));
+            color: #FFFFFF;
+            border-bottom: 4px solid var(--wa-dark);
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.28);
+        }
+
+        .btn-pastel {
+            background: var(--pastel-100);
+            color: var(--navy-900);
+            border: 2px solid var(--pastel-200);
+        }
+        .btn-pastel:hover { background: var(--pastel-200); }
+
+        .btn-outline {
+            background: #FFFFFF;
+            color: var(--navy-900);
+            border: 2px solid var(--border);
+        }
+        .btn-outline:hover { border-color: var(--navy-700); background: var(--pastel-50); }
+
+        .btn-danger-soft { background: var(--danger-bg); color: var(--danger); border: 1.5px solid #FECDD3; }
+        .btn-success-soft { background: var(--success-bg); color: var(--success); border: 1.5px solid #BBF7D0; }
+
+        .btn-sm { padding: 8px 14px; font-size: 12.5px; border-radius: 12px; border-bottom-width: 3px; }
+        .btn-block { width: 100%; }
+
+        /* === LAYOUT APP (SIDEBAR TERTATA RAPI TANPA SCROLLBAR) === */
+        .app-shell { display: none; min-height: 100vh; width: 100%; }
+        .app-shell.active { display: flex; }
+
+        .sidebar {
+            width: 258px;
+            background: linear-gradient(180deg, #183B6B 0%, #112C52 100%);
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            padding: 16px 13px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            flex-shrink: 0;
+            box-shadow: 6px 0 30px rgba(15, 37, 68, 0.12);
+            overflow: hidden;
+        }
+
+        .side-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 2px 8px 12px;
+            border-bottom: 1px solid rgba(198, 226, 252, 0.16);
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .side-logo {
+            width: 38px; height: 38px; border-radius: 12px;
+            background: var(--pastel-100);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+
+        .nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+            overflow: visible;
+        }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 8.5px 13px; border-radius: 12px;
+            color: var(--pastel-100); font-size: 13px; font-weight: 700;
+            cursor: pointer; border: none; background: transparent;
+            text-align: left; width: 100%;
+            transition: all 0.2s var(--bounce);
+        }
+        .nav-item:hover { background: rgba(255, 255, 255, 0.11); transform: translateX(3px); color: #FFFFFF; }
+        .nav-item.active {
+            background: #FFFFFF;
+            color: var(--navy-900);
+            box-shadow: 0 6px 14px rgba(10, 25, 47, 0.22);
+        }
+
+        /* Kartu Mini Maskot Lumi Ringkas di Sidebar */
+        .side-mascot-card {
+            margin: 8px 2px;
+            padding: 9px 11px;
+            border-radius: 14px;
+            background: rgba(226, 240, 254, 0.12);
+            border: 1.5px dashed rgba(198, 226, 252, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+        .side-mascot-card:hover { background: rgba(226, 240, 254, 0.2); }
+        .side-mascot-card p { font-size: 11px; color: var(--pastel-100); line-height: 1.32; font-weight: 600; }
+
+        .sidebar-footer {
+            padding-top: 10px;
+            border-top: 1px solid rgba(198, 226, 252, 0.16);
+            flex-shrink: 0;
+        }
+        .user-pill-side {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 7px 11px;
+            margin-bottom: 6px;
+        }
+        .user-pill-side small { font-size: 10px; color: var(--pastel-300); display: block; }
+        .user-pill-side strong { font-size: 11.5px; word-break: break-all; }
+
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            background: var(--navy-900);
+            color: #FFFFFF;
+            padding: 13px 18px;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky; top: 0; z-index: 120;
+        }
+        .mobile-menu-btn {
+            background: rgba(255, 255, 255, 0.16);
+            border: 1.5px solid rgba(255, 255, 255, 0.28);
+            color: #FFFFFF; padding: 7px 13px; border-radius: 12px;
+            font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+        }
+        .drawer-backdrop {
+            display: none; position: fixed; inset: 0;
+            background: rgba(15, 37, 68, 0.55); backdrop-filter: blur(3px); z-index: 140;
+        }
+        .drawer-backdrop.open { display: block; }
+
+        /* Main Area */
+        .main-area {
+            flex: 1;
+            padding: 28px 34px 96px;
+            max-width: 1180px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .page-view, .admin-view { display: none; }
+        .page-view.active, .admin-view.active { display: block; animation: popIn 0.3s ease; }
+
+        .page-head {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .page-badge {
+            display: inline-block;
+            background: var(--pastel-100);
+            color: var(--navy-800);
+            padding: 5px 12px;
+            border-radius: 99px;
+            font-size: 11.5px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        .page-title { font-size: 27px; color: var(--navy-950); }
+        .page-subtitle { font-size: 13.5px; color: var(--text-sub); margin-top: 2px; }
+
+        /* === HERO BERANDA BERKARAKTER === */
+        .hero-banner {
+            background: linear-gradient(130deg, #183B6B 0%, #275AA0 58%, #4F8ED6 100%);
+            border-radius: var(--radius-xl);
+            padding: 30px 34px;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 22px;
+            box-shadow: 0 18px 40px rgba(24, 59, 107, 0.22);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 22px;
+        }
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            width: 240px; height: 240px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            right: -50px; bottom: -90px;
+            pointer-events: none;
+        }
+        .hero-banner h2 { font-size: 30px; line-height: 1.22; margin-bottom: 8px; }
+        .hero-banner p { font-size: 14px; color: var(--pastel-100); max-width: 470px; margin-bottom: 18px; }
+
+        .hero-mascot-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+        .piko-bubble {
+            background: #FFFFFF;
+            color: var(--navy-950);
+            padding: 12px 16px;
+            border-radius: 20px;
+            border-bottom-right-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 800;
+            max-width: 200px;
+            box-shadow: 0 10px 26px rgba(15, 37, 68, 0.22);
+            line-height: 1.4;
+            transition: transform 0.2s var(--bounce);
+        }
+        .hero-mascot-wrap:hover .piko-bubble { transform: scale(1.04); }
+
+        /* Progress Bar Eksplorasi */
+        .progress-card {
+            background: #FFFFFF;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 18px 22px;
+            margin-bottom: 22px;
+            box-shadow: var(--shadow-soft);
+        }
+        .prog-track {
+            width: 100%; height: 13px; background: var(--pastel-100);
+            border-radius: 99px; overflow: hidden; margin: 10px 0 8px;
+        }
+        .prog-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--navy-700), var(--gold-400));
+            border-radius: 99px; transition: width 0.5s var(--bounce);
+        }
+
+        /* Cheer Banner */
+        .cheer-banner {
+            background: linear-gradient(120deg, var(--pastel-100) 0%, #EEF6FF 100%);
+            border: 2px solid var(--pastel-200);
+            border-radius: 20px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .cheer-banner strong { color: var(--navy-900); font-size: 13.5px; display: block; margin-bottom: 2px; }
+        .cheer-banner p { font-size: 12.5px; color: var(--text-sub); font-weight: 600; }
+
+        /* === CARDS & GRIDS === */
+        .card {
+            background: #FFFFFF;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 20px;
+        }
+        .card-pastel {
+            background: linear-gradient(145deg, var(--pastel-100), #F5FAFF);
+            border-color: var(--pastel-200);
+        }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+        .quick-card {
+            background: #FFFFFF;
+            border: 2px solid var(--border);
+            border-radius: 22px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.25s var(--bounce);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .quick-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--navy-700);
+            box-shadow: var(--shadow-hover);
+        }
+        .quick-icon {
+            width: 48px; height: 48px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; flex-shrink: 0;
+        }
+
+        .stat-tile {
+            background: #FFFFFF;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 18px;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+        }
+        .stat-tile .val { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; color: var(--navy-900); }
+        .stat-tile .lbl { font-size: 12px; font-weight: 700; color: var(--text-sub); margin-top: 2px; }
+
+        .pill-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+        .pill-btn {
+            padding: 9px 16px; border-radius: 99px;
+            border: 2px solid var(--border); background: #FFFFFF;
+            color: var(--text-sub); font-size: 12.5px; font-weight: 800;
+            cursor: pointer; transition: all 0.2s var(--bounce);
+        }
+        .pill-btn:hover { border-color: var(--navy-700); color: var(--navy-900); transform: translateY(-2px); }
+        .pill-btn.active { background: var(--navy-900); color: #FFFFFF; border-color: var(--navy-900); }
+
+        .pathway-card {
+            background: #FFFFFF;
+            border: 2px solid var(--border);
+            border-radius: 22px;
+            padding: 22px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.25s var(--bounce);
+        }
+        .pathway-card:hover { transform: translateY(-4px); border-color: var(--pastel-300); box-shadow: var(--shadow-hover); }
+
+        .tag { display: inline-block; font-size: 11px; font-weight: 800; padding: 4px 11px; border-radius: 99px; }
+        .tag-navy { background: var(--pastel-100); color: var(--navy-900); }
+        .tag-gold { background: var(--gold-100); color: #9A5E08; }
+        .tag-green { background: var(--success-bg); color: var(--success); }
+        .tag-red { background: var(--danger-bg); color: var(--danger); }
+
+        .official-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 16px; }
+        .official-link {
+            font-size: 12px; font-weight: 700; color: var(--navy-800);
+            background: var(--pastel-50); border: 1.5px solid var(--pastel-200);
+            padding: 6px 11px; border-radius: 10px; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 5px; transition: 0.2s;
+        }
+        .official-link:hover { background: var(--pastel-200); }
+
+        .table-wrap { overflow-x: auto; border: 2px solid var(--border); border-radius: 18px; }
+        table.compare-table { width: 100%; border-collapse: collapse; min-width: 720px; font-size: 13px; }
+        table.compare-table th {
+            background: var(--navy-900); color: #FFFFFF; text-align: left;
+            padding: 13px 15px; font-weight: 700; font-size: 12.5px;
+        }
+        table.compare-table td { padding: 13px 15px; border-bottom: 1.5px solid var(--pastel-100); vertical-align: top; }
+        table.compare-table tr:last-child td { border-bottom: none; }
+        table.compare-table tr:hover td { background: var(--pastel-50); }
+
+        .row-card {
+            background: var(--pastel-50);
+            border: 2px solid var(--border);
+            border-left: 6px solid var(--navy-800);
+            border-radius: 18px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; flex-wrap: wrap;
+        }
+        .row-card.done { border-left-color: var(--success); background: #F2FBF5; }
+        .row-card.blocked { border-left-color: var(--danger); background: #FFF5F7; }
+
+        .wa-hero-card {
+            background: linear-gradient(135deg, #ECFDF3 0%, #FFFFFF 65%, #E2F0FE 100%);
+            border: 2px solid #A7F3D0;
+            border-radius: 24px;
+            padding: 24px 26px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+            box-shadow: 0 12px 28px rgba(34, 197, 94, 0.1);
+        }
+
+        .floating-wa-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 300;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #2EE573, #16A34A);
+            color: #FFFFFF;
+            padding: 12px 18px;
+            border-radius: 99px;
+            font-size: 13.5px;
+            font-weight: 800;
+            text-decoration: none;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 12px 28px rgba(22, 163, 74, 0.35);
+            transition: transform 0.25s var(--bounce), box-shadow 0.25s ease;
+        }
+        .floating-wa-btn.visible { display: inline-flex; }
+        .floating-wa-btn:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 16px 34px rgba(22, 163, 74, 0.45); }
+
+        .consent-box {
+            background: var(--pastel-100);
+            border: 2px solid var(--pastel-200);
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin: 14px 0 18px;
+            display: flex; align-items: flex-start; gap: 11px;
+            font-size: 12.5px; color: var(--navy-950); font-weight: 600;
+        }
+        .consent-box input[type="checkbox"] {
+            width: 19px; height: 19px; margin-top: 2px;
+            accent-color: var(--navy-900); cursor: pointer; flex-shrink: 0;
+        }
+
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(15, 37, 68, 0.58); backdrop-filter: blur(4px);
+            z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-card {
+            background: #FFFFFF; width: 100%; max-width: 820px; max-height: 88vh;
+            border-radius: 26px; overflow: hidden; display: flex; flex-direction: column;
+            box-shadow: 0 24px 60px rgba(15, 37, 68, 0.3); border: 3px solid var(--pastel-200);
+            animation: popIn 0.25s var(--bounce);
+        }
+        .modal-head {
+            background: linear-gradient(135deg, #183B6B, #2B62A8);
+            color: #FFFFFF; padding: 20px 24px;
+            display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+        }
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2); border: none; color: #FFFFFF;
+            width: 36px; height: 36px; border-radius: 50%; font-size: 18px; font-weight: 800; cursor: pointer; flex-shrink: 0;
+        }
+        .modal-body { padding: 22px 24px; overflow-y: auto; background: var(--pastel-50); flex: 1; }
+        .modal-pane { display: none; }
+        .modal-pane.active { display: block; }
+
+        .toast {
+            position: fixed; top: 22px; right: 22px;
+            background: var(--navy-950); color: #FFFFFF;
+            padding: 13px 18px; border-radius: 16px; font-size: 13px; font-weight: 700;
+            box-shadow: 0 12px 30px rgba(15, 37, 68, 0.25);
+            transform: translateX(160%); transition: transform 0.35s var(--bounce);
+            z-index: 950; max-width: 90vw;
+        }
+        .toast.show { transform: translateX(0); }
+
+        @media (max-width: 920px) {
+            .auth-shell { grid-template-columns: 1fr; max-width: 460px; }
+            .auth-visual { padding: 28px 22px; }
+            .auth-form-pane { padding: 28px 22px; }
+            .app-shell.active { flex-direction: column; }
+            .mobile-header { display: flex; }
+            .sidebar {
+                position: fixed; top: 0; left: -280px; z-index: 150;
+                transition: left 0.28s ease;
+            }
+            .sidebar.open { left: 0; }
+            .main-area { padding: 18px 15px 96px; }
+            .hero-banner { flex-direction: column; text-align: center; padding: 24px 20px; }
+            .hero-mascot-wrap { flex-direction: column-reverse; }
+            .piko-bubble { border-bottom-right-radius: 20px; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .floating-wa-btn { bottom: 16px; right: 16px; padding: 11px 15px; font-size: 12.5px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================================= -->
+    <!-- 1. HALAMAN LOGIN BERKARAKTER (PIKO & LUMI)                -->
+    <!-- ========================================================= -->
+    <div id="auth-screen">
+        <div class="auth-shell">
+            <div class="auth-visual">
+                <div class="auth-chip">Media Bimbingan Karier Kelas XII SMA</div>
+
+                <div class="speech-pill" id="loginBubble">
+                    "Hai! Aku Piko & Lumi. Gak harus langsung yakin hari ini, yuk eksplor bareng pelan-pelan!"
+                </div>
+
+                <div class="character-stage">
+                    <svg width="78" height="68" viewBox="0 0 110 90" class="float-lumi" style="margin-bottom:26px;" aria-label="Lumi si Awan">
+                        <path d="M26 70 H82 C94 70 100 60 96 50 C93 42 84 38 76 40 C73 24 54 18 42 28 C33 25 22 32 21 43 C11 46 10 62 20 68 C22 69 24 70 26 70 Z" fill="#E2F0FE"/>
+                        <circle cx="45" cy="50" r="3.8" fill="#183B6B"/>
+                        <circle cx="66" cy="50" r="3.8" fill="#183B6B"/>
+                        <circle cx="46.2" cy="48.8" r="1.3" fill="#FFFFFF"/>
+                        <circle cx="67.2" cy="48.8" r="1.3" fill="#FFFFFF"/>
+                        <ellipse cx="37" cy="55" rx="4.5" ry="2.8" fill="#FF8FA3" opacity="0.7"/>
+                        <ellipse cx="74" cy="55" rx="4.5" ry="2.8" fill="#FF8FA3" opacity="0.7"/>
+                        <path d="M51 55 Q55.5 60 60 55" fill="none" stroke="#183B6B" stroke-width="2.4" stroke-linecap="round"/>
+                    </svg>
+
+                    <svg width="142" height="156" viewBox="0 0 160 175" class="float-piko" aria-label="Piko si Penguin">
+                        <ellipse cx="60" cy="158" rx="16" ry="9" fill="#F4A938"/>
+                        <ellipse cx="100" cy="158" rx="16" ry="9" fill="#F4A938"/>
+                        <ellipse cx="28" cy="108" rx="14" ry="28" transform="rotate(22 28 108)" fill="#0F2544"/>
+                        <ellipse cx="132" cy="102" rx="14" ry="28" transform="rotate(-32 132 102)" fill="#0F2544"/>
+                        <ellipse cx="80" cy="104" rx="50" ry="56" fill="#183B6B"/>
+                        <ellipse cx="80" cy="112" rx="35" ry="42" fill="#FFFFFF"/>
+                        <circle cx="63" cy="68" r="19" fill="#FFFFFF"/>
+                        <circle cx="97" cy="68" r="19" fill="#FFFFFF"/>
+                        <circle cx="64" cy="68" r="6" fill="#0F2544"/>
+                        <circle cx="96" cy="68" r="6" fill="#0F2544"/>
+                        <circle cx="66" cy="65.5" r="2.2" fill="#FFFFFF"/>
+                        <circle cx="98" cy="65.5" r="2.2" fill="#FFFFFF"/>
+                        <ellipse cx="48" cy="77" rx="6.5" ry="4" fill="#FF8FA3" opacity="0.75"/>
+                        <ellipse cx="112" cy="77" rx="6.5" ry="4" fill="#FF8FA3" opacity="0.75"/>
+                        <path d="M72 74 Q80 85 88 74 Q80 70 72 74 Z" fill="#FFC55A"/>
+                        <rect x="44" y="88" width="72" height="13" rx="6.5" fill="#FFC55A"/>
+                        <path d="M94 98 L108 120 L95 123 L84 100 Z" fill="#F4A938"/>
+                        <path d="M44 48 C46 22, 114 22, 116 48 Z" fill="#9ACBF9"/>
+                        <rect x="40" y="44" width="80" height="10" rx="5" fill="#E2F0FE"/>
+                        <circle cx="80" cy="21" r="8" fill="#FFC55A"/>
+                        <circle cx="80" cy="126" r="12" fill="#E2F0FE" stroke="#183B6B" stroke-width="2.5"/>
+                        <polygon points="80,118 83,126 80,134 77,126" fill="#F4A938"/>
+                    </svg>
+                </div>
+
+                <h1>Arah Karier</h1>
+                <p>Teman eksplorasi jurusan, vokasi, dunia kerja, dan wirausaha khusus siswa kelas XII SMA/MA.</p>
+            </div>
+
+            <div class="auth-form-pane">
+                <div class="role-tabs">
+                    <button type="button" class="role-tab active" id="tabBtnStudent" onclick="switchAuthTab('student')">Akses Siswa</button>
+                    <button type="button" class="role-tab" id="tabBtnAdmin" onclick="switchAuthTab('admin')">Admin BK</button>
+                </div>
+
+                <!-- Form Login Siswa -->
+                <div class="auth-panel active" id="panelStudent">
+                    <h2 style="font-size:24px; color:var(--navy-950); margin-bottom:4px;">Yuk, Mulai Eksplorasi!</h2>
+                    <p style="font-size:13px; color:var(--text-sub); margin-bottom:18px;">Masuk dengan email aktifmu dan kata sandi resmi kelas XII.</p>
+                    <div id="studentAlert" class="alert-box"></div>
+
+                    <form id="formStudentLogin" onsubmit="handleStudentLogin(event)">
+                        <div class="field">
+                            <label for="stuEmail">Username (Email Siswa)</label>
+                            <input type="email" id="stuEmail" placeholder="nama.siswa@email.com" required autocomplete="username">
+                        </div>
+                        <div class="field">
+                            <label for="stuPass">Kata Sandi Akses</label>
+                            <div class="input-wrap">
+                                <input type="password" id="stuPass" placeholder="Masukkan kata sandi" required autocomplete="current-password">
+                                <button type="button" class="pwd-toggle" onclick="togglePwd('stuPass')" aria-label="Tampilkan sandi">
+                                    <svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="info-tip">
+                            Gunakan <strong>email pribadimu</strong> dan kata sandi akses yang sudah dibagikan oleh Guru BK.
+                        </div>
+                        <button type="submit" class="btn btn-gold btn-block">Mulai Rencanakan Masa Depanmu</button>
+                    </form>
+                </div>
+
+                <!-- Form Login Admin (Cera) -->
+                <div class="auth-panel" id="panelAdmin">
+                    <h2 style="font-size:24px; color:var(--navy-950); margin-bottom:4px;">Portal Admin & Guru BK</h2>
+                    <p style="font-size:13px; color:var(--text-sub); margin-bottom:18px;">Pantau progres tiap siswa, kelola akses, dan cek konsultasi masuk.</p>
+                    <div id="adminAlert" class="alert-box"></div>
+
+                    <form id="formAdminLogin" onsubmit="handleAdminLogin(event)">
+                        <div class="field">
+                            <label for="admUser">Username Admin</label>
+                            <input type="text" id="admUser" placeholder="Masukkan username admin" required>
+                        </div>
+                        <div class="field">
+                            <label for="admPass">Kata Sandi Admin</label>
+                            <div class="input-wrap">
+                                <input type="password" id="admPass" placeholder="••••••••" required>
+                                <button type="button" class="pwd-toggle" onclick="togglePwd('admPass')" aria-label="Tampilkan sandi">
+                                    <svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-navy btn-block">Masuk Dashboard Admin</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- 2. APLIKASI SISWA (7 FITUR + KARAKTER + CHAT WA GURU BK)  -->
+    <!-- ========================================================= -->
+    <div id="student-app" class="app-shell">
+        <div class="drawer-backdrop" id="studentBackdrop" onclick="toggleMobileNav('studentSidebar','studentBackdrop')"></div>
+
+        <header class="mobile-header">
+            <div style="display:flex; align-items:center; gap:9px; font-family:'Outfit',sans-serif; font-weight:800; font-size:18px;">
+                <span style="background:#E2F0FE; width:30px; height:30px; border-radius:9px; display:inline-flex; align-items:center; justify-content:center;">
+                    <svg width="22" height="22" viewBox="0 0 160 175"><ellipse cx="80" cy="100" rx="52" ry="58" fill="#183B6B"/><circle cx="62" cy="70" r="19" fill="#fff"/><circle cx="98" cy="70" r="19" fill="#fff"/><circle cx="64" cy="70" r="6" fill="#0F2544"/><circle cx="96" cy="70" r="6" fill="#0F2544"/><path d="M72 78 Q80 88 88 78 Z" fill="#FFC55A"/></svg>
+                </span>
+                Arah Karier
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileNav('studentSidebar','studentBackdrop')">
+                <svg class="ico" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                Menu
+            </button>
+        </header>
+
+        <aside class="sidebar" id="studentSidebar">
+            <div class="side-brand">
+                <div class="side-logo">
+                    <svg width="28" height="28" viewBox="0 0 160 175">
+                        <ellipse cx="80" cy="100" rx="52" ry="58" fill="#183B6B"/>
+                        <ellipse cx="80" cy="112" rx="34" ry="40" fill="#FFFFFF"/>
+                        <circle cx="62" cy="68" r="19" fill="#FFFFFF"/>
+                        <circle cx="98" cy="68" r="19" fill="#FFFFFF"/>
+                        <circle cx="64" cy="68" r="6" fill="#0F2544"/>
+                        <circle cx="96" cy="68" r="6" fill="#0F2544"/>
+                        <path d="M72 76 Q80 86 88 76 Z" fill="#FFC55A"/>
+                        <rect x="46" y="88" width="68" height="11" rx="5" fill="#FFC55A"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="brand-name" style="font-size:18px; font-weight:800;">Arah Karier</div>
+                    <div style="font-size:10.5px; color:var(--pastel-200);">Bimbingan Karier XII</div>
+                </div>
+            </div>
+
+            <nav class="nav-list">
+                <button class="nav-item active" data-page="beranda" onclick="openStudentPage('beranda')">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Beranda
+                </button>
+                <button class="nav-item" data-page="kenali" onclick="openStudentPage('kenali')">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Kenali Diri
+                </button>
+                <button class="nav-item" data-page="jelajahi" onclick="openStudentPage('jelajahi')">
+                    <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                    Jelajahi Pilihan
+                </button>
+                <button class="nav-item" data-page="bandingkan" onclick="openStudentPage('bandingkan')">
+                    <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+                    Bandingkan Pilihan
+                </button>
+                <button class="nav-item" data-page="rencana" onclick="openStudentPage('rencana')">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                    Rencana Langkah
+                </button>
+                <button class="nav-item" data-page="artikel" onclick="openStudentPage('artikel')">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    Artikel & Video
+                </button>
+                <button class="nav-item" data-page="konsultasi" onclick="openStudentPage('konsultasi')">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Konsultasi BK
+                </button>
+            </nav>
+
+            <!-- Mini Karakter Lumi Penyemangat -->
+            <div class="side-mascot-card" onclick="gantiPesanLumi()" title="Klik Lumi untuk semangat baru!">
+                <svg width="36" height="30" viewBox="0 0 110 90" class="float-lumi" style="flex-shrink:0;">
+                    <path d="M26 70 H82 C94 70 100 60 96 50 C93 42 84 38 76 40 C73 24 54 18 42 28 C33 25 22 32 21 43 C11 46 10 62 20 68 Z" fill="#E2F0FE"/>
+                    <circle cx="45" cy="50" r="4" fill="#183B6B"/>
+                    <circle cx="66" cy="50" r="4" fill="#183B6B"/>
+                    <path d="M51 56 Q55.5 61 60 56" fill="none" stroke="#183B6B" stroke-width="2.6" stroke-linecap="round"/>
+                </svg>
+                <p id="sideLumiQuote">"Satu langkah kecil hari ini sudah sangat berarti!"</p>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-pill-side">
+                    <small>Siswa Kelas XII</small>
+                    <strong id="sideStudentEmail">-</strong>
+                </div>
+                <button class="nav-item" style="color:#FECDD3;" onclick="logoutStudent()">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Keluar Akun
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-area">
+
+            <!-- 1. BERANDA -->
+            <section id="view-beranda" class="page-view active">
+                <div class="hero-banner">
+                    <div style="z-index:2;">
+                        <div class="auth-chip" style="display:inline-block; margin-bottom:10px;">Sahabat Karier Kelas XII</div>
+                        <h2>Masa depan dimulai dari mengenali dirimu.</h2>
+                        <p>Gak perlu panik kalau belum punya jawaban pasti. Yuk susun pertimbangan studi, vokasi, kerja, atau wirausaha dengan santai bareng Piko & Guru BK!</p>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <button class="btn btn-gold" onclick="openStudentPage('kenali')">Mulai Kenali Dirimu</button>
+                            <button class="btn btn-wa" onclick="bukaWaGuruBK()">Chat WA Guru BK</button>
+                        </div>
+                    </div>
+
+                    <div class="hero-mascot-wrap" onclick="sapaPiko()" title="Klik Piko untuk kata penyemangat!">
+                        <div class="piko-bubble" id="pikoHomeQuote">Klik aku ya kalau lagi butuh penyemangat memilih masa depan!</div>
+                        <svg id="pikoHeroSvg" width="124" height="136" viewBox="0 0 160 175" class="float-piko">
+                            <ellipse cx="60" cy="158" rx="16" ry="9" fill="#F4A938"/>
+                            <ellipse cx="100" cy="158" rx="16" ry="9" fill="#F4A938"/>
+                            <ellipse cx="28" cy="108" rx="14" ry="28" transform="rotate(22 28 108)" fill="#0F2544"/>
+                            <ellipse cx="132" cy="102" rx="14" ry="28" transform="rotate(-32 132 102)" fill="#0F2544"/>
+                            <ellipse cx="80" cy="104" rx="50" ry="56" fill="#0F2544"/>
+                            <ellipse cx="80" cy="112" rx="35" ry="42" fill="#FFFFFF"/>
+                            <circle cx="63" cy="68" r="19" fill="#FFFFFF"/>
+                            <circle cx="97" cy="68" r="19" fill="#FFFFFF"/>
+                            <circle cx="64" cy="68" r="6" fill="#0F2544"/>
+                            <circle cx="96" cy="68" r="6" fill="#0F2544"/>
+                            <circle cx="66" cy="65.5" r="2.2" fill="#FFFFFF"/>
+                            <circle cx="98" cy="65.5" r="2.2" fill="#FFFFFF"/>
+                            <ellipse cx="48" cy="77" rx="6.5" ry="4" fill="#FF8FA3" opacity="0.8"/>
+                            <ellipse cx="112" cy="77" rx="6.5" ry="4" fill="#FF8FA3" opacity="0.8"/>
+                            <path d="M72 74 Q80 85 88 74 Q80 70 72 74 Z" fill="#FFC55A"/>
+                            <rect x="44" y="88" width="72" height="13" rx="6.5" fill="#FFC55A"/>
+                            <path d="M94 98 L108 120 L95 123 L84 100 Z" fill="#F4A938"/>
+                            <path d="M44 48 C46 22, 114 22, 116 48 Z" fill="#9ACBF9"/>
+                            <rect x="40" y="44" width="80" height="10" rx="5" fill="#E2F0FE"/>
+                            <circle cx="80" cy="21" r="8" fill="#FFC55A"/>
+                            <circle cx="80" cy="126" r="12" fill="#E2F0FE" stroke="#183B6B" stroke-width="2.5"/>
+                            <polygon points="80,118 83,126 80,134 77,126" fill="#F4A938"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Progress Bar Eksplorasi -->
+                <div class="progress-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <strong style="font-size:15px; color:var(--navy-950);">Progres Eksplorasi Kariermu</strong>
+                        <span class="tag tag-navy" id="progPercentText">0% Selesai</span>
+                    </div>
+                    <div class="prog-track"><div class="prog-fill" id="progBarFill"></div></div>
+                    <p style="font-size:12.5px; color:var(--text-sub); font-weight:600;" id="progHintText">Langkah pertama: Coba isi refleksi ringan di menu Kenali Diri yuk!</p>
+                </div>
+
+                <!-- 4 Kartu Akses Cepat -->
+                <div class="grid-2" style="margin-bottom:20px;">
+                    <div class="quick-card" onclick="openStudentPage('kenali')">
+                        <div class="quick-icon" style="background:#E2F0FE; color:#183B6B;">
+                            <svg class="ico" style="width:24px;height:24px;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                        <div>
+                            <h3 style="font-size:17px; color:var(--navy-950); margin-bottom:3px;">1. Kenali Diri</h3>
+                            <p style="font-size:13px; color:var(--text-sub);">Tulis minat, aktivitas favorit, dan kekuatanmu tanpa takut dinilai.</p>
+                        </div>
+                    </div>
+                    <div class="quick-card" onclick="openStudentPage('jelajahi')">
+                        <div class="quick-icon" style="background:#FFF5E0; color:#D88B1C;">
+                            <svg class="ico" style="width:24px;height:24px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                        </div>
+                        <div>
+                            <h3 style="font-size:17px; color:var(--navy-950); margin-bottom:3px;">2. Jelajahi Pilihan</h3>
+                            <p style="font-size:13px; color:var(--text-sub);">Lihat peluang kuliah, vokasi, kerja, dan wirausaha + tautan resminya.</p>
+                        </div>
+                    </div>
+                    <div class="quick-card" onclick="openStudentPage('bandingkan')">
+                        <div class="quick-icon" style="background:#E8F9EE; color:#16A34A;">
+                            <svg class="ico" style="width:24px;height:24px;" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+                        </div>
+                        <div>
+                            <h3 style="font-size:17px; color:var(--navy-950); margin-bottom:3px;">3. Bandingkan Pilihan</h3>
+                            <p style="font-size:13px; color:var(--text-sub);">Timbang syarat, biaya, lokasi, dan tenggat dari 2–3 pilihan terbaikmu.</p>
+                        </div>
+                    </div>
+                    <div class="quick-card" onclick="openStudentPage('rencana')">
+                        <div class="quick-icon" style="background:#FFF0F3; color:#E11D48;">
+                            <svg class="ico" style="width:24px;height:24px;" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        </div>
+                        <div>
+                            <h3 style="font-size:17px; color:var(--navy-950); margin-bottom:3px;">4. Rencana Langkah</h3>
+                            <p style="font-size:13px; color:var(--text-sub);">Ubah rencana besarmu jadi 1 aksi paling dekat yang realistis.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ringkasan & Batasan Produk -->
+                <div class="grid-4" style="margin-bottom:20px;">
+                    <div class="stat-tile"><div class="val" id="sumRefleksi">Belum</div><div class="lbl">Kenali Diri</div></div>
+                    <div class="stat-tile"><div class="val" id="sumBanding">0</div><div class="lbl">Perbandingan</div></div>
+                    <div class="stat-tile"><div class="val" id="sumRencana">0</div><div class="lbl">Rencana Langkah</div></div>
+                    <div class="stat-tile"><div class="val" id="sumKonsul">0</div><div class="lbl">Konsultasi BK</div></div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <h3 style="font-size:17px; color:var(--navy-950); margin-bottom:10px;">Cara Menggunakan Arah Karier</h3>
+                        <ol style="padding-left:18px; font-size:13.5px; color:var(--text-sub); display:flex; flex-direction:column; gap:6px; font-weight:500;">
+                            <li>Isi refleksi ringan di <strong>Kenali Diri</strong> sesuai perasaanmu saat ini.</li>
+                            <li>Kenali beragam jalur lulusan SMA di <strong>Jelajahi Pilihan</strong>.</li>
+                            <li>Bandingkan beberapa opsi favoritmu secara terstruktur.</li>
+                            <li>Susun langkah terdekat dan ngobrol dengan <strong>Guru BK</strong> lewat formulir atau WhatsApp.</li>
+                        </ol>
+                    </div>
+                    <div class="card card-pastel">
+                        <h3 style="font-size:17px; color:var(--navy-950); margin-bottom:10px;">Batasan Produk & Privasi</h3>
+                        <ul style="padding-left:18px; font-size:13.5px; color:var(--navy-900); display:flex; flex-direction:column; gap:6px; font-weight:600;">
+                            <li>Bukan alat tes IQ, diagnosis psikologis, atau penentu jurusan mutlak.</li>
+                            <li>Semua rencana bersifat sementara dan boleh diubah kapan saja.</li>
+                            <li>Tidak ada peringkat antar siswa—fokus murni pada perjalanan kariermu sendiri.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. KENALI DIRI -->
+            <section id="view-kenali" class="page-view">
+                <div class="page-head">
+                    <div>
+                        <span class="page-badge">Langkah 1 • Eksplorasi Diri</span>
+                        <h1 class="page-title">Kenali Diri</h1>
+                        <p class="page-subtitle">Ceritakan minat dan kekuatan yang kamu rasakan dengan santai.</p>
+                    </div>
+                </div>
+
+                <div class="cheer-banner">
+                    <svg width="56" height="48" viewBox="0 0 110 90" class="float-lumi" style="flex-shrink:0;">
+                        <path d="M26 70 H82 C94 70 100 60 96 50 C93 42 84 38 76 40 C73 24 54 18 42 28 C33 25 22 32 21 43 C11 46 10 62 20 68 Z" fill="#FFFFFF" stroke="#9ACBF9" stroke-width="3"/>
+                        <circle cx="45" cy="50" r="3.8" fill="#183B6B"/><circle cx="66" cy="50" r="3.8" fill="#183B6B"/>
+                        <ellipse cx="37" cy="55" rx="4.5" ry="2.8" fill="#FF8FA3" opacity="0.7"/><ellipse cx="74" cy="55" rx="4.5" ry="2.8" fill="#FF8FA3" opacity="0.7"/>
+                        <path d="M51 55 Q55.5 60 60 55" fill="none" stroke="#183B6B" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                    <div>
+                        <strong>Pesan dari Lumi (Tanpa Label & Diagnosis):</strong>
+                        <p>Tidak ada jawaban benar atau salah di sini! Tulis saja apa adanya sesuai hal yang kamu nikmati sehari-hari.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <form id="formKenali" onsubmit="saveKenaliDiri(event)">
+                        <div class="field">
+                            <label for="kdMinat">1. Bidang atau topik apa yang paling menarik perhatianmu akhir-akhir ini?</label>
+                            <textarea id="kdMinat" placeholder="Contoh: Desain visual, teknologi komputer, membantu teman bercerita, bisnis kuliner..."></textarea>
+                        </div>
+                        <div class="field">
+                            <label for="kdAktivitas">2. Aktivitas yang kamu sukai (bikin kamu bersemangat saat melakukannya)</label>
+                            <textarea id="kdAktivitas" placeholder="Tulis jawabanmu di sini..."></textarea>
+                        </div>
+                        <div class="field">
+                            <label for="kdKekuatan">3. Kekuatan yang kamu rasakan dalam dirimu</label>
+                            <textarea id="kdKekuatan" placeholder="Contoh: Sabar, teliti, mudah beradaptasi, suka kerja tim, atau cepat belajar hal praktik..."></textarea>
+                        </div>
+                        <div class="field">
+                            <label for="kdKembang">4. Hal yang ingin kamu kembangkan sebelum/sesudah lulus SMA</label>
+                            <textarea id="kdKembang" placeholder="Contoh: Berani presentasi, bahasa Inggris, disiplin waktu, atau skill komputer..."></textarea>
+                        </div>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+                            <button type="submit" class="btn btn-gold">Simpan Refleksi Diri</button>
+                            <button type="button" class="btn btn-pastel" onclick="openStudentPage('jelajahi')">Lanjut ke Jelajahi Pilihan</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card" id="kenaliSummaryCard" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                        <h3 style="font-size:17px; color:var(--navy-950);">Catatan Kenali Diri Tersimpan</h3>
+                        <span class="tag tag-green" id="kenaliUpdatedAt">Tersimpan</span>
+                    </div>
+                    <div class="grid-2" id="kenaliSummaryContent"></div>
+                </div>
+            </section>
+
+            <!-- 3. JELAJAHI PILIHAN -->
+            <section id="view-jelajahi" class="page-view">
+                <div class="page-head">
+                    <div>
+                        <span class="page-badge">Langkah 2 • Wawasan Pasca-SMA</span>
+                        <h1 class="page-title">Jelajahi Pilihan</h1>
+                        <p class="page-subtitle">Banyak jalan menuju masa depan! Cek informasi ringkas & tautan resmi tiap jalur.</p>
+                    </div>
+                </div>
+
+                <div class="pill-group" id="exploreFilters">
+                    <button class="pill-btn active" onclick="filterExplore('semua', this)">Semua Jalur</button>
+                    <button class="pill-btn" onclick="filterExplore('studi', this)">Studi Lanjut</button>
+                    <button class="pill-btn" onclick="filterExplore('vokasi', this)">Vokasi & Pelatihan</button>
+                    <button class="pill-btn" onclick="filterExplore('kerja', this)">Pekerjaan</button>
+                    <button class="pill-btn" onclick="filterExplore('wirausaha', this)">Wirausaha</button>
+                </div>
+
+                <div class="grid-2" id="exploreGrid"></div>
+            </section>
+
+            <!-- 4. BANDINGKAN PILIHAN -->
+            <section id="view-bandingkan" class="page-view">
+                <div class="page-head">
+                    <div>
+                        <span class="page-badge">Langkah 3 • Timbang Alternatif</span>
+                        <h1 class="page-title">Bandingkan Pilihan</h1>
+                        <p class="page-subtitle">Masukkan 2–3 jalur yang sedang kamu pertimbangkan supaya lebih mudah dilihat perbandingannya.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="font-size:17px; margin-bottom:14px; color:var(--navy-950);">Tambah Pilihan ke Matriks</h3>
+                    <form id="formCompare" onsubmit="addComparison(event)">
+                        <div class="grid-3">
+                            <div class="field">
+                                <label for="cmpNama">Nama Pilihan / Jalur</label>
+                                <input type="text" id="cmpNama" placeholder="Contoh: D3 Manajemen Informatika" required>
+                            </div>
+                            <div class="field">
+                                <label for="cmpMinat">Tingkat Minat</label>
+                                <select id="cmpMinat">
+                                    <option value="Sangat Diminati">Sangat Diminati</option>
+                                    <option value="Cukup Diminati">Cukup Diminati</option>
+                                    <option value="Masih Dipertimbangkan">Masih Dipertimbangkan</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="cmpLokasi">Lokasi</label>
+                                <input type="text" id="cmpLokasi" placeholder="Contoh: Dalam kota / Luar kota">
+                            </div>
+                        </div>
+                        <div class="grid-3">
+                            <div class="field">
+                                <label for="cmpSyarat">Persyaratan Utama</label>
+                                <input type="text" id="cmpSyarat" placeholder="Contoh: Rapor, UTBK, portofolio">
+                            </div>
+                            <div class="field">
+                                <label for="cmpBiaya">Biaya / Perkiraan Sumber Daya</label>
+                                <input type="text" id="cmpBiaya" placeholder="Contoh: KIP-Kuliah / UKT / Modal usaha">
+                            </div>
+                            <div class="field">
+                                <label for="cmpTenggat">Tenggat Pendaftaran</label>
+                                <input type="text" id="cmpTenggat" placeholder="Contoh: Maret 2027">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="cmpInfo">Informasi yang Masih Perlu Dicari</label>
+                            <input type="text" id="cmpInfo" placeholder="Contoh: Cek daya tampung & syarat beasiswa ke Guru BK">
+                        </div>
+                        <button type="submit" class="btn btn-navy">Tambahkan ke Perbandingan</button>
+                    </form>
+                </div>
+
+                <div class="card" style="padding:20px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                        <h3 style="font-size:17px; color:var(--navy-950);">Tabel Perbandingan Pilihanmu</h3>
+                        <button class="btn btn-gold btn-sm" onclick="openStudentPage('rencana')">Lanjut Susun Rencana</button>
+                    </div>
+                    <div id="compareTableContainer"></div>
+                </div>
+            </section>
+
+            <!-- 5. RENCANA LANGKAH -->
+            <section id="view-rencana" class="page-view">
+                <div class="page-head">
+                    <div>
+                        <span class="page-badge">Langkah 4 • Aksi Terdekat</span>
+                        <h1 class="page-title">Rencana Langkah</h1>
+                        <p class="page-subtitle">Ubah pilihanmu menjadi langkah realistis yang bisa langsung dikerjakan minggu ini.</p>
+                    </div>
+                </div>
+
+                <div class="cheer-banner">
+                    <svg width="52" height="58" viewBox="0 0 160 175" class="float-piko" style="flex-shrink:0;">
+                        <ellipse cx="80" cy="104" rx="50" ry="56" fill="#183B6B"/><ellipse cx="80" cy="112" rx="34" ry="40" fill="#FFFFFF"/>
+                        <circle cx="63" cy="68" r="19" fill="#FFFFFF"/><circle cx="97" cy="68" r="19" fill="#FFFFFF"/>
+                        <circle cx="64" cy="68" r="6" fill="#0F2544"/><circle cx="96" cy="68" r="6" fill="#0F2544"/>
+                        <path d="M72 74 Q80 85 88 74 Z" fill="#FFC55A"/><rect x="44" y="88" width="72" height="12" rx="6" fill="#FFC55A"/>
+                        <path d="M44 48 C46 22, 114 22, 116 48 Z" fill="#9ACBF9"/>
+                    </svg>
+                    <div>
+                        <strong>Tips dari Piko:</strong>
+                        <p>Rencana yang keren gak harus muluk-muluk. Cukup mulai dari satu tindakan kecil minggu ini, dan siapkan rencana cadangan biar hatimu lebih tenang!</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="font-size:17px; margin-bottom:14px; color:var(--navy-950);">Susun Satu Langkah Terdekat</h3>
+                    <form id="formPlan" onsubmit="addPlan(event)">
+                        <div class="grid-2">
+                            <div class="field">
+                                <label for="plnTujuan">Tujuan Sementara</label>
+                                <input type="text" id="plnTujuan" placeholder="Contoh: Lolos jalur vokasi / siap magang kerja" required>
+                            </div>
+                            <div class="field">
+                                <label for="plnTenggat">Tenggat Waktu</label>
+                                <input type="date" id="plnTenggat" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="plnTindakan">Tindakan Terdekat</label>
+                            <input type="text" id="plnTindakan" placeholder="Contoh: Cek portal resmi SNPMB & ngobrol dengan orang tua" required>
+                        </div>
+                        <div class="grid-2">
+                            <div class="field">
+                                <label for="plnDukungan">Dukungan yang Dibutuhkan</label>
+                                <input type="text" id="plnDukungan" placeholder="Contoh: Guru BK, orang tua, atau alumni">
+                            </div>
+                            <div class="field">
+                                <label for="plnAlternatif">Catatan Alternatif (Plan B)</label>
+                                <input type="text" id="plnAlternatif" placeholder="Contoh: Daftar pelatihan BLK bersertifikat">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-gold">Simpan & Tinjau Rencana</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3 style="font-size:17px; margin-bottom:14px; color:var(--navy-950);">Daftar Rencana Langkahmu</h3>
+                    <div id="planListContainer"></div>
+                </div>
+            </section>
+
+            <!-- 6. ARTIKEL & VIDEO -->
+            <section id="view-artikel" class="page-view">
+                <div class="page-head">
+                    <div>
+                        <span class="page-badge">Pustaka Karier</span>
+                        <h1 class="page-title">Artikel & Video Panduan</h1>
+                        <p class="page-subtitle">Bacaan singkat dan referensi video yang gampang dipahami buat persiapan lulus SMA.</p>
+                    </div>
+                </div>
+
+                <div class="pill-group" id="articleFilters">
+                    <button class="pill-btn active" onclick="filterArticles('semua', this)">Semua Topik</button>
+                    <button class="pill-btn" onclick="filterArticles('eksplorasi', this)">Eksplorasi Karier</button>
+                    <button class="pill-btn" onclick="filterArticles('sumber', this)">Sumber Informasi</button>
+                    <button class="pill-btn" onclick="filterArticles('persiapan', this)">Persiapan Studi & Kerja</button>
+                    <button class="pill-btn" onclick="filterArticles('keputusan', this)">Pengambilan Keputusan</button>
+                </div>
+
+                <div class="grid-2" id="articleGrid"></div>
+            </section>
+
+            <!-- 7. KONSULTASI BK (CHAT WA LANGSUNG + FORMULIR) -->
+            <section id="view-konsultasi" class="page-view">
+                <div class="page-head">
+                    <div>
+                        <span class="page-badge">Pendampingan Sekolah</span>
+                        <h1 class="page-title">Konsultasi BK</h1>
+                        <p class="page-subtitle">Butuh teman diskusi? Kamu bisa chat langsung lewat WhatsApp Guru BK atau kirim formulir janji konsultasi.</p>
+                    </div>
+                </div>
+
+                <div class="wa-hero-card">
+                    <div style="display:flex; align-items:center; gap:16px; flex:1; min-width:240px;">
+                        <svg width="64" height="70" viewBox="0 0 160 175" class="float-piko" style="flex-shrink:0;">
+                            <ellipse cx="80" cy="104" rx="50" ry="56" fill="#183B6B"/><ellipse cx="80" cy="112" rx="34" ry="40" fill="#FFFFFF"/>
+                            <circle cx="63" cy="68" r="19" fill="#FFFFFF"/><circle cx="97" cy="68" r="19" fill="#FFFFFF"/>
+                            <circle cx="64" cy="68" r="6" fill="#0F2544"/><circle cx="96" cy="68" r="6" fill="#0F2544"/>
+                            <ellipse cx="48" cy="77" rx="6.5" ry="4" fill="#FF8FA3" opacity="0.8"/><ellipse cx="112" cy="77" rx="6.5" ry="4" fill="#FF8FA3" opacity="0.8"/>
+                            <path d="M72 74 Q80 85 88 74 Z" fill="#FFC55A"/><rect x="44" y="88" width="72" height="12" rx="6" fill="#22C55E"/>
+                        </svg>
+                        <div>
+                            <span class="tag tag-green" style="margin-bottom:6px;">Respon Cepat • Rahasia Terjaga</span>
+                            <h3 style="font-size:20px; color:var(--navy-950); margin-bottom:4px;">Chat Langsung Guru BK via WhatsApp</h3>
+                            <p style="font-size:13px; color:var(--text-sub); font-weight:500;">Mau tanya soal jurusan, beasiswa, atau curhat kegalauan setelah lulus? Klik tombol di samping untuk langsung terhubung ke WhatsApp Guru BK.</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-wa" onclick="bukaWaGuruBK()">
+                        <svg class="ico" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                        Hubungi Guru BK di WhatsApp
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h3 style="font-size:17px; margin-bottom:14px; color:var(--navy-950);">Atau Kirim Formulir Permintaan Konsultasi</h3>
+                    <form id="formConsult" onsubmit="submitConsult(event)">
+                        <div class="grid-2">
+                            <div class="field">
+                                <label for="cnsNama">Nama Panggilan & Kelas</label>
+                                <input type="text" id="cnsNama" placeholder="Contoh: Dimas — XII IPA 2" required>
+                            </div>
+                            <div class="field">
+                                <label for="cnsTopik">Topik yang Ingin Dibahas</label>
+                                <select id="cnsTopik" required>
+                                    <option value="Bingung memilih jurusan studi lanjut">Bingung memilih jurusan studi lanjut</option>
+                                    <option value="Mempertimbangkan kuliah vs langsung kerja">Mempertimbangkan kuliah vs langsung kerja</option>
+                                    <option value="Informasi pendidikan vokasi / pelatihan / beasiswa">Informasi pendidikan vokasi / pelatihan / beasiswa</option>
+                                    <option value="Menyelaraskan pilihan karier dengan harapan orang tua">Menyelaraskan pilihan karier dengan harapan orang tua</option>
+                                    <option value="Membahas hasil perbandingan pilihan & rencana langkah">Membahas hasil perbandingan pilihan & rencana langkah</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="field">
+                                <label for="cnsMetode">Pilihan Layanan</label>
+                                <select id="cnsMetode">
+                                    <option value="Tatap Muka di Ruang BK">Tatap Muka di Ruang BK</option>
+                                    <option value="Konsultasi Daring (Chat WA / Video)">Konsultasi Daring (Chat WA / Video)</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="cnsWaktu">Usulan Waktu Konsultasi</label>
+                                <input type="text" id="cnsWaktu" placeholder="Contoh: Rabu sepulang sekolah / istirahat ke-2" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="cnsCatatan">Ceritakan Singkat Hal yang Sedang Kamu Pertimbangkan</label>
+                            <textarea id="cnsCatatan" placeholder="Tuliskan pertanyaan atau kegelisahanmu agar Guru BK bisa mempersiapkan bahan diskusi..." required></textarea>
+                        </div>
+
+                        <label class="consent-box">
+                            <input type="checkbox" id="cnsConsent" required>
+                            <span><strong>Persetujuan Pengiriman:</strong> Saya menyetujui pengiriman formulir ini beserta ringkasan eksplorasi karier saya di Arah Karier kepada Guru BK sekolah. Data hanya digunakan untuk layanan bimbingan karier dan dijaga kerahasiaannya.</span>
+                        </label>
+
+                        <button type="submit" class="btn btn-navy">Kirim Permintaan Konsultasi</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3 style="font-size:17px; margin-bottom:14px; color:var(--navy-950);">Riwayat Pengajuan Konsultasimu</h3>
+                    <div id="consultHistoryContainer"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Tombol Mengambang Chat WA Guru BK -->
+    <a href="#" id="floatingWaBtn" class="floating-wa-btn" onclick="event.preventDefault(); bukaWaGuruBK();" title="Chat langsung dengan Guru BK via WhatsApp">
+        <svg class="ico" style="width:20px;height:20px;" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        Chat Guru BK
+    </a>
+
+    <!-- ========================================================= -->
+    <!-- 3. PORTAL ADMIN / GURU BK (CERA)                          -->
+    <!-- ========================================================= -->
+    <div id="admin-app" class="app-shell">
+        <div class="drawer-backdrop" id="adminBackdrop" onclick="toggleMobileNav('adminSidebar','adminBackdrop')"></div>
+
+        <header class="mobile-header">
+            <div style="font-family:'Outfit',sans-serif; font-weight:800; font-size:18px;">Admin Arah Karier</div>
+            <button class="mobile-menu-btn" onclick="toggleMobileNav('adminSidebar','adminBackdrop')">Menu</button>
+        </header>
+
+        <aside class="sidebar" id="adminSidebar">
+            <div class="side-brand">
+                <div class="side-logo" style="background:var(--gold-400); color:var(--navy-950);">
+                    <svg class="ico" style="width:20px;height:20px;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div>
+                    <div class="brand-name" style="font-size:18px; font-weight:800;">Admin BK</div>
+                    <div style="font-size:10.5px; color:var(--pastel-200);">Monitoring Arah Karier</div>
+                </div>
+            </div>
+
+            <nav class="nav-list">
+                <button class="nav-item active" data-apage="adm-overview" onclick="openAdminPage('adm-overview')">
+                    <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    Pantau Progres Siswa
+                </button>
+                <button class="nav-item" data-apage="adm-consult" onclick="openAdminPage('adm-consult')">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Kotak Konsultasi BK
+                </button>
+                <button class="nav-item" data-apage="adm-access" onclick="openAdminPage('adm-access')">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Kelola Akses Siswa
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-pill-side">
+                    <small>Administrator BK</small>
+                    <strong>Cera • Kuota 100 Siswa</strong>
+                </div>
+                <button class="nav-item" style="color:#FECDD3;" onclick="logoutAdmin()">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Keluar Admin
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-area">
+            <section id="aview-adm-overview" class="admin-view active">
+                <div class="hero-banner" style="padding:26px 30px;">
+                    <div style="z-index:2;">
+                        <div class="auth-chip" style="display:inline-block; margin-bottom:8px;">Portal Guru BK</div>
+                        <h2 style="font-size:27px; margin-bottom:6px;">Halo, Admin Cera!</h2>
+                        <p style="margin-bottom:0;">Pantau seluruh progres eksplorasi karier siswa kelas XII dan klik <strong>Cek Progres</strong> di masing-masing akun.</p>
+                    </div>
+                </div>
+
+                <div class="grid-4" style="margin-bottom:20px;">
+                    <div class="stat-tile"><div class="val" id="admStatActive">0</div><div class="lbl">Akun Aktif</div></div>
+                    <div class="stat-tile"><div class="val" id="admStatBlocked" style="color:var(--danger);">0</div><div class="lbl">Dinonaktifkan</div></div>
+                    <div class="stat-tile"><div class="val" id="admStatPlans">0</div><div class="lbl">Rencana Langkah</div></div>
+                    <div class="stat-tile"><div class="val" id="admStatConsults" style="color:var(--gold-600);">0</div><div class="lbl">Konsultasi Masuk</div></div>
+                </div>
+
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+                        <h3 style="font-size:17px; color:var(--navy-950);">Daftar Siswa & Progres Eksplorasi</h3>
+                        <input type="text" id="admSearchMonitor" oninput="renderAdminDashboard()" placeholder="Cari email siswa..." style="padding:9px 14px; border:2px solid var(--border); border-radius:12px; font-size:13px; min-width:240px; outline:none;">
+                    </div>
+                    <div id="admMonitorList"></div>
+                </div>
+            </section>
+
+            <section id="aview-adm-consult" class="admin-view">
+                <div class="page-head">
+                    <div>
+                        <span class="page-badge">Layanan Konseling</span>
+                        <h1 class="page-title">Permintaan Konsultasi BK</h1>
+                        <p class="page-subtitle">Tinjau pengajuan konsultasi dari siswa dan perbarui status tindak lanjutnya.</p>
+                    </div>
+                </div>
+                <div class="card"><div id="admConsultList"></div></div>
+            </section>
+
+            <section id="aview-adm-access" class="admin-view">
+                <div class="page-head">
+                    <div>
+                        <span class="page-badge">Manajemen Pengguna</span>
+                        <h1 class="page-title">Kelola Akses Siswa</h1>
+                        <p class="page-subtitle">Tambahkan email siswa, nonaktifkan akses, atau hapus data akun (maksimal 100 akun aktif).</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="font-size:17px; margin-bottom:12px; color:var(--navy-950);">Tambahkan Email Siswa</h3>
+                    <form onsubmit="adminAddStudent(event)" style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+                        <div class="field" style="flex:1; min-width:240px; margin:0;">
+                            <label for="admNewEmail">Alamat Email Siswa</label>
+                            <input type="email" id="admNewEmail" placeholder="siswa.kelas12@email.com" required>
+                        </div>
+                        <button type="submit" class="btn btn-navy">Tambahkan Akses</button>
+                    </form>
+                    <p style="font-size:12px; color:var(--text-muted); margin-top:8px;">Kata sandi akses siswa tetap menggunakan: <strong>ARAH KARIER</strong>.</p>
+                </div>
+
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+                        <h3 style="font-size:17px; color:var(--navy-950);">Kontrol Semua Akun (<span id="admQuotaLabel">0/100</span>)</h3>
+                        <input type="text" id="admSearchAccess" oninput="renderAdminDashboard()" placeholder="Cari email siswa..." style="padding:9px 14px; border:2px solid var(--border); border-radius:12px; font-size:13px; min-width:240px; outline:none;">
+                    </div>
+                    <div id="admAccessList"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL BACA ARTIKEL / VIDEO -->
+    <div class="modal-overlay" id="articleModal" onclick="if(event.target===this) closeModal('articleModal')">
+        <div class="modal-card" style="max-width:660px;">
+            <div class="modal-head">
+                <div>
+                    <span class="tag tag-gold" id="artModalCat" style="margin-bottom:8px;">Topik</span>
+                    <h2 id="artModalTitle" style="font-size:21px; line-height:1.3;">Judul Artikel</h2>
+                </div>
+                <button class="modal-close" onclick="closeModal('articleModal')">✕</button>
+            </div>
+            <div class="modal-body" id="artModalBody" style="background:#FFFFFF; font-size:14px; line-height:1.75;"></div>
+        </div>
+    </div>
+
+    <!-- MODAL CEK DETAIL PROGRES SISWA (KHUSUS ADMIN) -->
+    <div class="modal-overlay" id="inspectModal" onclick="if(event.target===this) closeModal('inspectModal')">
+        <div class="modal-card">
+            <div class="modal-head">
+                <div>
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:4px;">
+                        <h2 id="insEmail" style="font-size:20px;">email@siswa.com</h2>
+                        <span id="insStatusTag" class="tag tag-green">Akses Aktif</span>
+                    </div>
+                    <p id="insMeta" style="font-size:12.5px; color:var(--pastel-100);">Terdaftar sejak -</p>
+                </div>
+                <button class="modal-close" onclick="closeModal('inspectModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="pill-group" style="margin-bottom:16px;">
+                    <button class="pill-btn active" id="itab-kenali" onclick="switchInspectTab('kenali')">Kenali Diri</button>
+                    <button class="pill-btn" id="itab-banding" onclick="switchInspectTab('banding')">Bandingkan (<span id="icnt-banding">0</span>)</button>
+                    <button class="pill-btn" id="itab-rencana" onclick="switchInspectTab('rencana')">Rencana (<span id="icnt-rencana">0</span>)</button>
+                    <button class="pill-btn" id="itab-konsul" onclick="switchInspectTab('konsul')">Konsultasi (<span id="icnt-konsul">0</span>)</button>
+                </div>
+                <div id="ipane-kenali" class="modal-pane active"></div>
+                <div id="ipane-banding" class="modal-pane"></div>
+                <div id="ipane-rencana" class="modal-pane"></div>
+                <div id="ipane-konsul" class="modal-pane"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toastEl">Pesan notifikasi</div>
+
+    <script>
+        // ============================================================
+        // KONSTANTA AKSES & NOMOR WA GURU BK (GANTI NOMOR WA DI SINI)
+        // ============================================================
+        const STUDENT_REQUIRED_PASS = 'ARAH KARIER';
+        const ADMIN_USERNAME = 'Cera';
+        const ADMIN_PASSWORD = '123456';
+        const WA_GURU_BK_NUMBER = '628XXXXXXXXXX'; // <-- GANTI DENGAN NOMOR WA GURU BK (format 628...)
+        const MAX_USERS = 100;
+
+        const DB_USERS_KEY = 'arahkarier_users_v1';
+        const SESSION_STU_KEY = 'arahkarier_session_stu';
+        const SESSION_ADM_KEY = 'arahkarier_session_adm';
+
+        let currentStudentEmail = null;
+        let currentInspectEmail = null;
+
+        // ============================================================
+        // INTERAKSI KARAKTER PENYEMANGAT (PIKO & LUMI)
+        // ============================================================
+        const DEFAULT_PIKO_QUOTE = 'Klik aku ya kalau lagi butuh penyemangat memilih masa depan!';
+        const DEFAULT_LUMI_QUOTE = '"Satu langkah kecil hari ini sudah sangat berarti!"';
+
+        const pesanPiko = [
+            "Bingung pilih jurusan itu wajar banget! Pelan-pelan kita urai bareng ya!",
+            "Gak perlu sama kayak teman, jalan terbaik adalah yang cocok sama dirimu!",
+            "Sudah coba isi Bandingkan Pilihan? Biar kamu makin mantap ngobrol sama orang tua!",
+            "Kalau lagi ragu banget, langsung klik Chat WA Guru BK aja ya. Tenang, rahasiamu aman!",
+            "Keren banget kamu sudah mulai mikirin masa depan sejak sekarang!"
+        ];
+        const pesanLumi = [
+            "\"Satu langkah kecil hari ini sudah sangat berarti!\"",
+            "\"Kuliah, vokasi, kerja, atau usaha — semuanya hebat kalau dijalani serius!\"",
+            "\"Jangan takut salah pilih, rencana selalu bisa ditinjau ulang.\"",
+            "\"Istirahat sejenak kalau pusing, lalu lanjut lagi bareng Piko & Lumi!\""
+        ];
+
+        function sapaPiko() {
+            const svg = document.getElementById('pikoHeroSvg');
+            svg.classList.remove('wiggle-now');
+            void svg.offsetWidth;
+            svg.classList.add('wiggle-now');
+            document.getElementById('pikoHomeQuote').innerText = pesanPiko[Math.floor(Math.random() * pesanPiko.length)];
+        }
+
+        function gantiPesanLumi() {
+            document.getElementById('sideLumiQuote').innerText = pesanLumi[Math.floor(Math.random() * pesanLumi.length)];
+        }
+
+        function bukaWaGuruBK() {
+            const emailInfo = currentStudentEmail ? ` (Akun: ${currentStudentEmail})` : '';
+            const teks = encodeURIComponent(`Halo Ibu/Bapak Guru BK, saya siswa kelas XII dari website Arah Karier${emailInfo}. Saya ingin berkonsultasi mengenai rencana karier saya setelah lulus SMA.`);
+            window.open(`https://wa.me/${WA_GURU_BK_NUMBER}?text=${teks}`, '_blank', 'noopener,noreferrer');
+        }
+
+        // ============================================================
+        // DATA JELAJAHI PILIHAN & ARTIKEL/VIDEO
+        // ============================================================
+        const exploreData = [
+            {
+                cat: 'studi', catLabel: 'Studi Lanjut',
+                title: 'Perguruan Tinggi Negeri & Swasta (S1)',
+                desc: 'Jalur akademik bagi siswa yang ingin mendalami ilmu pengetahuan, riset, dan profesi sarjana lewat SNBP, SNBT, atau jalur mandiri.',
+                points: ['Durasi rata-rata 4 tahun', 'Tersedia KIP-Kuliah & berbagai beasiswa', 'Cocok untuk penguatan teori & profesi akademik'],
+                links: [
+                    { label: 'Portal SNPMB Resmi', url: 'https://snpmb.bppp.kemdikbud.go.id/' },
+                    { label: 'KIP Kuliah', url: 'https://kip-kuliah.kemdiktisaintek.go.id/' }
+                ]
+            },
+            {
+                cat: 'studi', catLabel: 'Studi Lanjut',
+                title: 'Sekolah Kedinasan',
+                desc: 'Perguruan tinggi di bawah kementerian/lembaga pemerintah dengan ikatan dinas atau fokus kompetensi pemerintahan tertentu.',
+                points: ['Seleksi meliputi SKD & tes khusus instansi', 'Perlu persiapan fisik, akademik, dan berkas sejak dini', 'Biaya pendidikan umumnya disubsidi negara'],
+                links: [{ label: 'Portal Dikdin BKN', url: 'https://dikdin.bkn.go.id/' }]
+            },
+            {
+                cat: 'vokasi', catLabel: 'Vokasi & Pelatihan',
+                title: 'Pendidikan Vokasi Politeknik (D3 / D4)',
+                desc: 'Pendidikan tinggi yang mengutamakan praktik kerja lapangan, proyek terapan, dan sertifikasi keahlian siap kerja.',
+                points: ['Proporsi praktik sekitar 60–70%', 'Masa studi 3 tahun (D3) atau 4 tahun (D4)', 'Jaringan magang langsung ke industri'],
+                links: [
+                    { label: 'Ditjen Vokasi', url: 'https://vokasi.kemdikbud.go.id/' },
+                    { label: 'SNPMB Vokasi', url: 'https://snpmb.bppp.kemdikbud.go.id/' }
+                ]
+            },
+            {
+                cat: 'vokasi', catLabel: 'Vokasi & Pelatihan',
+                title: 'Balai Latihan Kerja (BLK) & Sertifikasi',
+                desc: 'Pelatihan singkat berbasis kompetensi dari pemerintah maupun lembaga resmi untuk menguasai keahlian teknis spesifik.',
+                points: ['Durasi 1–6 bulan + sertifikat kompetensi BNSP', 'Bidang: desain, IT, teknisi, tata boga, administrasi', 'Banyak program gratis dari Kemnaker'],
+                links: [{ label: 'Skillhub Kemnaker', url: 'https://skillhub.kemnaker.go.id/' }]
+            },
+            {
+                cat: 'kerja', catLabel: 'Pekerjaan',
+                title: 'Memasuki Dunia Kerja & Magang Lulusan SMA',
+                desc: 'Jalur langsung bekerja atau mengikuti pemagangan industri untuk membangun pengalaman, penghasilan mandiri, dan relasi.',
+                points: ['Siapkan CV 1 halaman & portofolio keterampilan', 'Pastikan selalu cek keaslian lowongan resmi', 'Tetap bisa lanjut kuliah kelas karyawan nanti'],
+                links: [
+                    { label: 'SIAPkerja Kemnaker', url: 'https://siapkerja.kemnaker.go.id/' },
+                    { label: 'Karirhub Resmi', url: 'https://karirhub.kemnaker.go.id/' }
+                ]
+            },
+            {
+                cat: 'wirausaha', catLabel: 'Wirausaha',
+                title: 'Merintis Usaha Mandiri & UMKM Pemula',
+                desc: 'Membangun usaha barang atau jasa dari skala kecil sesuai kebutuhan sekitar dengan memanfaatkan media digital.',
+                points: ['Mulai dari uji coba produk dengan modal terukur', 'Pelajari pencatatan keuangan sederhana & NIB', 'Ikuti komunitas & inkubasi wirausaha muda'],
+                links: [
+                    { label: 'Kementerian UMKM', url: 'https://kemenkopukm.go.id/' },
+                    { label: 'Perizinan OSS', url: 'https://oss.go.id/' }
+                ]
+            }
+        ];
+
+        const articlesData = [
+            {
+                id: 'art1', cat: 'eksplorasi', catLabel: 'Eksplorasi Karier', type: 'Artikel • 4 mnt',
+                title: 'Tidak Harus Langsung Yakin: Memahami Eksplorasi Karier di Kelas XII',
+                excerpt: 'Merasa ragu menjelang lulus adalah hal normal. Begini cara memetakan minat tanpa terburu-buru memberi label diri.',
+                body: `<p style="margin-bottom:12px;">Banyak siswa kelas XII merasa tertekan karena menganggap pilihan setelah lulus harus 100% pasti. Padahal, perkembangan karier adalah proses belajar bertahap.</p>
+                       <ul style="padding-left:20px; margin-bottom:12px;">
+                           <li>Pisahkan antara <em>minat pribadi</em> dan sekadar ikut-ikutan tren teman.</li>
+                           <li>Amati aktivitas harian yang bikin kamu antusias tanpa merasa terpaksa.</li>
+                           <li>Cari tahu fakta di lapangan sebelum menolak atau menyetujui suatu jalur.</li>
+                       </ul>`,
+                videoUrl: 'https://www.youtube.com/results?search_query=cara+menentukan+jurusan+kuliah+dan+karier+kelas+12+bk'
+            },
+            {
+                id: 'art2', cat: 'sumber', catLabel: 'Sumber Informasi', type: 'Panduan • 3 mnt',
+                title: 'Cara Memeriksa Sumber Resmi Seleksi Kuliah, Beasiswa, & Lowongan Kerja',
+                excerpt: 'Hindari berita hoaks dan penipuan pendaftaran dengan membiasakan cek domain resmi pemerintah dan institusi.',
+                body: `<p style="margin-bottom:12px;">Biasakan memeriksa langsung sumber utama sebelum mengambil keputusan pendaftaran:</p>
+                       <ul style="padding-left:20px; margin-bottom:12px;">
+                           <li>Cek domain resmi berakhiran <strong>.go.id</strong>, <strong>.ac.id</strong>, atau akun terverifikasi.</li>
+                           <li>Catat tenggat resmi di menu <strong>Bandingkan Pilihan</strong> agar tidak terlewat.</li>
+                           <li>Waspadai lowongan kerja yang meminta transfer uang di awal.</li>
+                       </ul>`,
+                videoUrl: 'https://www.youtube.com/results?search_query=panduan+snpmb+kip+kuliah+resmi'
+            },
+            {
+                id: 'art3', cat: 'persiapan', catLabel: 'Persiapan Studi & Kerja', type: 'Artikel & Video • 5 mnt',
+                title: 'Menyiapkan CV Pemula, Portofolio, & Mental Wawancara Lulusan SMA',
+                excerpt: 'Belum punya pengalaman kerja bukan berarti CV-mu kosong. Pengalaman OSIS, ekskul, dan proyek sekolah sangat bernilai.',
+                body: `<p style="margin-bottom:12px;">Modal awal lulusan SMA untuk melamar beasiswa, vokasi, atau kerja pertama:</p>
+                       <ul style="padding-left:20px; margin-bottom:12px;">
+                           <li><strong>CV 1 Halaman:</strong> Tulis kontak rapi, pendidikan, kepanitiaan/ekskul, dan skill nyata.</li>
+                           <li><strong>Portofolio:</strong> Simpan 3–5 karya/dokumentasi proyek terbaik di Google Drive.</li>
+                           <li><strong>Latihan Perkenalan:</strong> Latih memperkenalkan diri selama 60 detik bersama Guru BK.</li>
+                       </ul>`,
+                videoUrl: 'https://www.youtube.com/results?search_query=cara+membuat+cv+lulusan+sma+tanpa+pengalaman'
+            },
+            {
+                id: 'art4', cat: 'keputusan', catLabel: 'Pengambilan Keputusan', type: 'Artikel • 4 mnt',
+                title: 'Menimbang Pilihan Secara Realistis & Berdiskusi dengan Orang Tua',
+                excerpt: 'Cara menjembatani impian pribadi, kondisi biaya keluarga, dan kesiapan rencana cadangan (Plan B) tanpa konflik.',
+                body: `<p style="margin-bottom:12px;">Keputusan karier yang tenang mempertimbangkan <strong>minat diri</strong>, <strong>syarat nyata</strong>, dan <strong>dukungan keluarga</strong>.</p>
+                       <p>Tunjukkan hasil tabel di menu <strong>Bandingkan Pilihan</strong> saat berdiskusi dengan orang tua—mereka akan lebih percaya ketika melihat kamu sudah riset dengan matang.</p>`,
+                videoUrl: 'https://www.youtube.com/results?search_query=tips+diskusi+pilihan+karier+dengan+orang+tua'
+            }
+        ];
+
+        // ============================================================
+        // HELPER DATABASE LOKAL
+        // ============================================================
+        function esc(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+        function getUsers() { return JSON.parse(localStorage.getItem(DB_USERS_KEY) || '[]'); }
+        function saveUsers(users) { localStorage.setItem(DB_USERS_KEY, JSON.stringify(users)); }
+        function createEmptyRecord(email) {
+            return {
+                email: email.trim().toLowerCase(),
+                allowed: true,
+                joinedAt: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+                kenaliDiri: null,
+                comparisons: [],
+                plans: [],
+                consultations: []
+            };
+        }
+        function getCurrentStudent() { return getUsers().find(u => u.email === currentStudentEmail) || null; }
+        function updateStudentRecord(email, fn) {
+            const users = getUsers();
+            const idx = users.findIndex(u => u.email === email);
+            if (idx === -1) return null;
+            fn(users[idx]);
+            saveUsers(users);
+            return users[idx];
+        }
+        function showToast(msg) {
+            const el = document.getElementById('toastEl');
+            el.innerText = msg;
+            el.classList.add('show');
+            clearTimeout(window._t);
+            window._t = setTimeout(() => el.classList.remove('show'), 3400);
+        }
+
+        // Reset total seluruh form & tampilan UI agar akun baru selalu bersih dari sisa akun sebelumnya
+        function resetAllStudentForms() {
+            ['formKenali', 'formCompare', 'formPlan', 'formConsult'].forEach(id => {
+                const f = document.getElementById(id);
+                if (f) f.reset();
+            });
+            ['kdMinat', 'kdAktivitas', 'kdKekuatan', 'kdKembang'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            document.getElementById('kenaliSummaryCard').style.display = 'none';
+            document.getElementById('kenaliSummaryContent').innerHTML = '';
+            document.getElementById('compareTableContainer').innerHTML = '';
+            document.getElementById('planListContainer').innerHTML = '';
+            document.getElementById('consultHistoryContainer').innerHTML = '';
+            document.getElementById('pikoHomeQuote').innerText = DEFAULT_PIKO_QUOTE;
+            document.getElementById('sideLumiQuote').innerText = DEFAULT_LUMI_QUOTE;
+
+            // Reset filter pills kembali ke "Semua"
+            const expBtns = document.querySelectorAll('#exploreFilters .pill-btn');
+            expBtns.forEach((b, i) => b.classList.toggle('active', i === 0));
+            const artBtns = document.querySelectorAll('#articleFilters .pill-btn');
+            artBtns.forEach((b, i) => b.classList.toggle('active', i === 0));
+        }
+
+        // ============================================================
+        // AUTH LOGIC
+        // ============================================================
+        function switchAuthTab(mode) {
+            document.getElementById('tabBtnStudent').classList.toggle('active', mode === 'student');
+            document.getElementById('tabBtnAdmin').classList.toggle('active', mode === 'admin');
+            document.getElementById('panelStudent').classList.toggle('active', mode === 'student');
+            document.getElementById('panelAdmin').classList.toggle('active', mode === 'admin');
+            hideAuthAlerts();
+        }
+        function hideAuthAlerts() {
+            document.getElementById('studentAlert').className = 'alert-box';
+            document.getElementById('adminAlert').className = 'alert-box';
+        }
+        function showAuthAlert(id, msg, type) {
+            const el = document.getElementById(id);
+            el.innerText = msg;
+            el.className = `alert-box ${type}`;
+        }
+        function togglePwd(id) {
+            const inp = document.getElementById(id);
+            inp.type = inp.type === 'password' ? 'text' : 'password';
+        }
+
+        function handleStudentLogin(e) {
+            e.preventDefault();
+            hideAuthAlerts();
+            const email = document.getElementById('stuEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('stuPass').value.trim();
+
+            if (!email || !email.includes('@')) {
+                showAuthAlert('studentAlert', 'Masukkan alamat email yang valid sebagai username.', 'error');
+                return;
+            }
+            if (pass !== STUDENT_REQUIRED_PASS) {
+                showAuthAlert('studentAlert', 'Kata sandi belum sesuai ketentuan. Cek huruf kapital sesuai arahan Guru BK ya!', 'error');
+                return;
+            }
+
+            const users = getUsers();
+            let user = users.find(u => u.email === email);
+            if (user) {
+                if (user.allowed === false) {
+                    showAuthAlert('studentAlert', 'Akses akun ini sedang dinonaktifkan oleh Admin BK. Hubungi Guru BK untuk mengaktifkannya kembali.', 'error');
+                    return;
+                }
+            } else {
+                if (users.filter(u => u.allowed !== false).length >= MAX_USERS) {
+                    showAuthAlert('studentAlert', `Kuota pengguna aktif sudah penuh (${MAX_USERS} siswa). Hubungi Admin BK.`, 'error');
+                    return;
+                }
+                user = createEmptyRecord(email);
+                users.push(user);
+                saveUsers(users);
+            }
+
+            localStorage.setItem(SESSION_STU_KEY, email);
+            document.getElementById('formStudentLogin').reset();
+            launchStudentApp(email);
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            hideAuthAlerts();
+            const uname = document.getElementById('admUser').value.trim();
+            const pass = document.getElementById('admPass').value;
+
+            if (uname.toLowerCase() === ADMIN_USERNAME.toLowerCase() && pass === ADMIN_PASSWORD) {
+                localStorage.setItem(SESSION_ADM_KEY, 'true');
+                document.getElementById('formAdminLogin').reset();
+                launchAdminApp();
+            } else {
+                showAuthAlert('adminAlert', 'Username atau kata sandi Admin salah.', 'error');
+            }
+        }
+
+        // ============================================================
+        // LAUNCH & NAVIGATION
+        // ============================================================
+        function launchStudentApp(email) {
+            currentStudentEmail = email;
+            resetAllStudentForms();
+
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('admin-app').classList.remove('active');
+            document.getElementById('student-app').classList.add('active');
+            document.getElementById('floatingWaBtn').classList.add('visible');
+            document.getElementById('sideStudentEmail').innerText = email;
+
+            openStudentPage('beranda');
+            renderExplore('semua');
+            renderArticles('semua');
+            renderStudentAll();
+        }
+
+        function logoutStudent() {
+            localStorage.removeItem(SESSION_STU_KEY);
+            currentStudentEmail = null;
+            resetAllStudentForms();
+            closeAllDrawers();
+            document.getElementById('floatingWaBtn').classList.remove('visible');
+            document.getElementById('student-app').classList.remove('active');
+            document.getElementById('auth-screen').style.display = 'flex';
+            switchAuthTab('student');
+            showAuthAlert('studentAlert', 'Kamu berhasil keluar dari akun Arah Karier.', 'success');
+        }
+
+        function launchAdminApp() {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('student-app').classList.remove('active');
+            document.getElementById('floatingWaBtn').classList.remove('visible');
+            document.getElementById('admin-app').classList.add('active');
+            openAdminPage('adm-overview');
+            renderAdminDashboard();
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem(SESSION_ADM_KEY);
+            closeAllDrawers();
+            closeModal('inspectModal');
+            document.getElementById('admin-app').classList.remove('active');
+            document.getElementById('auth-screen').style.display = 'flex';
+            switchAuthTab('admin');
+            showAuthAlert('adminAlert', 'Berhasil keluar dari Portal Admin BK.', 'success');
+        }
+
+        function toggleMobileNav(sId, bId) {
+            document.getElementById(sId).classList.toggle('open');
+            document.getElementById(bId).classList.toggle('open');
+        }
+        function closeAllDrawers() {
+            ['studentSidebar', 'adminSidebar'].forEach(id => document.getElementById(id).classList.remove('open'));
+            ['studentBackdrop', 'adminBackdrop'].forEach(id => document.getElementById(id).classList.remove('open'));
+        }
+        function openStudentPage(pageId) {
+            document.querySelectorAll('#student-app .nav-item[data-page]').forEach(btn => btn.classList.toggle('active', btn.dataset.page === pageId));
+            document.querySelectorAll('.page-view').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(`view-${pageId}`).classList.add('active');
+            closeAllDrawers();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function openAdminPage(pageId) {
+            document.querySelectorAll('#admin-app .nav-item[data-apage]').forEach(btn => btn.classList.toggle('active', btn.dataset.apage === pageId));
+            document.querySelectorAll('.admin-view').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(`aview-${pageId}`).classList.add('active');
+            closeAllDrawers();
+            renderAdminDashboard();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('open');
+            if (id === 'inspectModal') currentInspectEmail = null;
+        }
+
+        // ============================================================
+        // FITUR SISWA
+        // ============================================================
+        function saveKenaliDiri(e) {
+            e.preventDefault();
+            const minat = document.getElementById('kdMinat').value.trim();
+            const aktivitas = document.getElementById('kdAktivitas').value.trim();
+            const kekuatan = document.getElementById('kdKekuatan').value.trim();
+            const kembang = document.getElementById('kdKembang').value.trim();
+            if (!minat && !aktivitas && !kekuatan && !kembang) {
+                showToast('Isi minimal satu pertanyaan refleksi dulu ya!');
+                return;
+            }
+            updateStudentRecord(currentStudentEmail, u => {
+                u.kenaliDiri = {
+                    minat: minat || '-', aktivitas: aktivitas || '-',
+                    kekuatan: kekuatan || '-', kembang: kembang || '-',
+                    updatedAt: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+                };
+            });
+            renderStudentAll();
+            showToast('Keren! Refleksi Kenali Diri berhasil disimpan.');
+        }
+
+        function filterExplore(cat, btn) {
+            document.querySelectorAll('#exploreFilters .pill-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderExplore(cat);
+        }
+        function renderExplore(cat) {
+            const list = cat === 'semua' ? exploreData : exploreData.filter(i => i.cat === cat);
+            document.getElementById('exploreGrid').innerHTML = list.map(item => `
+                <article class="pathway-card">
+                    <div>
+                        <span class="tag tag-navy" style="margin-bottom:10px;">${esc(item.catLabel)}</span>
+                        <h3 style="font-size:18px; color:var(--navy-950); margin-bottom:8px;">${esc(item.title)}</h3>
+                        <p style="font-size:13.5px; color:var(--text-sub); margin-bottom:12px;">${esc(item.desc)}</p>
+                        <ul style="padding-left:18px; font-size:12.5px; color:var(--text-main); display:flex; flex-direction:column; gap:4px; font-weight:500;">
+                            ${item.points.map(p => `<li>${esc(p)}</li>`).join('')}
+                        </ul>
+                        <div class="official-links">
+                            ${item.links.map(l => `
+                                <a class="official-link" href="${l.url}" target="_blank" rel="noopener noreferrer">
+                                    ${esc(l.label)}
+                                    <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                                </a>`).join('')}
+                        </div>
+                    </div>
+                    <button class="btn btn-pastel btn-sm" onclick="prefillCompare('${esc(item.title)}')">Bandingkan Jalur Ini</button>
+                </article>
+            `).join('');
+        }
+
+        function prefillCompare(title) {
+            document.getElementById('cmpNama').value = title;
+            openStudentPage('bandingkan');
+            document.getElementById('cmpSyarat').focus();
+            showToast('Pilihan masuk ke form Bandingkan! Lengkapi detailnya yuk.');
+        }
+
+        function addComparison(e) {
+            e.preventDefault();
+            const item = {
+                id: Date.now(),
+                nama: document.getElementById('cmpNama').value.trim(),
+                minat: document.getElementById('cmpMinat').value,
+                lokasi: document.getElementById('cmpLokasi').value.trim() || '-',
+                syarat: document.getElementById('cmpSyarat').value.trim() || '-',
+                biaya: document.getElementById('cmpBiaya').value.trim() || '-',
+                tenggat: document.getElementById('cmpTenggat').value.trim() || '-',
+                info: document.getElementById('cmpInfo').value.trim() || '-'
+            };
+            updateStudentRecord(currentStudentEmail, u => {
+                if (!Array.isArray(u.comparisons)) u.comparisons = [];
+                u.comparisons.unshift(item);
+            });
+            e.target.reset();
+            renderStudentAll();
+            showToast('Pilihan ditambahkan ke matriks perbandingan!');
+        }
+        function deleteComparison(id) {
+            updateStudentRecord(currentStudentEmail, u => {
+                u.comparisons = (u.comparisons || []).filter(c => c.id !== id);
+            });
+            renderStudentAll();
+        }
+
+        function addPlan(e) {
+            e.preventDefault();
+            const plan = {
+                id: Date.now(),
+                tujuan: document.getElementById('plnTujuan').value.trim(),
+                tindakan: document.getElementById('plnTindakan').value.trim(),
+                tenggat: document.getElementById('plnTenggat').value,
+                dukungan: document.getElementById('plnDukungan').value.trim() || 'Mandiri',
+                alternatif: document.getElementById('plnAlternatif').value.trim() || 'Belum dicatat',
+                done: false
+            };
+            updateStudentRecord(currentStudentEmail, u => {
+                if (!Array.isArray(u.plans)) u.plans = [];
+                u.plans.unshift(plan);
+            });
+            e.target.reset();
+            renderStudentAll();
+            showToast('Mantap! Rencana langkah terdekatmu tersimpan.');
+        }
+        function togglePlanStatus(id) {
+            updateStudentRecord(currentStudentEmail, u => {
+                const p = (u.plans || []).find(x => x.id === id);
+                if (p) p.done = !p.done;
+            });
+            renderStudentAll();
+        }
+        function deletePlan(id) {
+            updateStudentRecord(currentStudentEmail, u => {
+                u.plans = (u.plans || []).filter(x => x.id !== id);
+            });
+            renderStudentAll();
+        }
+
+        function filterArticles(cat, btn) {
+            document.querySelectorAll('#articleFilters .pill-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderArticles(cat);
+        }
+        function renderArticles(cat) {
+            const list = cat === 'semua' ? articlesData : articlesData.filter(a => a.cat === cat);
+            document.getElementById('articleGrid').innerHTML = list.map(a => `
+                <article class="pathway-card">
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px;">
+                            <span class="tag tag-navy">${esc(a.catLabel)}</span>
+                            <span style="font-size:11.5px; color:var(--text-muted); font-weight:700;">${esc(a.type)}</span>
+                        </div>
+                        <h3 style="font-size:17.5px; color:var(--navy-950); margin-bottom:8px; line-height:1.35;">${esc(a.title)}</h3>
+                        <p style="font-size:13.5px; color:var(--text-sub); margin-bottom:16px;">${esc(a.excerpt)}</p>
+                    </div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button class="btn btn-navy btn-sm" onclick="openArticleModal('${a.id}')">Baca Materi</button>
+                        <a class="btn btn-outline btn-sm" href="${a.videoUrl}" target="_blank" rel="noopener noreferrer">Referensi Video</a>
+                    </div>
+                </article>
+            `).join('');
+        }
+        function openArticleModal(id) {
+            const a = articlesData.find(x => x.id === id);
+            if (!a) return;
+            document.getElementById('artModalCat').innerText = `${a.catLabel} • ${a.type}`;
+            document.getElementById('artModalTitle').innerText = a.title;
+            document.getElementById('artModalBody').innerHTML = `
+                ${a.body}
+                <div style="margin-top:20px; padding-top:16px; border-top:2px solid var(--border); display:flex; gap:10px; flex-wrap:wrap;">
+                    <a class="btn btn-gold btn-sm" href="${a.videoUrl}" target="_blank" rel="noopener noreferrer">Tonton Video Terkait</a>
+                    <button class="btn btn-outline btn-sm" onclick="closeModal('articleModal')">Tutup</button>
+                </div>`;
+            document.getElementById('articleModal').classList.add('open');
+        }
+
+        function submitConsult(e) {
+            e.preventDefault();
+            if (!document.getElementById('cnsConsent').checked) {
+                showToast('Centang kotak persetujuan pengiriman dulu ya!');
+                return;
+            }
+            const req = {
+                id: Date.now(),
+                tanggal: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+                nama: document.getElementById('cnsNama').value.trim(),
+                topik: document.getElementById('cnsTopik').value,
+                metode: document.getElementById('cnsMetode').value,
+                waktu: document.getElementById('cnsWaktu').value.trim(),
+                catatan: document.getElementById('cnsCatatan').value.trim(),
+                consent: true,
+                status: 'Menunggu'
+            };
+            updateStudentRecord(currentStudentEmail, u => {
+                if (!Array.isArray(u.consultations)) u.consultations = [];
+                u.consultations.unshift(req);
+            });
+            e.target.reset();
+            renderStudentAll();
+            showToast('Permintaan konsultasi terkirim ke Guru BK!');
+        }
+
+        function renderStudentAll() {
+            const u = getCurrentStudent();
+            if (!u) return;
+
+            const comparisons = Array.isArray(u.comparisons) ? u.comparisons : [];
+            const plans = Array.isArray(u.plans) ? u.plans : [];
+            const consultations = Array.isArray(u.consultations) ? u.consultations : [];
+
+            let stepsDone = 0;
+            if (u.kenaliDiri) stepsDone++;
+            if (comparisons.length > 0) stepsDone++;
+            if (plans.length > 0) stepsDone++;
+            if (consultations.length > 0) stepsDone++;
+            const pct = stepsDone * 25;
+            document.getElementById('progBarFill').style.width = `${pct}%`;
+            document.getElementById('progPercentText').innerText = `${pct}% Selesai`;
+            const hints = [
+                'Langkah pertama: Coba isi refleksi ringan di menu Kenali Diri yuk!',
+                'Bagus! Lanjutkan dengan membandingkan 2–3 jalur di Bandingkan Pilihan.',
+                'Hebat! Sekarang ubah pilihanmu jadi aksi nyata di Rencana Langkah.',
+                'Hampir lengkap! Kamu bisa diskusikan rencanamu lewat Konsultasi BK.',
+                'Luar biasa! Semua tahap eksplorasi sudah kamu jalani — tetap tinjau ulang berkala ya!'
+            ];
+            document.getElementById('progHintText').innerText = hints[stepsDone];
+
+            document.getElementById('sumRefleksi').innerText = u.kenaliDiri ? 'Sudah' : 'Belum';
+            document.getElementById('sumBanding').innerText = comparisons.length;
+            document.getElementById('sumRencana').innerText = plans.length;
+            document.getElementById('sumKonsul').innerText = consultations.length;
+
+            // Pastikan form Kenali Diri selalu kosong untuk akun baru
+            const kdCard = document.getElementById('kenaliSummaryCard');
+            if (u.kenaliDiri) {
+                document.getElementById('kdMinat').value = u.kenaliDiri.minat === '-' ? '' : u.kenaliDiri.minat;
+                document.getElementById('kdAktivitas').value = u.kenaliDiri.aktivitas === '-' ? '' : u.kenaliDiri.aktivitas;
+                document.getElementById('kdKekuatan').value = u.kenaliDiri.kekuatan === '-' ? '' : u.kenaliDiri.kekuatan;
+                document.getElementById('kdKembang').value = u.kenaliDiri.kembang === '-' ? '' : u.kenaliDiri.kembang;
+                kdCard.style.display = 'block';
+                document.getElementById('kenaliUpdatedAt').innerText = `Diperbarui ${u.kenaliDiri.updatedAt}`;
+                document.getElementById('kenaliSummaryContent').innerHTML = `
+                    <div class="stat-tile" style="text-align:left;"><div class="lbl">Minat Utama</div><p style="font-size:13.5px; margin-top:4px;">${esc(u.kenaliDiri.minat)}</p></div>
+                    <div class="stat-tile" style="text-align:left;"><div class="lbl">Aktivitas Disukai</div><p style="font-size:13.5px; margin-top:4px;">${esc(u.kenaliDiri.aktivitas)}</p></div>
+                    <div class="stat-tile" style="text-align:left;"><div class="lbl">Kekuatan Dirasakan</div><p style="font-size:13.5px; margin-top:4px;">${esc(u.kenaliDiri.kekuatan)}</p></div>
+                    <div class="stat-tile" style="text-align:left;"><div class="lbl">Ingin Dikembangkan</div><p style="font-size:13.5px; margin-top:4px;">${esc(u.kenaliDiri.kembang)}</p></div>`;
+            } else {
+                document.getElementById('kdMinat').value = '';
+                document.getElementById('kdAktivitas').value = '';
+                document.getElementById('kdKekuatan').value = '';
+                document.getElementById('kdKembang').value = '';
+                kdCard.style.display = 'none';
+                document.getElementById('kenaliSummaryContent').innerHTML = '';
+            }
+
+            const cmpBox = document.getElementById('compareTableContainer');
+            cmpBox.innerHTML = !comparisons.length
+                ? `<p style="text-align:center; padding:24px; color:var(--text-muted); font-size:13.5px;">Belum ada pilihan yang dibandingkan. Yuk tambahkan 2 pilihan di atas!</p>`
+                : `<div class="table-wrap"><table class="compare-table">
+                    <thead><tr><th>Pilihan</th><th>Minat</th><th>Syarat</th><th>Biaya / Sumber Daya</th><th>Lokasi & Tenggat</th><th>Info Perlu Dicari</th><th>Aksi</th></tr></thead>
+                    <tbody>${comparisons.map(c => `
+                        <tr>
+                            <td><strong>${esc(c.nama)}</strong></td>
+                            <td><span class="tag tag-navy">${esc(c.minat)}</span></td>
+                            <td>${esc(c.syarat)}</td>
+                            <td>${esc(c.biaya)}</td>
+                            <td>${esc(c.lokasi)}<br><small style="color:var(--text-muted);">Tenggat: ${esc(c.tenggat)}</small></td>
+                            <td>${esc(c.info)}</td>
+                            <td><button class="btn btn-danger-soft btn-sm" onclick="deleteComparison(${c.id})">Hapus</button></td>
+                        </tr>`).join('')}
+                    </tbody></table></div>`;
+
+            const planBox = document.getElementById('planListContainer');
+            planBox.innerHTML = !plans.length
+                ? `<p style="text-align:center; padding:20px; color:var(--text-muted); font-size:13.5px;">Belum ada rencana langkah yang disusun.</p>`
+                : plans.map(p => `
+                    <div class="row-card ${p.done ? 'done' : ''}">
+                        <div style="flex:1; min-width:240px;">
+                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:5px;">
+                                <strong style="font-size:15.5px; color:var(--navy-950);">${esc(p.tujuan)}</strong>
+                                <span class="tag ${p.done ? 'tag-green' : 'tag-gold'}">${p.done ? 'Selesai Ditinjau' : 'Berjalan'}</span>
+                            </div>
+                            <p style="font-size:13.5px; margin-bottom:4px;"><strong>Tindakan terdekat:</strong> ${esc(p.tindakan)}</p>
+                            <p style="font-size:12.5px; color:var(--text-sub);">Tenggat: ${esc(p.tenggat)} • Dukungan: ${esc(p.dukungan)} • Alternatif: ${esc(p.alternatif)}</p>
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="btn btn-success-soft btn-sm" onclick="togglePlanStatus(${p.id})">${p.done ? 'Batal Selesai' : 'Tandai Selesai'}</button>
+                            <button class="btn btn-danger-soft btn-sm" onclick="deletePlan(${p.id})">Hapus</button>
+                        </div>
+                    </div>`).join('');
+
+            const cnsBox = document.getElementById('consultHistoryContainer');
+            cnsBox.innerHTML = !consultations.length
+                ? `<p style="text-align:center; padding:20px; color:var(--text-muted); font-size:13.5px;">Belum ada pengajuan formulir konsultasi.</p>`
+                : consultations.map(c => {
+                    const cls = c.status === 'Selesai' ? 'tag-green' : (c.status === 'Dijadwalkan' ? 'tag-navy' : 'tag-gold');
+                    return `<div class="row-card ${c.status === 'Selesai' ? 'done' : ''}">
+                        <div style="flex:1;">
+                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
+                                <strong>${esc(c.topik)}</strong><span class="tag ${cls}">${esc(c.status)}</span>
+                            </div>
+                            <p style="font-size:12.5px; color:var(--text-sub);">${esc(c.tanggal)} • ${esc(c.metode)} • Usulan: ${esc(c.waktu)}</p>
+                            <p style="font-size:13px; margin-top:6px;">${esc(c.catatan)}</p>
+                        </div>
+                    </div>`;
+                }).join('');
+        }
+
+        // ============================================================
+        // ADMIN PANEL / GURU BK (CERA)
+        // ============================================================
+        function adminAddStudent(e) {
+            e.preventDefault();
+            const email = document.getElementById('admNewEmail').value.trim().toLowerCase();
+            const users = getUsers();
+            if (users.some(u => u.email === email)) { showToast('Email siswa sudah terdaftar.'); return; }
+            if (users.filter(u => u.allowed !== false).length >= MAX_USERS) { showToast(`Kuota penuh (${MAX_USERS} siswa).`); return; }
+            users.push(createEmptyRecord(email));
+            saveUsers(users);
+            e.target.reset();
+            renderAdminDashboard();
+            showToast(`Akses untuk ${email} berhasil ditambahkan.`);
+        }
+
+        function adminToggleAccess(email, allow) {
+            const users = getUsers();
+            if (allow && users.filter(u => u.allowed !== false).length >= MAX_USERS) { showToast(`Kuota sudah mencapai ${MAX_USERS}.`); return; }
+            updateStudentRecord(email, u => { u.allowed = allow; });
+            renderAdminDashboard();
+            if (currentInspectEmail === email) renderInspectModal();
+            showToast(allow ? `Akses ${email} diaktifkan.` : `Akses ${email} dinonaktifkan.`);
+        }
+
+        function adminDeleteStudent(email) {
+            if (!confirm(`Hapus permanen akun ${email} beserta seluruh data progresnya?`)) return;
+            saveUsers(getUsers().filter(u => u.email !== email));
+            if (currentInspectEmail === email) closeModal('inspectModal');
+            renderAdminDashboard();
+            showToast('Akun siswa berhasil dihapus.');
+        }
+
+        function adminUpdateConsultStatus(email, consultId, newStatus) {
+            updateStudentRecord(email, u => {
+                const c = (u.consultations || []).find(x => x.id === consultId);
+                if (c) c.status = newStatus;
+            });
+            renderAdminDashboard();
+            if (currentInspectEmail === email) renderInspectModal();
+            showToast(`Status konsultasi diubah ke ${newStatus}.`);
+        }
+
+        function openInspectModal(email) {
+            currentInspectEmail = email;
+            switchInspectTab('kenali');
+            renderInspectModal();
+            document.getElementById('inspectModal').classList.add('open');
+        }
+        function switchInspectTab(tab) {
+            ['kenali', 'banding', 'rencana', 'konsul'].forEach(t => {
+                document.getElementById(`itab-${t}`).classList.toggle('active', t === tab);
+                document.getElementById(`ipane-${t}`).classList.toggle('active', t === tab);
+            });
+        }
+        function renderInspectModal() {
+            const u = getUsers().find(x => x.email === currentInspectEmail);
+            if (!u) return;
+            const comparisons = Array.isArray(u.comparisons) ? u.comparisons : [];
+            const plans = Array.isArray(u.plans) ? u.plans : [];
+            const consultations = Array.isArray(u.consultations) ? u.consultations : [];
+
+            document.getElementById('insEmail').innerText = u.email;
+            const tag = document.getElementById('insStatusTag');
+            tag.className = `tag ${u.allowed !== false ? 'tag-green' : 'tag-red'}`;
+            tag.innerText = u.allowed !== false ? 'Akses Aktif' : 'Dinonaktifkan';
+            document.getElementById('insMeta').innerText = `Bergabung ${u.joinedAt} • ${comparisons.length} perbandingan • ${plans.length} rencana`;
+            document.getElementById('icnt-banding').innerText = comparisons.length;
+            document.getElementById('icnt-rencana').innerText = plans.length;
+            document.getElementById('icnt-konsul').innerText = consultations.length;
+
+            document.getElementById('ipane-kenali').innerHTML = u.kenaliDiri ? `
+                <div class="grid-2">
+                    <div class="stat-tile" style="text-align:left;"><div class="lbl">Minat</div><p style="font-size:13.5px; margin-top:4px;">${esc(u.kenaliDiri.minat)}</p></div>
+                    <div class="stat-tile" style="text-align:left;"><div class="lbl">Aktivitas Disukai</div><p style="font-size:13.5px; margin-top:4px;">${esc(u.kenaliDiri.aktivitas)}</p></div>
+                    <div class="stat-tile" style="text-align:left;"><div class="lbl">Kekuatan</div><p style="font-size:13.5px; margin-top:4px;">${esc(u.kenaliDiri.kekuatan)}</p></div>
+                    <div class="stat-tile" style="text-align:left;"><div class="lbl">Ingin Dikembangkan</div><p style="font-size:13.5px; margin-top:4px;">${esc(u.kenaliDiri.kembang)}</p></div>
+                </div>` : `<p style="text-align:center; padding:24px; color:var(--text-muted);">Belum mengisi refleksi Kenali Diri.</p>`;
+
+            document.getElementById('ipane-banding').innerHTML = comparisons.length ? comparisons.map(c => `
+                <div class="row-card" style="background:#fff;">
+                    <div style="width:100%;">
+                        <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:5px;">
+                            <strong>${esc(c.nama)}</strong><span class="tag tag-navy">${esc(c.minat)}</span>
+                        </div>
+                        <p style="font-size:12.5px; color:var(--text-sub);">Syarat: ${esc(c.syarat)} • Biaya: ${esc(c.biaya)} • Lokasi: ${esc(c.lokasi)} • Tenggat: ${esc(c.tenggat)}</p>
+                        <p style="font-size:12.5px; color:var(--navy-800); margin-top:4px;">Perlu dicari: ${esc(c.info)}</p>
+                    </div>
+                </div>`).join('') : `<p style="text-align:center; padding:24px; color:var(--text-muted);">Belum ada perbandingan pilihan.</p>`;
+
+            document.getElementById('ipane-rencana').innerHTML = plans.length ? plans.map(p => `
+                <div class="row-card ${p.done ? 'done' : ''}" style="background:#fff;">
+                    <div style="width:100%;">
+                        <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:5px;">
+                            <strong>${esc(p.tujuan)}</strong><span class="tag ${p.done ? 'tag-green' : 'tag-gold'}">${p.done ? 'Selesai' : 'Berjalan'}</span>
+                        </div>
+                        <p style="font-size:13px;">Tindakan: ${esc(p.tindakan)}</p>
+                        <p style="font-size:12px; color:var(--text-sub); margin-top:3px;">Tenggat: ${esc(p.tenggat)} • Dukungan: ${esc(p.dukungan)} • Plan B: ${esc(p.alternatif)}</p>
+                    </div>
+                </div>`).join('') : `<p style="text-align:center; padding:24px; color:var(--text-muted);">Belum ada rencana langkah.</p>`;
+
+            document.getElementById('ipane-konsul').innerHTML = consultations.length ? consultations.map(c => `
+                <div class="row-card" style="background:#fff;">
+                    <div style="flex:1;">
+                        <strong>${esc(c.topik)}</strong>
+                        <p style="font-size:12px; color:var(--text-sub);">${esc(c.nama)} • ${esc(c.tanggal)} • ${esc(c.metode)} (${esc(c.waktu)})</p>
+                        <p style="font-size:13px; margin-top:6px;">${esc(c.catatan)}</p>
+                    </div>
+                    <select onchange="adminUpdateConsultStatus('${esc(u.email)}', ${c.id}, this.value)" style="padding:7px 10px; border-radius:10px; border:2px solid var(--border); font-size:12px; font-weight:700;">
+                        <option value="Menunggu" ${c.status==='Menunggu'?'selected':''}>Menunggu</option>
+                        <option value="Dijadwalkan" ${c.status==='Dijadwalkan'?'selected':''}>Dijadwalkan</option>
+                        <option value="Selesai" ${c.status==='Selesai'?'selected':''}>Selesai</option>
+                    </select>
+                </div>`).join('') : `<p style="text-align:center; padding:24px; color:var(--text-muted);">Belum ada permintaan konsultasi.</p>`;
+        }
+
+        function renderAdminDashboard() {
+            const users = getUsers();
+            const activeUsers = users.filter(u => u.allowed !== false);
+            const blockedUsers = users.filter(u => u.allowed === false);
+            const totalPlans = users.reduce((s, u) => s + (u.plans?.length || 0), 0);
+            const allConsults = [];
+            users.forEach(u => (u.consultations || []).forEach(c => allConsults.push({ ...c, email: u.email })));
+
+            document.getElementById('admStatActive').innerText = activeUsers.length;
+            document.getElementById('admStatBlocked').innerText = blockedUsers.length;
+            document.getElementById('admStatPlans').innerText = totalPlans;
+            document.getElementById('admStatConsults').innerText = allConsults.length;
+            document.getElementById('admQuotaLabel').innerText = `${activeUsers.length}/${MAX_USERS}`;
+
+            const qMon = (document.getElementById('admSearchMonitor')?.value || '').trim().toLowerCase();
+            const monList = users.filter(u => !qMon || u.email.toLowerCase().includes(qMon));
+            document.getElementById('admMonitorList').innerHTML = monList.length ? monList.map((u, idx) => `
+                <div class="row-card ${u.allowed === false ? 'blocked' : ''}">
+                    <div style="flex:1; min-width:230px;">
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
+                            <strong>${idx + 1}. ${esc(u.email)}</strong>
+                            <span class="tag ${u.allowed !== false ? 'tag-green' : 'tag-red'}">${u.allowed !== false ? 'Aktif' : 'Dinonaktifkan'}</span>
+                            <span class="tag ${u.kenaliDiri ? 'tag-navy' : 'tag-gold'}">${u.kenaliDiri ? 'Kenali Diri: Sudah' : 'Kenali Diri: Belum'}</span>
+                        </div>
+                        <p style="font-size:12.5px; color:var(--text-sub);">Bergabung: ${esc(u.joinedAt)} • Bandingkan: ${(u.comparisons||[]).length} • Rencana: ${(u.plans||[]).length} • Konsultasi: ${(u.consultations||[]).length}</p>
+                    </div>
+                    <button class="btn btn-navy btn-sm" onclick="openInspectModal('${esc(u.email)}')">Cek Progres</button>
+                </div>`).join('') : `<p style="text-align:center; padding:24px; color:var(--text-muted);">Belum ada siswa yang masuk.</p>`;
+
+            allConsults.sort((a, b) => b.id - a.id);
+            document.getElementById('admConsultList').innerHTML = allConsults.length ? allConsults.map(c => `
+                <div class="row-card ${c.status === 'Selesai' ? 'done' : ''}">
+                    <div style="flex:1; min-width:240px;">
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
+                            <strong>${esc(c.nama)}</strong><small style="color:var(--text-muted);">(${esc(c.email)})</small>
+                            <span class="tag tag-green">Persetujuan Disetujui</span>
+                        </div>
+                        <p style="font-size:13.5px; font-weight:700; color:var(--navy-900); margin-top:4px;">Topik: ${esc(c.topik)}</p>
+                        <p style="font-size:12.5px; color:var(--text-sub);">${esc(c.tanggal)} • ${esc(c.metode)} • Usulan: ${esc(c.waktu)}</p>
+                        <p style="font-size:13px; margin-top:6px;">${esc(c.catatan)}</p>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-end;">
+                        <select onchange="adminUpdateConsultStatus('${esc(c.email)}', ${c.id}, this.value)" style="padding:7px 11px; border-radius:10px; border:2px solid var(--border); font-size:12.5px; font-weight:700; background:#fff;">
+                            <option value="Menunggu" ${c.status==='Menunggu'?'selected':''}>Menunggu</option>
+                            <option value="Dijadwalkan" ${c.status==='Dijadwalkan'?'selected':''}>Dijadwalkan</option>
+                            <option value="Selesai" ${c.status==='Selesai'?'selected':''}>Selesai</option>
+                        </select>
+                        <button class="btn btn-pastel btn-sm" onclick="openInspectModal('${esc(c.email)}')">Lihat Progres Siswa</button>
+                    </div>
+                </div>`).join('') : `<p style="text-align:center; padding:24px; color:var(--text-muted);">Belum ada permintaan konsultasi masuk.</p>`;
+
+            const qAcc = (document.getElementById('admSearchAccess')?.value || '').trim().toLowerCase();
+            const accList = users.filter(u => !qAcc || u.email.toLowerCase().includes(qAcc));
+            document.getElementById('admAccessList').innerHTML = accList.length ? accList.map(u => `
+                <div class="row-card ${u.allowed === false ? 'blocked' : ''}">
+                    <div>
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <strong>${esc(u.email)}</strong>
+                            <span class="tag ${u.allowed !== false ? 'tag-green' : 'tag-red'}">${u.allowed !== false ? 'Aktif' : 'Dinonaktifkan'}</span>
+                        </div>
+                        <p style="font-size:12px; color:var(--text-sub); margin-top:3px;">Terdaftar: ${esc(u.joinedAt)}</p>
+                    </div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button class="btn btn-pastel btn-sm" onclick="openInspectModal('${esc(u.email)}')">Cek Progres</button>
+                        ${u.allowed !== false
+                            ? `<button class="btn btn-danger-soft btn-sm" onclick="adminToggleAccess('${esc(u.email)}', false)">Nonaktifkan</button>`
+                            : `<button class="btn btn-success-soft btn-sm" onclick="adminToggleAccess('${esc(u.email)}', true)">Aktifkan</button>`}
+                        <button class="btn btn-outline btn-sm" onclick="adminDeleteStudent('${esc(u.email)}')">Hapus</button>
+                    </div>
+                </div>`).join('') : `<p style="text-align:center; padding:24px; color:var(--text-muted);">Belum ada akun terdaftar.</p>`;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem(SESSION_ADM_KEY) === 'true') { launchAdminApp(); return; }
+            const savedStu = localStorage.getItem(SESSION_STU_KEY);
+            if (savedStu) {
+                const u = getUsers().find(x => x.email === savedStu);
+                if (u && u.allowed !== false) { launchStudentApp(savedStu); return; }
+                localStorage.removeItem(SESSION_STU_KEY);
+            }
+            switchAuthTab('student');
+        });
+    </script>
+</body>
+</html>
