@@ -39,10 +39,10 @@
         .ico { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
         /* AUTH */
-        #auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px 16px; }
+        #auth-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 28px 16px 24px; gap: 28px; }
         .auth-shell {
             width: 100%; max-width: 920px; background: #fff; border-radius: 30px; border: 3px solid #fff;
-            box-shadow: 0 24px 60px rgba(24,59,107,0.15); display: grid; grid-template-columns: 1.05fr 1fr; overflow: hidden;
+            box-shadow: 0 24px 60px rgba(24,59,107,0.15); display: grid; grid-template-columns: 1.05fr 1fr; overflow: hidden; margin: auto 0;
         }
         .auth-visual {
             background: linear-gradient(155deg, #183B6B 0%, #245291 58%, #3B76C4 100%);
@@ -125,8 +125,8 @@
         .drawer-backdrop.open { display: block; }
 
         /* MAIN CONTENT */
-        .main-area { flex: 1; padding: 26px 32px 92px; max-width: 1160px; width: 100%; margin: 0 auto; }
-        .page-view, .admin-view { display: none; }
+        .main-area { flex: 1; padding: 26px 32px 92px; max-width: 1160px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; min-height: 100vh; }
+        .page-view, .admin-view { display: none; flex: 1; }
         .page-view.active, .admin-view.active { display: block; animation: popIn 0.25s ease; }
         .page-head { margin-bottom: 18px; }
         .page-badge { display: inline-block; background: var(--pastel-100); color: var(--navy-800); padding: 4px 12px; border-radius: 99px; font-size: 11.5px; font-weight: 800; margin-bottom: 5px; }
@@ -194,6 +194,45 @@
         .consent-box { background: var(--pastel-100); border: 2px solid var(--pastel-200); border-radius: 14px; padding: 13px 15px; margin: 12px 0 16px; display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; color: var(--navy-950); font-weight: 600; }
         .consent-box input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--navy-900); }
 
+        /* FOOTER INFORMASI */
+        .site-footer {
+            width: 100%;
+            background: #142F59;
+            color: #FFFFFF;
+            border-radius: 20px;
+            padding: 28px 26px 22px;
+            margin-top: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+        .site-footer h4 {
+            font-size: 19px;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 14px;
+        }
+        .site-footer p {
+            font-size: 13.5px;
+            color: #E2EEFA;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .site-footer hr {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.32);
+            margin: 18px 0 16px;
+        }
+        .site-footer .footer-copy {
+            text-align: center;
+            font-size: 13.5px;
+            color: #FFFFFF;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+        #auth-screen .site-footer {
+            max-width: 920px;
+            margin-top: 0;
+        }
+
         .modal-overlay { position: fixed; inset: 0; background: rgba(15,37,68,0.58); z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px; }
         .modal-overlay.open { display: flex; }
         .modal-card { background: #fff; width: 100%; max-width: 800px; max-height: 88vh; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; border: 3px solid var(--pastel-200); }
@@ -208,6 +247,7 @@
 
         @media (max-width: 920px) {
             .auth-shell { grid-template-columns: 1fr; max-width: 450px; }
+            #auth-screen .site-footer { max-width: 450px; }
             .app-shell.active { flex-direction: column; }
             .mobile-header { display: flex; }
             .sidebar { position: fixed; top: 0; left: -275px; z-index: 150; transition: left 0.25s ease; }
@@ -305,6 +345,14 @@
                 </div>
             </div>
         </div>
+
+        <footer class="site-footer">
+            <h4>Informasi</h4>
+            <p>Website pendukung layanan Bimbingan dan Konseling bidang karier.</p>
+            <p>Dikembangkan sebagai media eksplorasi dan perencanaan karier siswa.</p>
+            <hr>
+            <p class="footer-copy">&copy; 2026 Arah Karier. All Rights Reserved.</p>
+        </footer>
     </div>
 
     <!-- 2. APLIKASI SISWA -->
@@ -562,6 +610,14 @@
                 </div>
                 <div class="card"><h3 style="font-size:16px; margin-bottom:12px;">Riwayat Pengajuan Konsultasimu</h3><div id="consultHistoryContainer"></div></div>
             </section>
+
+            <footer class="site-footer">
+                <h4>Informasi</h4>
+                <p>Website pendukung layanan Bimbingan dan Konseling bidang karier.</p>
+                <p>Dikembangkan sebagai media eksplorasi dan perencanaan karier siswa.</p>
+                <hr>
+                <p class="footer-copy">&copy; 2026 Arah Karier. All Rights Reserved.</p>
+            </footer>
         </main>
     </div>
 
@@ -633,6 +689,14 @@
                     <div id="admAccessList"></div>
                 </div>
             </section>
+
+            <footer class="site-footer">
+                <h4>Informasi</h4>
+                <p>Website pendukung layanan Bimbingan dan Konseling bidang karier.</p>
+                <p>Dikembangkan sebagai media eksplorasi dan perencanaan karier siswa.</p>
+                <hr>
+                <p class="footer-copy">&copy; 2026 Arah Karier. All Rights Reserved.</p>
+            </footer>
         </main>
     </div>
 
@@ -707,9 +771,9 @@
 
         function formatFirebaseError(err) {
             const code = err?.code || '';
-            if (code === 'permission-denied') return 'Akses Firestore ditolak (permission-denied). Buka Firebase Console → Firestore Database → tab Rules, ubah ke "allow read, write: if true;" lalu klik Publish.';
-            if (code === 'not-found' || code === 'failed-precondition') return 'Firestore Database belum dibuat di proyek arah-karier. Buat Firestore Database (Start in test mode) di Firebase Console.';
-            if (code === 'unavailable') return 'Tidak dapat menjangkau server Firebase. Periksa koneksi internet atau matikan VPN/AdBlock.';
+            if (code === 'permission-denied') return 'Akses Firestore ditolak (permission-denied). Periksa tab Rules di Firestore Database Firebase Console.';
+            if (code === 'not-found' || code === 'failed-precondition') return 'Firestore Database belum dibuat di proyek arah-karier.';
+            if (code === 'unavailable') return 'Tidak dapat menjangkau server Firebase. Periksa koneksi internetmu.';
             return `Gagal terhubung ke Firebase (${code || err?.message || 'error tidak diketahui'}).`;
         }
 
@@ -811,7 +875,7 @@
             const btn = document.getElementById('btnStuLogin');
             const email = document.getElementById('stuEmail').value.trim().toLowerCase();
             const pass = document.getElementById('stuPass').value.trim();
-            if (pass !== STUDENT_REQUIRED_PASS) { showAuthAlert('studentAlert', 'Kata sandi belum sesuai ketentuan. Gunakan ARAH KARIER (huruf kapital).', 'error'); return; }
+            if (pass !== STUDENT_REQUIRED_PASS) { showAuthAlert('studentAlert', 'Password salah.', 'error'); return; }
             btn.disabled = true; btn.innerText = 'Menghubungkan...';
             try {
                 const snap = await usersCol.doc(email).get();
@@ -843,7 +907,7 @@
                 localStorage.setItem(SESSION_ADM_KEY, 'true');
                 document.getElementById('formAdminLogin').reset();
                 launchAdminApp();
-            } else { showAuthAlert('adminAlert', 'Username atau kata sandi Admin salah.', 'error'); }
+            } else { showAuthAlert('adminAlert', 'Username atau password salah.', 'error'); }
         }
 
         function launchStudentApp(email, initialRecord) {
