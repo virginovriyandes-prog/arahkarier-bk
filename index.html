@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <style>
@@ -22,63 +23,47 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
         h1, h2, h3, h4, .brand-name { font-family: 'Outfit', sans-serif; letter-spacing: -0.015em; }
-        body {
-            background: var(--pastel-50);
-            background-image: radial-gradient(circle at 8% 12%, rgba(154,203,249,0.38) 0%, transparent 32%),
-                radial-gradient(circle at 92% 18%, rgba(255,197,90,0.22) 0%, transparent 28%);
-            color: var(--text-main); min-height: 100vh; line-height: 1.55;
-        }
+        body { background: var(--pastel-50); background-image: radial-gradient(circle at 8% 12%, rgba(154,203,249,0.38) 0%, transparent 32%), radial-gradient(circle at 92% 18%, rgba(255,197,90,0.22) 0%, transparent 28%); color: var(--text-main); min-height: 100vh; line-height: 1.55; }
         button, input, select, textarea { font-family: inherit; }
-        @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-        @keyframes floatCloud { 0%,100%{transform:translate(0,0)} 50%{transform:translate(5px,-5px)} }
-        @keyframes wiggleChar { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-8deg) scale(1.07)} 60%{transform:rotate(8deg) scale(1.07)} }
-        @keyframes popIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-        .float-piko { animation: floatY 3.4s ease-in-out infinite; }
-        .float-lumi { animation: floatCloud 4.2s ease-in-out infinite; }
+        @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+        @keyframes wiggleChar { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-6deg) scale(1.05)} 60%{transform:rotate(6deg) scale(1.05)} }
+        @keyframes popIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+        .float-boy { animation: floatY 3.4s ease-in-out infinite; }
+        .float-girl { animation: floatY 4s ease-in-out infinite; }
         .wiggle-now { animation: wiggleChar 0.5s var(--bounce) !important; }
         .ico { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
         /* AUTH */
-        #auth-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 28px 16px 24px; gap: 28px; }
-        .auth-shell {
-            width: 100%; max-width: 920px; background: #fff; border-radius: 30px; border: 3px solid #fff;
-            box-shadow: 0 24px 60px rgba(24,59,107,0.15); display: grid; grid-template-columns: 1.05fr 1fr; overflow: hidden; margin: auto 0;
-        }
-        .auth-visual {
-            background: linear-gradient(155deg, #183B6B 0%, #245291 58%, #3B76C4 100%);
-            padding: 36px 28px; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        }
+        #auth-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 26px 16px 24px; gap: 26px; }
+        .auth-shell { width: 100%; max-width: 920px; background: #fff; border-radius: 30px; border: 3px solid #fff; box-shadow: 0 24px 60px rgba(24,59,107,0.15); display: grid; grid-template-columns: 1.05fr 1fr; overflow: hidden; margin: auto 0; }
+        .auth-visual { background: linear-gradient(155deg,#183B6B 0%,#245291 58%,#3B76C4 100%); padding: 34px 26px; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .auth-chip { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.28); padding: 5px 14px; border-radius: 99px; font-size: 11.5px; font-weight: 700; margin-bottom: 14px; display: inline-block; }
-        .speech-pill { background: #fff; color: var(--navy-950); padding: 10px 15px; border-radius: 18px; font-size: 12.5px; font-weight: 700; box-shadow: 0 10px 24px rgba(15,37,68,0.22); margin-bottom: 14px; max-width: 290px; }
-        .character-stage { display: flex; align-items: flex-end; justify-content: center; gap: 4px; margin-bottom: 12px; }
+        .speech-pill { background: #fff; color: var(--navy-950); padding: 10px 15px; border-radius: 18px; font-size: 12.5px; font-weight: 700; box-shadow: 0 10px 24px rgba(15,37,68,0.22); margin-bottom: 14px; max-width: 300px; }
+        .character-stage { display: flex; align-items: flex-end; justify-content: center; gap: 6px; margin-bottom: 10px; }
         .auth-form-pane { padding: 36px 34px; display: flex; flex-direction: column; justify-content: center; }
         .role-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--pastel-100); padding: 5px; border-radius: 15px; margin-bottom: 20px; }
         .role-tab { border: none; background: transparent; padding: 9px; border-radius: 11px; font-size: 13.5px; font-weight: 800; color: var(--text-sub); cursor: pointer; }
         .role-tab.active { background: var(--navy-900); color: #fff; }
         .auth-panel { display: none; }
         .auth-panel.active { display: block; animation: popIn 0.25s ease; }
-        .alert-box { display: none; padding: 10px 14px; border-radius: 12px; font-size: 12.5px; font-weight: 700; margin-bottom: 14px; }
+
+        .alert-box { display: none; padding: 11px 14px; border-radius: 12px; font-size: 12.5px; font-weight: 700; margin-bottom: 14px; }
         .alert-box.error { display: block; background: var(--danger-bg); color: var(--danger); border: 1.5px solid #FECDD3; }
         .alert-box.success { display: block; background: var(--success-bg); color: var(--success); border: 1.5px solid #BBF7D0; }
+        .alert-box.warn { display: block; background: var(--gold-100); color: #8A5306; border: 1.5px solid #F7D488; }
 
         .field { margin-bottom: 13px; }
         .field label { display: block; font-size: 12.5px; font-weight: 800; color: var(--navy-900); margin-bottom: 5px; }
         .input-wrap { position: relative; display: flex; align-items: center; }
-        .field input, .field select, .field textarea {
-            width: 100%; padding: 10px 14px; border: 2px solid var(--border); border-radius: 13px;
-            background: var(--pastel-50); color: var(--text-main); font-size: 13.5px; font-weight: 600; outline: none;
-        }
+        .field input, .field select, .field textarea { width: 100%; padding: 10px 14px; border: 2px solid var(--border); border-radius: 13px; background: var(--pastel-50); color: var(--text-main); font-size: 13.5px; font-weight: 600; outline: none; transition: 0.2s; }
         .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--navy-700); background: #fff; }
-        .field textarea { resize: vertical; min-height: 82px; }
+        .field input.field-error, .field textarea.field-error, .field select.field-error { border-color: var(--danger) !important; background: var(--danger-bg) !important; box-shadow: 0 0 0 3px rgba(225,29,72,0.14) !important; }
+        .field textarea { resize: vertical; min-height: 80px; }
         .pwd-toggle { position: absolute; right: 12px; background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; }
         .info-tip { background: var(--pastel-100); border: 1.5px dashed var(--pastel-300); color: var(--navy-900); padding: 9px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 15px; }
 
         /* BUTTONS */
-        .btn {
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 11px 18px; border-radius: 14px; font-size: 13.5px; font-weight: 800;
-            cursor: pointer; border: none; transition: transform 0.2s var(--bounce); text-decoration: none;
-        }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 18px; border-radius: 14px; font-size: 13.5px; font-weight: 800; cursor: pointer; border: none; transition: transform 0.2s var(--bounce); text-decoration: none; }
         .btn:hover { transform: translateY(-2px); }
         .btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
         .btn-navy { background: linear-gradient(135deg,#245291,var(--navy-900)); color: #fff; border-bottom: 4px solid var(--navy-950); }
@@ -94,33 +79,25 @@
         /* SHELL & SIDEBAR (NO SCROLLBAR) */
         .app-shell { display: none; min-height: 100vh; width: 100%; }
         .app-shell.active { display: flex; }
-        .sidebar {
-            width: 256px; background: linear-gradient(180deg, #183B6B 0%, #112C52 100%); color: #fff;
-            display: flex; flex-direction: column; padding: 15px 13px; position: sticky; top: 0;
-            height: 100vh; flex-shrink: 0; overflow: hidden; box-shadow: 6px 0 28px rgba(15,37,68,0.12);
-        }
-        .side-brand { display: flex; align-items: center; gap: 10px; padding: 2px 6px 11px; border-bottom: 1px solid rgba(198,226,252,0.16); margin-bottom: 9px; }
-        .side-logo { width: 36px; height: 36px; border-radius: 11px; background: var(--pastel-100); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .nav-list { display: flex; flex-direction: column; gap: 3px; flex: 1; overflow: visible; }
-        .nav-item {
-            display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 11px;
-            color: var(--pastel-100); font-size: 13px; font-weight: 700; cursor: pointer; border: none;
-            background: transparent; text-align: left; width: 100%; transition: 0.18s;
-        }
+        .sidebar { width: 256px; background: linear-gradient(180deg,#183B6B 0%,#112C52 100%); color: #fff; display: flex; flex-direction: column; padding: 13px 12px; position: sticky; top: 0; height: 100vh; flex-shrink: 0; overflow: hidden; box-shadow: 6px 0 28px rgba(15,37,68,0.12); }
+        .side-brand { display: flex; align-items: center; gap: 10px; padding: 2px 6px 10px; border-bottom: 1px solid rgba(198,226,252,0.16); margin-bottom: 8px; }
+        .side-logo { width: 36px; height: 36px; border-radius: 11px; background: var(--pastel-100); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+        .nav-list { display: flex; flex-direction: column; gap: 2px; flex: 1; overflow: visible; }
+        .nav-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7.5px 11px; border-radius: 11px; color: var(--pastel-100); font-size: 12.8px; font-weight: 700; cursor: pointer; border: none; background: transparent; text-align: left; width: 100%; transition: 0.18s; }
+        .nav-item-l { display: inline-flex; align-items: center; gap: 9px; }
+        .nav-check { width: 18px; height: 18px; border-radius: 50%; background: var(--success); color: #fff; font-size: 10.5px; display: none; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0; }
+        .nav-item.done-nav .nav-check { display: inline-flex; }
         .nav-item:hover { background: rgba(255,255,255,0.12); color: #fff; }
         .nav-item.active { background: #fff; color: var(--navy-900); }
-        .side-mascot-card {
-            margin: 7px 2px; padding: 8px 10px; border-radius: 13px; background: rgba(226,240,254,0.12);
-            border: 1.5px dashed rgba(198,226,252,0.35); display: flex; align-items: center; gap: 8px; cursor: pointer;
-        }
-        .side-mascot-card p { font-size: 11px; color: var(--pastel-100); line-height: 1.3; font-weight: 600; }
-        .sidebar-footer { padding-top: 9px; border-top: 1px solid rgba(198,226,252,0.16); }
-        .user-pill-side { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 7px 10px; margin-bottom: 5px; }
+        .side-mascot-card { margin: 6px 2px; padding: 7px 9px; border-radius: 13px; background: rgba(226,240,254,0.12); border: 1.5px dashed rgba(198,226,252,0.35); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .side-mascot-card p { font-size: 10.8px; color: var(--pastel-100); line-height: 1.28; font-weight: 600; }
+        .sidebar-footer { padding-top: 8px; border-top: 1px solid rgba(198,226,252,0.16); }
+        .user-pill-side { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 6px 10px; margin-bottom: 4px; }
         .user-pill-side small { font-size: 10px; color: var(--pastel-300); display: block; }
         .user-pill-side strong { font-size: 11.5px; word-break: break-all; }
 
         .mobile-header { display: none; background: var(--navy-900); color: #fff; padding: 13px 18px; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 120; }
-        .mobile-menu-btn { background: rgba(255,255,255,0.16); border: 1.5px solid rgba(255,255,255,0.28); color: #fff; padding: 7px 12px; border-radius: 11px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+        .mobile-menu-btn { background: rgba(255,255,255,0.16); border: 1.5px solid rgba(255,255,255,0.28); color: #fff; padding: 7px 12px; border-radius: 11px; font-size: 13px; font-weight: 700; cursor: pointer; }
         .drawer-backdrop { display: none; position: fixed; inset: 0; background: rgba(15,37,68,0.55); z-index: 140; }
         .drawer-backdrop.open { display: block; }
 
@@ -128,45 +105,52 @@
         .main-area { flex: 1; padding: 26px 32px 92px; max-width: 1160px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; min-height: 100vh; }
         .page-view, .admin-view { display: none; flex: 1; }
         .page-view.active, .admin-view.active { display: block; animation: popIn 0.25s ease; }
-        .page-head { margin-bottom: 18px; }
+        .page-head { margin-bottom: 18px; display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
         .page-badge { display: inline-block; background: var(--pastel-100); color: var(--navy-800); padding: 4px 12px; border-radius: 99px; font-size: 11.5px; font-weight: 800; margin-bottom: 5px; }
         .page-title { font-size: 26px; color: var(--navy-950); }
         .page-subtitle { font-size: 13.5px; color: var(--text-sub); margin-top: 2px; }
 
-        .hero-banner {
-            background: linear-gradient(130deg, #183B6B 0%, #275AA0 58%, #4F8ED6 100%);
-            border-radius: 26px; padding: 28px 32px; color: #fff; display: flex; align-items: center;
-            justify-content: space-between; gap: 20px; box-shadow: 0 18px 40px rgba(24,59,107,0.22); margin-bottom: 20px;
-        }
-        .hero-banner h2 { font-size: 28px; line-height: 1.22; margin-bottom: 8px; }
-        .hero-banner p { font-size: 14px; color: var(--pastel-100); max-width: 470px; margin-bottom: 16px; }
-        .hero-mascot-wrap { display: flex; align-items: center; gap: 12px; cursor: pointer; flex-shrink: 0; }
-        .piko-bubble { background: #fff; color: var(--navy-950); padding: 11px 15px; border-radius: 18px; border-bottom-right-radius: 5px; font-size: 12px; font-weight: 800; max-width: 195px; box-shadow: 0 10px 24px rgba(15,37,68,0.22); }
+        .step-nav { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 18px; padding-top: 15px; border-top: 1.5px dashed var(--border); }
+        .hero-banner { background: linear-gradient(130deg,#183B6B 0%,#275AA0 58%,#4F8ED6 100%); border-radius: 26px; padding: 24px 28px; color: #fff; display: flex; align-items: center; justify-content: space-between; gap: 18px; box-shadow: 0 18px 40px rgba(24,59,107,0.22); margin-bottom: 20px; }
+        .hero-banner h2 { font-size: 27px; line-height: 1.22; margin-bottom: 8px; }
+        .hero-banner p { font-size: 13.8px; color: var(--pastel-100); max-width: 455px; margin-bottom: 16px; }
+        .hero-mascot-wrap { display: flex; align-items: center; gap: 8px; cursor: pointer; flex-shrink: 0; }
+        .raka-bubble { background: #fff; color: var(--navy-950); padding: 10px 14px; border-radius: 17px; border-bottom-right-radius: 5px; font-size: 12px; font-weight: 800; max-width: 185px; box-shadow: 0 10px 24px rgba(15,37,68,0.22); }
 
         .card { background: #fff; border: 2px solid var(--border); border-radius: 22px; padding: 22px; box-shadow: var(--shadow-soft); margin-bottom: 18px; }
-        .card-pastel { background: linear-gradient(145deg, var(--pastel-100), #F5FAFF); border-color: var(--pastel-200); }
+        .card-pastel { background: linear-gradient(145deg,var(--pastel-100),#F5FAFF); border-color: var(--pastel-200); }
         .prog-track { width: 100%; height: 12px; background: var(--pastel-100); border-radius: 99px; overflow: hidden; margin: 9px 0 7px; }
-        .prog-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--navy-700), var(--gold-400)); transition: width 0.4s ease; }
+        .prog-fill { height: 100%; width: 0%; background: linear-gradient(90deg,var(--navy-700),var(--gold-400)); transition: width 0.4s ease; }
 
-        .cheer-banner { background: linear-gradient(120deg, var(--pastel-100), #EEF6FF); border: 2px solid var(--pastel-200); border-radius: 18px; padding: 13px 16px; display: flex; align-items: center; gap: 13px; margin-bottom: 18px; }
+        .saved-panel { margin-top: 16px; background: #F2FBF6; border: 2px solid #BCEAD0; border-radius: 16px; padding: 15px 17px; }
+        .saved-panel-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+        .saved-panel-head h4 { color: var(--success); font-size: 14.5px; }
+        .saved-panel ul { padding-left: 18px; font-size: 13px; display: flex; flex-direction: column; gap: 4px; }
+
+        .summary-block { background: var(--pastel-50); border: 1.5px solid var(--border); border-radius: 16px; padding: 16px 18px; margin-bottom: 13px; }
+        .summary-block h4 { color: var(--navy-900); font-size: 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+        .summary-block p, .summary-block li { font-size: 13px; }
+        .missing-chip-list { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
+        .missing-chip { background: #fff; border: 1.5px solid #F5B8C6; color: var(--danger); padding: 6px 11px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .missing-chip:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+
+        .cheer-banner { background: linear-gradient(120deg,var(--pastel-100),#EEF6FF); border: 2px solid var(--pastel-200); border-radius: 18px; padding: 12px 16px; display: flex; align-items: center; gap: 13px; margin-bottom: 18px; }
         .cheer-banner strong { color: var(--navy-900); font-size: 13.5px; display: block; }
         .cheer-banner p { font-size: 12.5px; color: var(--text-sub); font-weight: 600; }
 
         .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
         .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; }
-
         .quick-card { background: #fff; border: 2px solid var(--border); border-radius: 20px; padding: 18px; cursor: pointer; transition: 0.2s; display: flex; align-items: flex-start; gap: 13px; }
         .quick-card:hover { transform: translateY(-4px); border-color: var(--navy-700); }
         .quick-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .stat-tile { background: #fff; border: 2px solid var(--border); border-radius: 18px; padding: 16px; text-align: center; }
-        .stat-tile .val { font-family: 'Outfit', sans-serif; font-size: 26px; font-weight: 800; color: var(--navy-900); }
+        .stat-tile .val { font-family: 'Outfit', sans-serif; font-size: 25px; font-weight: 800; color: var(--navy-900); }
         .stat-tile .lbl { font-size: 12px; font-weight: 700; color: var(--text-sub); }
 
         .pill-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
         .pill-btn { padding: 8px 15px; border-radius: 99px; border: 2px solid var(--border); background: #fff; color: var(--text-sub); font-size: 12.5px; font-weight: 800; cursor: pointer; }
         .pill-btn.active { background: var(--navy-900); color: #fff; border-color: var(--navy-900); }
-
         .pathway-card { background: #fff; border: 2px solid var(--border); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow-soft); }
         .tag { display: inline-block; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 99px; }
         .tag-navy { background: var(--pastel-100); color: var(--navy-900); }
@@ -187,51 +171,20 @@
         .row-card.done { border-left-color: var(--success); background: #F2FBF5; }
         .row-card.blocked { border-left-color: var(--danger); background: #FFF5F7; }
 
-        .wa-hero-card { background: linear-gradient(135deg,#ECFDF3,#FFFFFF 65%,#E2F0FE); border: 2px solid #A7F3D0; border-radius: 22px; padding: 22px 24px; display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; margin-bottom: 20px; }
+        .wa-hero-card { background: linear-gradient(135deg,#ECFDF3,#FFFFFF 65%,#E2F0FE); border: 2px solid #A7F3D0; border-radius: 22px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; margin-bottom: 18px; }
         .floating-wa-btn { position: fixed; bottom: 22px; right: 22px; z-index: 300; display: none; align-items: center; gap: 9px; background: linear-gradient(135deg,#2EE573,#16A34A); color: #fff; padding: 11px 17px; border-radius: 99px; font-size: 13.5px; font-weight: 800; text-decoration: none; border: 3px solid #fff; box-shadow: 0 12px 28px rgba(22,163,74,0.35); }
         .floating-wa-btn.visible { display: inline-flex; }
 
         .consent-box { background: var(--pastel-100); border: 2px solid var(--pastel-200); border-radius: 14px; padding: 13px 15px; margin: 12px 0 16px; display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; color: var(--navy-950); font-weight: 600; }
+        .consent-box.consent-error { border-color: var(--danger); background: var(--danger-bg); }
         .consent-box input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--navy-900); }
 
-        /* FOOTER INFORMASI */
-        .site-footer {
-            width: 100%;
-            background: #142F59;
-            color: #FFFFFF;
-            border-radius: 20px;
-            padding: 28px 26px 22px;
-            margin-top: 24px;
-            box-shadow: var(--shadow-soft);
-        }
-        .site-footer h4 {
-            font-size: 19px;
-            font-weight: 800;
-            color: #FFFFFF;
-            margin-bottom: 14px;
-        }
-        .site-footer p {
-            font-size: 13.5px;
-            color: #E2EEFA;
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
-        .site-footer hr {
-            border: none;
-            border-top: 1px solid rgba(255, 255, 255, 0.32);
-            margin: 18px 0 16px;
-        }
-        .site-footer .footer-copy {
-            text-align: center;
-            font-size: 13.5px;
-            color: #FFFFFF;
-            margin-bottom: 0;
-            font-weight: 500;
-        }
-        #auth-screen .site-footer {
-            max-width: 920px;
-            margin-top: 0;
-        }
+        .site-footer { width: 100%; background: #142F59; color: #FFFFFF; border-radius: 20px; padding: 26px 26px 20px; margin-top: 24px; box-shadow: var(--shadow-soft); }
+        .site-footer h4 { font-size: 19px; font-weight: 800; color: #FFFFFF; margin-bottom: 12px; }
+        .site-footer p { font-size: 13.5px; color: #E2EEFA; line-height: 1.6; margin-bottom: 10px; }
+        .site-footer hr { border: none; border-top: 1px solid rgba(255,255,255,0.32); margin: 16px 0 14px; }
+        .site-footer .footer-copy { text-align: center; font-size: 13.5px; color: #FFFFFF; margin-bottom: 0; font-weight: 500; }
+        #auth-screen .site-footer { max-width: 920px; margin-top: 0; }
 
         .modal-overlay { position: fixed; inset: 0; background: rgba(15,37,68,0.58); z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px; }
         .modal-overlay.open { display: flex; }
@@ -242,12 +195,20 @@
         .modal-pane { display: none; }
         .modal-pane.active { display: block; }
 
-        .toast { position: fixed; top: 20px; right: 20px; background: var(--navy-950); color: #fff; padding: 12px 17px; border-radius: 14px; font-size: 13px; font-weight: 700; transform: translateX(160%); transition: 0.3s; z-index: 950; max-width: 90vw; }
+        .toast { position: fixed; top: 20px; right: 20px; background: var(--navy-950); color: #fff; padding: 12px 17px; border-radius: 14px; font-size: 13px; font-weight: 700; transform: translateX(160%); transition: 0.3s; z-index: 950; max-width: 90vw; box-shadow: 0 12px 28px rgba(15,37,68,0.28); }
+        .toast.toast-error { background: var(--danger); }
+        .toast.toast-success { background: var(--success); }
         .toast.show { transform: translateX(0); }
 
+        #pdf-print-sheet { display: none; }
+        @media print {
+            body { background: #fff !important; color: #000 !important; }
+            #auth-screen, #student-app, #admin-app, #floatingWaBtn, .modal-overlay, .toast { display: none !important; }
+            #pdf-print-sheet { display: block !important; padding: 10px 16px; }
+        }
+
         @media (max-width: 920px) {
-            .auth-shell { grid-template-columns: 1fr; max-width: 450px; }
-            #auth-screen .site-footer { max-width: 450px; }
+            .auth-shell, #auth-screen .site-footer { max-width: 450px; grid-template-columns: 1fr; }
             .app-shell.active { flex-direction: column; }
             .mobile-header { display: flex; }
             .sidebar { position: fixed; top: 0; left: -275px; z-index: 150; transition: left 0.25s ease; }
@@ -262,32 +223,76 @@
 </head>
 <body>
 
+    <!-- DEFINISI KARAKTER KARTUN ANAK SEKOLAH (LAKI-LAKI & PEREMPUAN) -->
+    <svg style="display:none" aria-hidden="true">
+        <symbol id="char-boy" viewBox="0 0 150 185">
+            <rect x="86" y="88" width="38" height="48" rx="12" fill="#2A3441" stroke="#18202A" stroke-width="2.5"/>
+            <path d="M52 102 C36 98, 28 84, 30 74" fill="none" stroke="#FFE0C2" stroke-width="11" stroke-linecap="round"/>
+            <circle cx="29" cy="70" r="8" fill="#FFE0C2" stroke="#2D1A10" stroke-width="2"/>
+            <rect x="52" y="132" width="18" height="34" rx="5" fill="#263B5E" stroke="#162238" stroke-width="2.4"/>
+            <rect x="74" y="132" width="18" height="34" rx="5" fill="#263B5E" stroke="#162238" stroke-width="2.4"/>
+            <rect x="46" y="162" width="25" height="11" rx="5" fill="#FFFFFF" stroke="#162238" stroke-width="2.2"/>
+            <rect x="73" y="162" width="25" height="11" rx="5" fill="#FFFFFF" stroke="#162238" stroke-width="2.2"/>
+            <path d="M48 92 L96 92 L94 134 L50 134 Z" fill="#FFFFFF" stroke="#162238" stroke-width="2.4" stroke-linejoin="round"/>
+            <rect x="50" y="128" width="44" height="7" fill="#1E293B"/>
+            <rect x="68" y="127" width="8" height="9" rx="1.5" fill="#CBD5E1" stroke="#1E293B" stroke-width="1.5"/>
+            <path d="M56 92 L54 128 M88 92 L90 128" stroke="#334155" stroke-width="5.5" stroke-linecap="round"/>
+            <polygon points="62,92 72,102 82,92" fill="#E2F0FE" stroke="#162238" stroke-width="2"/>
+            <polygon points="70,98 74,98 76,125 72,130 68,125" fill="#25528F" stroke="#162238" stroke-width="1.8"/>
+            <path d="M69 107 L75 104 M69 114 L75 111 M69 121 L75 118" stroke="#FFFFFF" stroke-width="1.6"/>
+            <rect x="78" y="102" width="23" height="29" rx="3" fill="#2E6BC6" stroke="#162238" stroke-width="2.2"/>
+            <line x1="83" y1="102" x2="83" y2="131" stroke="#9ACBF9" stroke-width="2"/>
+            <circle cx="80" cy="118" r="6" fill="#FFE0C2" stroke="#2D1A10" stroke-width="2"/>
+            <circle cx="38" cy="60" r="8" fill="#FFE0C2" stroke="#2D1A10" stroke-width="2.2"/>
+            <circle cx="106" cy="60" r="8" fill="#FFE0C2" stroke="#2D1A10" stroke-width="2.2"/>
+            <ellipse cx="72" cy="57" rx="35" ry="33" fill="#FFE0C2" stroke="#2D1A10" stroke-width="2.5"/>
+            <path d="M35 55 C32 22, 60 10, 82 14 C104 17, 114 34, 108 56 C104 42, 95 36, 86 42 C82 32, 70 30, 62 42 C54 34, 42 40, 35 55 Z" fill="#5A3018" stroke="#2D1A10" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M58 18 L68 10 L76 17" fill="#5A3018" stroke="#2D1A10" stroke-width="2.2" stroke-linejoin="round"/>
+            <ellipse cx="58" cy="60" rx="6.5" ry="7.5" fill="#2B160B"/>
+            <ellipse cx="86" cy="60" rx="6.5" ry="7.5" fill="#2B160B"/>
+            <circle cx="60" cy="57" r="2.5" fill="#FFFFFF"/><circle cx="88" cy="57" r="2.5" fill="#FFFFFF"/>
+            <ellipse cx="47" cy="69" rx="5.5" ry="3" fill="#FF8A9B" opacity="0.65"/><ellipse cx="97" cy="69" rx="5.5" ry="3" fill="#FF8A9B" opacity="0.65"/>
+            <path d="M65 73 Q72 82 79 73 Z" fill="#E85D75" stroke="#2D1A10" stroke-width="1.8" stroke-linejoin="round"/>
+        </symbol>
+        <symbol id="char-girl" viewBox="0 0 150 185">
+            <path d="M34 56 C28 84, 34 108, 46 112 L104 112 C116 108, 122 84, 116 56 Z" fill="#4A2715" stroke="#261309" stroke-width="2.5"/>
+            <path d="M98 102 C114 98, 122 84, 120 74" fill="none" stroke="#FFE0C2" stroke-width="10" stroke-linecap="round"/>
+            <circle cx="121" cy="70" r="7.5" fill="#FFE0C2" stroke="#261309" stroke-width="2"/>
+            <rect x="57" y="142" width="12" height="24" rx="4" fill="#FFE0C2" stroke="#261309" stroke-width="2"/>
+            <rect x="81" y="142" width="12" height="24" rx="4" fill="#FFE0C2" stroke="#261309" stroke-width="2"/>
+            <rect x="57" y="153" width="12" height="12" fill="#FFFFFF" stroke="#261309" stroke-width="1.8"/>
+            <rect x="81" y="153" width="12" height="12" fill="#FFFFFF" stroke="#261309" stroke-width="1.8"/>
+            <rect x="52" y="163" width="21" height="10" rx="5" fill="#1E293B" stroke="#0F172A" stroke-width="2"/>
+            <rect x="78" y="163" width="21" height="10" rx="5" fill="#1E293B" stroke="#0F172A" stroke-width="2"/>
+            <path d="M54 124 L96 124 L104 148 L46 148 Z" fill="#263B5E" stroke="#162238" stroke-width="2.4" stroke-linejoin="round"/>
+            <path d="M64 126 L61 148 M75 126 L75 148 M86 126 L89 148" stroke="#162238" stroke-width="1.6"/>
+            <path d="M52 92 L98 92 L96 125 L54 125 Z" fill="#FFFFFF" stroke="#162238" stroke-width="2.4" stroke-linejoin="round"/>
+            <polygon points="64,92 75,103 86,92" fill="#E2F0FE" stroke="#162238" stroke-width="2"/>
+            <polygon points="73,99 77,99 79,120 75,124 71,120" fill="#3B76C4" stroke="#162238" stroke-width="1.8"/>
+            <rect x="44" y="102" width="22" height="27" rx="3" fill="#FFC55A" stroke="#162238" stroke-width="2.2"/>
+            <circle cx="64" cy="117" r="5.5" fill="#FFE0C2" stroke="#261309" stroke-width="2"/>
+            <circle cx="41" cy="61" r="7.5" fill="#FFE0C2" stroke="#261309" stroke-width="2.2"/>
+            <circle cx="109" cy="61" r="7.5" fill="#FFE0C2" stroke="#261309" stroke-width="2.2"/>
+            <ellipse cx="75" cy="58" rx="34" ry="32" fill="#FFE0C2" stroke="#261309" stroke-width="2.5"/>
+            <path d="M39 56 C38 24, 62 14, 75 14 C88 14, 112 24, 111 56 C104 42, 95 38, 86 44 C81 36, 69 36, 64 44 C55 38, 46 42, 39 56 Z" fill="#5A3018" stroke="#261309" stroke-width="2.5" stroke-linejoin="round"/>
+            <rect x="92" y="34" width="13" height="5" rx="2.5" transform="rotate(20 98 36)" fill="#FFC55A" stroke="#261309" stroke-width="1.5"/>
+            <ellipse cx="61" cy="61" rx="6.3" ry="7.3" fill="#2B160B"/>
+            <ellipse cx="89" cy="61" rx="6.3" ry="7.3" fill="#2B160B"/>
+            <circle cx="63" cy="58" r="2.5" fill="#FFFFFF"/><circle cx="91" cy="58" r="2.5" fill="#FFFFFF"/>
+            <ellipse cx="50" cy="70" rx="5.5" ry="3" fill="#FF8A9B" opacity="0.7"/><ellipse cx="100" cy="70" rx="5.5" ry="3" fill="#FF8A9B" opacity="0.7"/>
+            <path d="M68 74 Q75 81 82 74" fill="none" stroke="#261309" stroke-width="2.3" stroke-linecap="round"/>
+        </symbol>
+    </svg>
+
     <!-- 1. HALAMAN LOGIN -->
     <div id="auth-screen">
         <div class="auth-shell">
             <div class="auth-visual">
                 <div class="auth-chip">Media Bimbingan Karier Kelas XII SMA</div>
-                <div class="speech-pill">"Hai! Aku Piko & Lumi. Gak harus langsung yakin hari ini, yuk eksplor bareng pelan-pelan!"</div>
+                <div class="speech-pill">"Hai! Kami Raka & Nisa. Gak harus langsung yakin hari ini, yuk eksplor masa depan bareng pelan-pelan!"</div>
                 <div class="character-stage">
-                    <svg width="72" height="62" viewBox="0 0 110 90" class="float-lumi" style="margin-bottom:22px;">
-                        <path d="M26 70 H82 C94 70 100 60 96 50 C93 42 84 38 76 40 C73 24 54 18 42 28 C33 25 22 32 21 43 C11 46 10 62 20 68 Z" fill="#E2F0FE"/>
-                        <circle cx="45" cy="50" r="3.8" fill="#183B6B"/><circle cx="66" cy="50" r="3.8" fill="#183B6B"/>
-                        <ellipse cx="37" cy="55" rx="4.5" ry="2.8" fill="#FF8FA3" opacity="0.7"/><ellipse cx="74" cy="55" rx="4.5" ry="2.8" fill="#FF8FA3" opacity="0.7"/>
-                        <path d="M51 55 Q55.5 60 60 55" fill="none" stroke="#183B6B" stroke-width="2.4" stroke-linecap="round"/>
-                    </svg>
-                    <svg width="132" height="145" viewBox="0 0 160 175" class="float-piko">
-                        <ellipse cx="60" cy="158" rx="16" ry="9" fill="#F4A938"/><ellipse cx="100" cy="158" rx="16" ry="9" fill="#F4A938"/>
-                        <ellipse cx="28" cy="108" rx="14" ry="28" transform="rotate(22 28 108)" fill="#0F2544"/>
-                        <ellipse cx="132" cy="102" rx="14" ry="28" transform="rotate(-32 132 102)" fill="#0F2544"/>
-                        <ellipse cx="80" cy="104" rx="50" ry="56" fill="#183B6B"/><ellipse cx="80" cy="112" rx="35" ry="42" fill="#FFFFFF"/>
-                        <circle cx="63" cy="68" r="19" fill="#FFFFFF"/><circle cx="97" cy="68" r="19" fill="#FFFFFF"/>
-                        <circle cx="64" cy="68" r="6" fill="#0F2544"/><circle cx="96" cy="68" r="6" fill="#0F2544"/>
-                        <ellipse cx="48" cy="77" rx="6.5" ry="4" fill="#FF8FA3" opacity="0.75"/><ellipse cx="112" cy="77" rx="6.5" ry="4" fill="#FF8FA3" opacity="0.75"/>
-                        <path d="M72 74 Q80 85 88 74 Z" fill="#FFC55A"/><rect x="44" y="88" width="72" height="13" rx="6.5" fill="#FFC55A"/>
-                        <path d="M44 48 C46 22, 114 22, 116 48 Z" fill="#9ACBF9"/><circle cx="80" cy="21" r="8" fill="#FFC55A"/>
-                        <circle cx="80" cy="126" r="12" fill="#E2F0FE" stroke="#183B6B" stroke-width="2.5"/>
-                        <polygon points="80,118 83,126 80,134 77,126" fill="#F4A938"/>
-                    </svg>
+                    <svg width="118" height="145" class="float-boy" aria-label="Siswa Laki-laki"><use href="#char-boy"/></svg>
+                    <svg width="116" height="142" class="float-girl" aria-label="Siswa Perempuan"><use href="#char-girl"/></svg>
                 </div>
                 <h1 style="font-size:28px; margin-bottom:6px;">Arah Karier</h1>
                 <p style="font-size:13px; color:var(--pastel-100); max-width:300px;">Teman eksplorasi jurusan, vokasi, dunia kerja, dan wirausaha khusus siswa kelas XII SMA/MA.</p>
@@ -303,18 +308,13 @@
                     <h2 style="font-size:23px; color:var(--navy-950); margin-bottom:4px;">Yuk, Mulai Eksplorasi!</h2>
                     <p style="font-size:13px; color:var(--text-sub); margin-bottom:16px;">Masuk dengan email aktifmu dan kata sandi resmi kelas XII.</p>
                     <div id="studentAlert" class="alert-box"></div>
-                    <form id="formStudentLogin" onsubmit="handleStudentLogin(event)">
-                        <div class="field">
-                            <label for="stuEmail">Username (Email Siswa)</label>
-                            <input type="email" id="stuEmail" placeholder="nama.siswa@email.com" required>
-                        </div>
+                    <form id="formStudentLogin" novalidate onsubmit="handleStudentLogin(event)">
+                        <div class="field"><label for="stuEmail">Username (Email Siswa)</label><input type="email" id="stuEmail" placeholder="nama.siswa@email.com"></div>
                         <div class="field">
                             <label for="stuPass">Kata Sandi Akses</label>
                             <div class="input-wrap">
-                                <input type="password" id="stuPass" placeholder="Masukkan kata sandi" required>
-                                <button type="button" class="pwd-toggle" onclick="togglePwd('stuPass')">
-                                    <svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                </button>
+                                <input type="password" id="stuPass" placeholder="Masukkan kata sandi">
+                                <button type="button" class="pwd-toggle" onclick="togglePwd('stuPass')"><svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
                             </div>
                         </div>
                         <div class="info-tip">Gunakan <strong>email pribadimu</strong> dan kata sandi akses yang sudah dibagikan oleh Guru BK.</div>
@@ -326,18 +326,13 @@
                     <h2 style="font-size:23px; color:var(--navy-950); margin-bottom:4px;">Portal Admin & Guru BK</h2>
                     <p style="font-size:13px; color:var(--text-sub); margin-bottom:16px;">Pantau progres tiap siswa, kelola akses, dan cek konsultasi masuk.</p>
                     <div id="adminAlert" class="alert-box"></div>
-                    <form id="formAdminLogin" onsubmit="handleAdminLogin(event)">
-                        <div class="field">
-                            <label for="admUser">Username Admin</label>
-                            <input type="text" id="admUser" placeholder="Masukkan username admin" required>
-                        </div>
+                    <form id="formAdminLogin" novalidate onsubmit="handleAdminLogin(event)">
+                        <div class="field"><label for="admUser">Username Admin</label><input type="text" id="admUser" placeholder="Masukkan username admin"></div>
                         <div class="field">
                             <label for="admPass">Kata Sandi Admin</label>
                             <div class="input-wrap">
-                                <input type="password" id="admPass" placeholder="••••••••" required>
-                                <button type="button" class="pwd-toggle" onclick="togglePwd('admPass')">
-                                    <svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                </button>
+                                <input type="password" id="admPass" placeholder="••••••••">
+                                <button type="button" class="pwd-toggle" onclick="togglePwd('admPass')"><svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-navy btn-block">Masuk Dashboard Admin</button>
@@ -365,9 +360,7 @@
 
         <aside class="sidebar" id="studentSidebar">
             <div class="side-brand">
-                <div class="side-logo">
-                    <svg width="26" height="26" viewBox="0 0 160 175"><ellipse cx="80" cy="100" rx="52" ry="58" fill="#183B6B"/><circle cx="62" cy="68" r="19" fill="#fff"/><circle cx="98" cy="68" r="19" fill="#fff"/><circle cx="64" cy="68" r="6" fill="#0F2544"/><circle cx="96" cy="68" r="6" fill="#0F2544"/><path d="M72 76 Q80 86 88 76 Z" fill="#FFC55A"/></svg>
-                </div>
+                <div class="side-logo"><svg width="32" height="38" style="margin-top:4px;"><use href="#char-boy"/></svg></div>
                 <div>
                     <div class="brand-name" style="font-size:17.5px; font-weight:800;">Arah Karier</div>
                     <div style="font-size:10.5px; color:var(--pastel-200);">Bimbingan Karier XII</div>
@@ -375,29 +368,24 @@
             </div>
 
             <nav class="nav-list">
-                <button class="nav-item active" data-page="beranda" onclick="openStudentPage('beranda')"><svg class="ico" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Beranda</button>
-                <button class="nav-item" data-page="kenali" onclick="openStudentPage('kenali')"><svg class="ico" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Kenali Diri</button>
-                <button class="nav-item" data-page="jelajahi" onclick="openStudentPage('jelajahi')"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>Jelajahi Pilihan</button>
-                <button class="nav-item" data-page="bandingkan" onclick="openStudentPage('bandingkan')"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>Bandingkan Pilihan</button>
-                <button class="nav-item" data-page="rencana" onclick="openStudentPage('rencana')"><svg class="ico" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Rencana Langkah</button>
-                <button class="nav-item" data-page="artikel" onclick="openStudentPage('artikel')"><svg class="ico" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Artikel & Video</button>
-                <button class="nav-item" data-page="konsultasi" onclick="openStudentPage('konsultasi')"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Konsultasi BK</button>
+                <button class="nav-item active" data-page="beranda" onclick="openStudentPage('beranda')"><span class="nav-item-l"><svg class="ico" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Beranda</span></button>
+                <button class="nav-item" id="nav-kenali" data-page="kenali" onclick="openStudentPage('kenali')"><span class="nav-item-l"><svg class="ico" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Kenali Diri</span><span class="nav-check">✓</span></button>
+                <button class="nav-item" data-page="jelajahi" onclick="openStudentPage('jelajahi')"><span class="nav-item-l"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>Jelajahi Pilihan</span></button>
+                <button class="nav-item" id="nav-bandingkan" data-page="bandingkan" onclick="openStudentPage('bandingkan')"><span class="nav-item-l"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>Bandingkan Pilihan</span><span class="nav-check">✓</span></button>
+                <button class="nav-item" id="nav-rencana" data-page="rencana" onclick="openStudentPage('rencana')"><span class="nav-item-l"><svg class="ico" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Rencana Langkah</span><span class="nav-check">✓</span></button>
+                <button class="nav-item" data-page="artikel" onclick="openStudentPage('artikel')"><span class="nav-item-l"><svg class="ico" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Artikel & Video</span></button>
+                <button class="nav-item" id="nav-konsultasi" data-page="konsultasi" onclick="openStudentPage('konsultasi')"><span class="nav-item-l"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Konsultasi BK</span><span class="nav-check">✓</span></button>
+                <button class="nav-item" id="nav-ringkasan" data-page="ringkasan" onclick="openStudentPage('ringkasan')"><span class="nav-item-l"><svg class="ico" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Ringkasan & PDF</span><span class="nav-check">✓</span></button>
             </nav>
 
-            <div class="side-mascot-card" onclick="gantiPesanLumi()">
-                <svg width="34" height="28" viewBox="0 0 110 90" class="float-lumi" style="flex-shrink:0;">
-                    <path d="M26 70 H82 C94 70 100 60 96 50 C93 42 84 38 76 40 C73 24 54 18 42 28 C33 25 22 32 21 43 C11 46 10 62 20 68 Z" fill="#E2F0FE"/>
-                    <circle cx="45" cy="50" r="4" fill="#183B6B"/><circle cx="66" cy="50" r="4" fill="#183B6B"/>
-                </svg>
-                <p id="sideLumiQuote">"Satu langkah kecil hari ini sudah sangat berarti!"</p>
+            <div class="side-mascot-card" onclick="gantiPesanNisa()">
+                <svg width="34" height="42" style="flex-shrink:0;"><use href="#char-girl"/></svg>
+                <p id="sideNisaQuote">"Satu langkah kecil hari ini sudah sangat berarti!"</p>
             </div>
 
             <div class="sidebar-footer">
-                <div class="user-pill-side">
-                    <small>Siswa Kelas XII • Cloud Sync</small>
-                    <strong id="sideStudentEmail">-</strong>
-                </div>
-                <button class="nav-item" style="color:#FECDD3;" onclick="logoutStudent()"><svg class="ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Keluar Akun</button>
+                <div class="user-pill-side"><small>Siswa Kelas XII • Cloud Sync</small><strong id="sideStudentEmail">-</strong></div>
+                <button class="nav-item" style="color:#FECDD3;" onclick="logoutStudent()"><span class="nav-item-l"><svg class="ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Keluar Akun</span></button>
             </div>
         </aside>
 
@@ -408,24 +396,18 @@
                     <div>
                         <div class="auth-chip">Sahabat Karier Kelas XII</div>
                         <h2>Masa depan dimulai dari mengenali dirimu.</h2>
-                        <p>Gak perlu panik kalau belum punya jawaban pasti. Susun pertimbangan studi, vokasi, kerja, atau wirausaha bareng Piko & Guru BK.</p>
+                        <p>Gak perlu panik kalau belum punya jawaban pasti. Susun pertimbangan studi, vokasi, kerja, atau wirausaha bareng Raka, Nisa & Guru BK.</p>
                         <div style="display:flex; gap:10px; flex-wrap:wrap;">
                             <button class="btn btn-gold" onclick="openStudentPage('kenali')">Mulai Kenali Dirimu</button>
                             <button class="btn btn-wa" onclick="bukaWaGuruBK()">Chat WA Guru BK</button>
                         </div>
                     </div>
-                    <div class="hero-mascot-wrap" onclick="sapaPiko()">
-                        <div class="piko-bubble" id="pikoHomeQuote">Klik aku ya kalau lagi butuh penyemangat memilih masa depan!</div>
-                        <svg id="pikoHeroSvg" width="115" height="126" viewBox="0 0 160 175" class="float-piko">
-                            <ellipse cx="60" cy="158" rx="16" ry="9" fill="#F4A938"/><ellipse cx="100" cy="158" rx="16" ry="9" fill="#F4A938"/>
-                            <ellipse cx="80" cy="104" rx="50" ry="56" fill="#0F2544"/><ellipse cx="80" cy="112" rx="35" ry="42" fill="#FFFFFF"/>
-                            <circle cx="63" cy="68" r="19" fill="#FFFFFF"/><circle cx="97" cy="68" r="19" fill="#FFFFFF"/>
-                            <circle cx="64" cy="68" r="6" fill="#0F2544"/><circle cx="96" cy="68" r="6" fill="#0F2544"/>
-                            <ellipse cx="48" cy="77" rx="6.5" ry="4" fill="#FF8FA3" opacity="0.8"/><ellipse cx="112" cy="77" rx="6.5" ry="4" fill="#FF8FA3" opacity="0.8"/>
-                            <path d="M72 74 Q80 85 88 74 Z" fill="#FFC55A"/><rect x="44" y="88" width="72" height="13" rx="6.5" fill="#FFC55A"/>
-                            <path d="M44 48 C46 22, 114 22, 116 48 Z" fill="#9ACBF9"/><circle cx="80" cy="21" r="8" fill="#FFC55A"/>
-                            <circle cx="80" cy="126" r="12" fill="#E2F0FE" stroke="#183B6B" stroke-width="2.5"/><polygon points="80,118 83,126 80,134 77,126" fill="#F4A938"/>
-                        </svg>
+                    <div class="hero-mascot-wrap" onclick="sapaRaka()">
+                        <div class="raka-bubble" id="rakaHomeQuote">Klik kami ya kalau lagi butuh penyemangat memilih masa depan!</div>
+                        <div id="heroCharsWrap" style="display:flex; align-items:flex-end;">
+                            <svg width="86" height="106" class="float-boy"><use href="#char-boy"/></svg>
+                            <svg width="82" height="102" class="float-girl" style="margin-left:-12px;"><use href="#char-girl"/></svg>
+                        </div>
                     </div>
                 </div>
 
@@ -471,7 +453,7 @@
                             <li>Isi refleksi ringan di <strong>Kenali Diri</strong> sesuai kondisimu saat ini.</li>
                             <li>Kenali beragam jalur lulusan SMA di <strong>Jelajahi Pilihan</strong>.</li>
                             <li>Bandingkan beberapa opsi favoritmu secara terstruktur.</li>
-                            <li>Susun langkah terdekat dan diskusi dengan <strong>Guru BK</strong> lewat formulir atau WhatsApp.</li>
+                            <li>Susun langkah terdekat, konsultasi BK, lalu unduh <strong>Ringkasan PDF</strong>.</li>
                         </ol>
                     </div>
                     <div class="card card-pastel">
@@ -487,32 +469,33 @@
 
             <!-- 2. KENALI DIRI -->
             <section id="view-kenali" class="page-view">
-                <div class="page-head"><span class="page-badge">Langkah 1 • Eksplorasi Diri</span><h1 class="page-title">Kenali Diri</h1><p class="page-subtitle">Ceritakan minat dan kekuatan yang kamu rasakan tanpa label atau diagnosis.</p></div>
+                <div class="page-head"><div><span class="page-badge">Langkah 1 • Eksplorasi Diri</span><h1 class="page-title">Kenali Diri</h1><p class="page-subtitle">Ceritakan minat dan kekuatan yang kamu rasakan tanpa label atau diagnosis.</p></div></div>
                 <div class="cheer-banner">
-                    <svg width="48" height="40" viewBox="0 0 110 90" class="float-lumi"><path d="M26 70 H82 C94 70 100 60 96 50 C93 42 84 38 76 40 C73 24 54 18 42 28 C33 25 22 32 21 43 C11 46 10 62 20 68 Z" fill="#fff" stroke="#9ACBF9" stroke-width="3"/><circle cx="45" cy="50" r="3.8" fill="#183B6B"/><circle cx="66" cy="50" r="3.8" fill="#183B6B"/></svg>
-                    <div><strong>Pesan dari Lumi:</strong><p>Tidak ada jawaban benar atau salah. Tulis saja apa adanya sesuai hal yang kamu sukai sehari-hari.</p></div>
+                    <svg width="46" height="56" class="float-girl" style="flex-shrink:0;"><use href="#char-girl"/></svg>
+                    <div><strong>Pesan dari Nisa:</strong><p>Tidak ada jawaban benar atau salah. Tulis saja apa adanya sesuai hal yang kamu sukai sehari-hari.</p></div>
                 </div>
                 <div class="card">
-                    <form id="formKenali" onsubmit="saveKenaliDiri(event)">
+                    <div id="alert-kenali" class="alert-box"></div>
+                    <form id="formKenali" novalidate onsubmit="saveKenaliDiri(event)">
                         <div class="field"><label>1. Bidang atau topik apa yang paling menarik perhatianmu akhir-akhir ini?</label><textarea id="kdMinat" placeholder="Contoh: Desain visual, teknologi komputer, membantu teman bercerita, bisnis kuliner..."></textarea></div>
                         <div class="field"><label>2. Aktivitas yang kamu sukai</label><textarea id="kdAktivitas" placeholder="Aktivitas yang membuatmu bersemangat saat mengerjakannya..."></textarea></div>
                         <div class="field"><label>3. Kekuatan yang kamu rasakan dalam dirimu</label><textarea id="kdKekuatan" placeholder="Contoh: Sabar, teliti, mudah beradaptasi, suka kerja tim, cepat belajar praktik..."></textarea></div>
                         <div class="field"><label>4. Hal yang ingin kamu kembangkan sebelum/sesudah lulus SMA</label><textarea id="kdKembang" placeholder="Contoh: Berani presentasi, bahasa Inggris, disiplin waktu, skill komputer..."></textarea></div>
-                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                            <button type="submit" class="btn btn-gold">Simpan Refleksi Diri</button>
-                            <button type="button" class="btn btn-pastel" onclick="openStudentPage('jelajahi')">Lanjut ke Jelajahi Pilihan</button>
+                        <div class="step-nav">
+                            <button type="button" class="btn btn-outline btn-sm" onclick="openStudentPage('beranda')">← Beranda</button>
+                            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                <button type="submit" class="btn btn-gold btn-sm">Simpan Refleksi Diri</button>
+                                <button type="button" class="btn btn-navy btn-sm" onclick="nextFromKenali()">Lanjut ke Jelajahi Pilihan →</button>
+                            </div>
                         </div>
                     </form>
-                </div>
-                <div class="card" id="kenaliSummaryCard" style="display:none;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><h3 style="font-size:16px;">Catatan Kenali Diri Tersimpan</h3><span class="tag tag-green" id="kenaliUpdatedAt">Tersimpan</span></div>
-                    <div class="grid-2" id="kenaliSummaryContent"></div>
+                    <div id="saved-kenali-box"></div>
                 </div>
             </section>
 
             <!-- 3. JELAJAHI PILIHAN -->
             <section id="view-jelajahi" class="page-view">
-                <div class="page-head"><span class="page-badge">Langkah 2 • Wawasan Pasca-SMA</span><h1 class="page-title">Jelajahi Pilihan</h1><p class="page-subtitle">Cek informasi ringkas dan tautan sumber resmi tiap jalur setelah lulus.</p></div>
+                <div class="page-head"><div><span class="page-badge">Langkah 2 • Wawasan Pasca-SMA</span><h1 class="page-title">Jelajahi Pilihan</h1><p class="page-subtitle">Cek informasi ringkas dan tautan sumber resmi tiap jalur setelah lulus.</p></div></div>
                 <div class="pill-group" id="exploreFilters">
                     <button class="pill-btn active" onclick="filterExplore('semua', this)">Semua Jalur</button>
                     <button class="pill-btn" onclick="filterExplore('studi', this)">Studi Lanjut</button>
@@ -521,15 +504,22 @@
                     <button class="pill-btn" onclick="filterExplore('wirausaha', this)">Wirausaha</button>
                 </div>
                 <div class="grid-2" id="exploreGrid"></div>
+                <div class="card" style="padding:14px 20px; margin-top:16px;">
+                    <div class="step-nav" style="margin-top:0; padding-top:0; border:none;">
+                        <button class="btn btn-outline btn-sm" onclick="openStudentPage('kenali')">← Kenali Diri</button>
+                        <button class="btn btn-navy btn-sm" onclick="openStudentPage('bandingkan')">Lanjut ke Bandingkan Pilihan →</button>
+                    </div>
+                </div>
             </section>
 
             <!-- 4. BANDINGKAN PILIHAN -->
             <section id="view-bandingkan" class="page-view">
-                <div class="page-head"><span class="page-badge">Langkah 3 • Timbang Alternatif</span><h1 class="page-title">Bandingkan Pilihan</h1><p class="page-subtitle">Timbang minat, persyaratan, biaya, lokasi, tenggat, dan info yang masih perlu dicari.</p></div>
+                <div class="page-head"><div><span class="page-badge">Langkah 3 • Timbang Alternatif</span><h1 class="page-title">Bandingkan Pilihan</h1><p class="page-subtitle">Timbang minat, persyaratan, biaya, lokasi, tenggat, dan info yang masih perlu dicari.</p></div></div>
                 <div class="card">
-                    <form id="formCompare" onsubmit="addComparison(event)">
+                    <div id="alert-compare" class="alert-box"></div>
+                    <form id="formCompare" novalidate onsubmit="addComparison(event)">
                         <div class="grid-3">
-                            <div class="field"><label>Nama Pilihan / Jalur</label><input type="text" id="cmpNama" placeholder="Contoh: D3 Manajemen Informatika" required></div>
+                            <div class="field"><label>Nama Pilihan / Jalur</label><input type="text" id="cmpNama" placeholder="Contoh: D3 Manajemen Informatika"></div>
                             <div class="field"><label>Tingkat Minat</label><select id="cmpMinat"><option value="Sangat Diminati">Sangat Diminati</option><option value="Cukup Diminati">Cukup Diminati</option><option value="Masih Dipertimbangkan">Masih Dipertimbangkan</option></select></div>
                             <div class="field"><label>Lokasi</label><input type="text" id="cmpLokasi" placeholder="Dalam kota / Luar kota"></div>
                         </div>
@@ -539,38 +529,55 @@
                             <div class="field"><label>Tenggat Pendaftaran</label><input type="text" id="cmpTenggat" placeholder="Contoh: Maret 2027"></div>
                         </div>
                         <div class="field"><label>Informasi yang Masih Perlu Dicari</label><input type="text" id="cmpInfo" placeholder="Contoh: Cek daya tampung & syarat beasiswa ke Guru BK"></div>
-                        <button type="submit" class="btn btn-navy">Tambahkan ke Perbandingan</button>
+                        <div class="step-nav">
+                            <button type="button" class="btn btn-outline btn-sm" onclick="openStudentPage('jelajahi')">← Jelajahi Pilihan</button>
+                            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                <button type="submit" class="btn btn-gold btn-sm">Tambahkan ke Perbandingan</button>
+                                <button type="button" class="btn btn-navy btn-sm" onclick="nextFromCompare()">Lanjut ke Rencana Langkah →</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="card" style="padding:18px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><h3 style="font-size:16px;">Tabel Perbandingan Pilihanmu</h3><button class="btn btn-gold btn-sm" onclick="openStudentPage('rencana')">Lanjut Susun Rencana</button></div>
+                    <h3 style="font-size:16px; margin-bottom:12px;">Tabel Perbandingan Pilihan Tersimpan</h3>
                     <div id="compareTableContainer"></div>
                 </div>
             </section>
 
             <!-- 5. RENCANA LANGKAH -->
             <section id="view-rencana" class="page-view">
-                <div class="page-head"><span class="page-badge">Langkah 4 • Aksi Terdekat</span><h1 class="page-title">Rencana Langkah</h1><p class="page-subtitle">Ubah pilihanmu menjadi tindakan terdekat yang realistis dan dapat ditinjau ulang.</p></div>
+                <div class="page-head"><div><span class="page-badge">Langkah 4 • Aksi Terdekat</span><h1 class="page-title">Rencana Langkah</h1><p class="page-subtitle">Ubah pilihanmu menjadi tindakan terdekat yang realistis dan dapat ditinjau ulang.</p></div></div>
+                <div class="cheer-banner">
+                    <svg width="48" height="58" class="float-boy" style="flex-shrink:0;"><use href="#char-boy"/></svg>
+                    <div><strong>Tips dari Raka:</strong><p>Mulai dari satu tindakan paling dekat minggu ini, dan siapkan rencana cadangan (Plan B) biar hatimu lebih tenang!</p></div>
+                </div>
                 <div class="card">
-                    <form id="formPlan" onsubmit="addPlan(event)">
+                    <div id="alert-plan" class="alert-box"></div>
+                    <form id="formPlan" novalidate onsubmit="addPlan(event)">
                         <div class="grid-2">
-                            <div class="field"><label>Tujuan Sementara</label><input type="text" id="plnTujuan" placeholder="Contoh: Lolos jalur vokasi / siap kerja" required></div>
-                            <div class="field"><label>Tenggat Waktu</label><input type="date" id="plnTenggat" required></div>
+                            <div class="field"><label>Tujuan Sementara</label><input type="text" id="plnTujuan" placeholder="Contoh: Lolos jalur vokasi / siap kerja"></div>
+                            <div class="field"><label>Tenggat Waktu</label><input type="date" id="plnTenggat"></div>
                         </div>
-                        <div class="field"><label>Tindakan Terdekat</label><input type="text" id="plnTindakan" placeholder="Contoh: Cek portal resmi SNPMB & diskusi dengan orang tua" required></div>
+                        <div class="field"><label>Tindakan Terdekat</label><input type="text" id="plnTindakan" placeholder="Contoh: Cek portal resmi SNPMB & diskusi dengan orang tua"></div>
                         <div class="grid-2">
                             <div class="field"><label>Dukungan yang Dibutuhkan</label><input type="text" id="plnDukungan" placeholder="Guru BK, orang tua, atau alumni"></div>
                             <div class="field"><label>Catatan Alternatif (Plan B)</label><input type="text" id="plnAlternatif" placeholder="Contoh: Daftar pelatihan BLK bersertifikat"></div>
                         </div>
-                        <button type="submit" class="btn btn-gold">Simpan & Tinjau Rencana</button>
+                        <div class="step-nav">
+                            <button type="button" class="btn btn-outline btn-sm" onclick="openStudentPage('bandingkan')">← Bandingkan Pilihan</button>
+                            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                <button type="submit" class="btn btn-gold btn-sm">Simpan Rencana Langkah</button>
+                                <button type="button" class="btn btn-navy btn-sm" onclick="nextFromPlan()">Lanjut ke Artikel & Video →</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
-                <div class="card"><h3 style="font-size:16px; margin-bottom:12px;">Daftar Rencana Langkahmu</h3><div id="planListContainer"></div></div>
+                <div class="card"><h3 style="font-size:16px; margin-bottom:12px;">Daftar Rencana Langkah Tersimpan</h3><div id="planListContainer"></div></div>
             </section>
 
             <!-- 6. ARTIKEL & VIDEO -->
             <section id="view-artikel" class="page-view">
-                <div class="page-head"><span class="page-badge">Pustaka Karier</span><h1 class="page-title">Artikel & Video Panduan</h1><p class="page-subtitle">Materi singkat tentang eksplorasi karier, sumber informasi, persiapan studi/kerja, dan keputusan.</p></div>
+                <div class="page-head"><div><span class="page-badge">Pustaka Karier</span><h1 class="page-title">Artikel & Video Panduan</h1><p class="page-subtitle">Materi singkat tentang eksplorasi karier, sumber informasi, persiapan studi/kerja, dan keputusan.</p></div></div>
                 <div class="pill-group" id="articleFilters">
                     <button class="pill-btn active" onclick="filterArticles('semua', this)">Semua Topik</button>
                     <button class="pill-btn" onclick="filterArticles('eksplorasi', this)">Eksplorasi Karier</button>
@@ -579,36 +586,71 @@
                     <button class="pill-btn" onclick="filterArticles('keputusan', this)">Pengambilan Keputusan</button>
                 </div>
                 <div class="grid-2" id="articleGrid"></div>
+                <div class="card" style="padding:14px 20px; margin-top:16px;">
+                    <div class="step-nav" style="margin-top:0; padding-top:0; border:none;">
+                        <button class="btn btn-outline btn-sm" onclick="openStudentPage('rencana')">← Rencana Langkah</button>
+                        <button class="btn btn-navy btn-sm" onclick="openStudentPage('konsultasi')">Lanjut ke Konsultasi BK →</button>
+                    </div>
+                </div>
             </section>
 
             <!-- 7. KONSULTASI BK -->
             <section id="view-konsultasi" class="page-view">
-                <div class="page-head"><span class="page-badge">Pendampingan Sekolah</span><h1 class="page-title">Konsultasi BK</h1><p class="page-subtitle">Chat langsung lewat WhatsApp Guru BK atau kirim formulir permintaan konsultasi.</p></div>
+                <div class="page-head"><div><span class="page-badge">Pendampingan Sekolah</span><h1 class="page-title">Konsultasi BK</h1><p class="page-subtitle">Chat langsung lewat WhatsApp Guru BK atau kirim formulir permintaan konsultasi.</p></div></div>
                 <div class="wa-hero-card">
-                    <div style="flex:1; min-width:230px;">
-                        <span class="tag tag-green" style="margin-bottom:5px;">Respon Cepat • Rahasia Terjaga</span>
-                        <h3 style="font-size:19px; color:var(--navy-950); margin-bottom:4px;">Chat Langsung Guru BK via WhatsApp</h3>
-                        <p style="font-size:13px; color:var(--text-sub);">Klik tombol di samping untuk terhubung langsung ke WhatsApp Guru BK sekolah.</p>
+                    <div style="display:flex; align-items:center; gap:14px; flex:1; min-width:230px;">
+                        <svg width="52" height="62" class="float-boy" style="flex-shrink:0;"><use href="#char-boy"/></svg>
+                        <div>
+                            <span class="tag tag-green" style="margin-bottom:5px;">Respon Cepat • Rahasia Terjaga</span>
+                            <h3 style="font-size:19px; color:var(--navy-950); margin-bottom:4px;">Chat Langsung Guru BK via WhatsApp</h3>
+                            <p style="font-size:13px; color:var(--text-sub);">Klik tombol di samping untuk terhubung langsung ke WhatsApp Guru BK sekolah.</p>
+                        </div>
                     </div>
                     <button class="btn btn-wa" onclick="bukaWaGuruBK()">Hubungi Guru BK di WhatsApp</button>
                 </div>
                 <div class="card">
                     <h3 style="font-size:16px; margin-bottom:12px;">Formulir Permintaan Konsultasi</h3>
-                    <form id="formConsult" onsubmit="submitConsult(event)">
+                    <div id="alert-consult" class="alert-box"></div>
+                    <form id="formConsult" novalidate onsubmit="submitConsult(event)">
                         <div class="grid-2">
-                            <div class="field"><label>Nama Panggilan & Kelas</label><input type="text" id="cnsNama" placeholder="Contoh: Dimas — XII IPA 2" required></div>
+                            <div class="field"><label>Nama Panggilan & Kelas</label><input type="text" id="cnsNama" placeholder="Contoh: Dimas — XII IPA 2"></div>
                             <div class="field"><label>Topik yang Ingin Dibahas</label><select id="cnsTopik"><option value="Bingung memilih jurusan studi lanjut">Bingung memilih jurusan studi lanjut</option><option value="Mempertimbangkan kuliah vs langsung kerja">Mempertimbangkan kuliah vs langsung kerja</option><option value="Informasi pendidikan vokasi / pelatihan / beasiswa">Informasi pendidikan vokasi / pelatihan / beasiswa</option><option value="Menyelaraskan pilihan dengan harapan orang tua">Menyelaraskan pilihan dengan harapan orang tua</option><option value="Membahas hasil perbandingan pilihan & rencana langkah">Membahas hasil perbandingan pilihan & rencana langkah</option></select></div>
                         </div>
                         <div class="grid-2">
                             <div class="field"><label>Pilihan Layanan</label><select id="cnsMetode"><option value="Tatap Muka di Ruang BK">Tatap Muka di Ruang BK</option><option value="Konsultasi Daring (Chat WA / Video)">Konsultasi Daring (Chat WA / Video)</option></select></div>
-                            <div class="field"><label>Usulan Waktu</label><input type="text" id="cnsWaktu" placeholder="Contoh: Rabu sepulang sekolah" required></div>
+                            <div class="field"><label>Usulan Waktu</label><input type="text" id="cnsWaktu" placeholder="Contoh: Rabu sepulang sekolah"></div>
                         </div>
-                        <div class="field"><label>Hal yang Sedang Dipertimbangkan</label><textarea id="cnsCatatan" placeholder="Tuliskan pertanyaan atau kendalamu..." required></textarea></div>
-                        <label class="consent-box"><input type="checkbox" id="cnsConsent" required><span><strong>Persetujuan Pengiriman:</strong> Saya menyetujui pengiriman formulir ini beserta ringkasan eksplorasi karier saya kepada Guru BK sekolah untuk keperluan layanan bimbingan karier.</span></label>
-                        <button type="submit" class="btn btn-navy">Kirim Permintaan Konsultasi</button>
+                        <div class="field"><label>Hal yang Sedang Dipertimbangkan</label><textarea id="cnsCatatan" placeholder="Tuliskan pertanyaan atau kendalamu..."></textarea></div>
+                        <label class="consent-box" id="cnsConsentBox"><input type="checkbox" id="cnsConsent" onchange="this.parentElement.classList.remove('consent-error')"><span><strong>Persetujuan Pengiriman:</strong> Saya menyetujui pengiriman formulir ini beserta ringkasan eksplorasi karier saya kepada Guru BK sekolah untuk keperluan layanan bimbingan karier.</span></label>
+                        <div class="step-nav">
+                            <button type="button" class="btn btn-outline btn-sm" onclick="openStudentPage('artikel')">← Artikel & Video</button>
+                            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                <button type="submit" class="btn btn-gold btn-sm">Kirim Permintaan Konsultasi</button>
+                                <button type="button" class="btn btn-navy btn-sm" onclick="openStudentPage('ringkasan')">Lihat Ringkasan & PDF →</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
-                <div class="card"><h3 style="font-size:16px; margin-bottom:12px;">Riwayat Pengajuan Konsultasimu</h3><div id="consultHistoryContainer"></div></div>
+                <div class="card"><h3 style="font-size:16px; margin-bottom:12px;">Riwayat Pengajuan Konsultasi Tersimpan</h3><div id="consultHistoryContainer"></div></div>
+            </section>
+
+            <!-- 8. RINGKASAN DATA & EKSPOR PDF -->
+            <section id="view-ringkasan" class="page-view">
+                <div class="page-head">
+                    <div><span class="page-badge">Laporan Eksplorasi</span><h1 class="page-title">Ringkasan Data & Cetak PDF</h1><p class="page-subtitle">Cek kelengkapan seluruh datamu yang tersimpan dan unduh sebagai laporan PDF.</p></div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button class="btn btn-navy btn-sm" onclick="downloadSummaryPDF(this)"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Unduh File PDF</button>
+                        <button class="btn btn-outline btn-sm" onclick="printSummaryPDF()">Cetak via Browser</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div id="finalCompletenessBanner"></div>
+                    <div id="finalSavedListContainer"></div>
+                    <div class="step-nav">
+                        <button class="btn btn-outline btn-sm" onclick="openStudentPage('konsultasi')">← Konsultasi BK</button>
+                        <button class="btn btn-wa btn-sm" onclick="bukaWaGuruBK()">Diskusikan Hasil ke WA Guru BK</button>
+                    </div>
+                </div>
             </section>
 
             <footer class="site-footer">
@@ -676,8 +718,8 @@
                 <div class="page-head"><h1 class="page-title">Kelola Akses Siswa</h1></div>
                 <div class="card">
                     <h3 style="font-size:16px; margin-bottom:10px;">Tambahkan Email Siswa</h3>
-                    <form onsubmit="adminAddStudent(event)" style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
-                        <div class="field" style="flex:1; min-width:220px; margin:0;"><label>Alamat Email Siswa</label><input type="email" id="admNewEmail" placeholder="siswa.kelas12@email.com" required></div>
+                    <form novalidate onsubmit="adminAddStudent(event)" style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+                        <div class="field" style="flex:1; min-width:220px; margin:0;"><label>Alamat Email Siswa</label><input type="email" id="admNewEmail" placeholder="siswa.kelas12@email.com"></div>
                         <button type="submit" id="btnAdmAdd" class="btn btn-navy">Tambahkan Akses</button>
                     </form>
                 </div>
@@ -739,6 +781,7 @@
         </div>
     </div>
 
+    <div id="pdf-print-sheet"></div>
     <div class="toast" id="toastEl">Notifikasi</div>
 
     <script>
@@ -750,10 +793,7 @@
             messagingSenderId: "754696890996",
             appId: "1:754696890996:web:f10a719c0b647fce66ff21"
         };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         db.settings({ experimentalAutoDetectLongPolling: true });
         const usersCol = db.collection('arahkarier_users');
@@ -771,32 +811,30 @@
 
         function formatFirebaseError(err) {
             const code = err?.code || '';
-            if (code === 'permission-denied') return 'Akses Firestore ditolak (permission-denied). Periksa tab Rules di Firestore Database Firebase Console.';
+            if (code === 'permission-denied') return 'Akses Firestore ditolak (permission-denied). Periksa tab Rules di Firestore Database.';
             if (code === 'not-found' || code === 'failed-precondition') return 'Firestore Database belum dibuat di proyek arah-karier.';
             if (code === 'unavailable') return 'Tidak dapat menjangkau server Firebase. Periksa koneksi internetmu.';
             return `Gagal terhubung ke Firebase (${code || err?.message || 'error tidak diketahui'}).`;
         }
 
-        const pesanPiko = [
+        const pesanRaka = [
             "Bingung pilih jurusan itu wajar banget! Pelan-pelan kita urai bareng ya!",
             "Gak perlu sama kayak teman, jalan terbaik adalah yang cocok sama dirimu!",
             "Sudah coba isi Bandingkan Pilihan? Biar makin mantap ngobrol sama orang tua!",
             "Kalau ragu banget, langsung klik Chat WA Guru BK aja ya. Tenang, rahasiamu aman!"
         ];
-        const pesanLumi = [
+        const pesanNisa = [
             "\"Satu langkah kecil hari ini sudah sangat berarti!\"",
             "\"Kuliah, vokasi, kerja, atau usaha — semuanya hebat kalau dijalani serius!\"",
             "\"Jangan takut salah pilih, rencana selalu bisa ditinjau ulang.\""
         ];
 
-        function sapaPiko() {
-            const svg = document.getElementById('pikoHeroSvg');
-            svg.classList.remove('wiggle-now'); void svg.offsetWidth; svg.classList.add('wiggle-now');
-            document.getElementById('pikoHomeQuote').innerText = pesanPiko[Math.floor(Math.random() * pesanPiko.length)];
+        function sapaRaka() {
+            const el = document.getElementById('heroCharsWrap');
+            el.classList.remove('wiggle-now'); void el.offsetWidth; el.classList.add('wiggle-now');
+            document.getElementById('rakaHomeQuote').innerText = pesanRaka[Math.floor(Math.random() * pesanRaka.length)];
         }
-        function gantiPesanLumi() {
-            document.getElementById('sideLumiQuote').innerText = pesanLumi[Math.floor(Math.random() * pesanLumi.length)];
-        }
+        function gantiPesanNisa() { document.getElementById('sideNisaQuote').innerText = pesanNisa[Math.floor(Math.random() * pesanNisa.length)]; }
         function bukaWaGuruBK() {
             const info = currentStudentEmail ? ` (Akun: ${currentStudentEmail})` : '';
             const teks = encodeURIComponent(`Halo Ibu/Bapak Guru BK, saya siswa kelas XII dari website Arah Karier${info}. Saya ingin berkonsultasi mengenai rencana karier saya setelah lulus SMA.`);
@@ -822,19 +860,53 @@
         function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
         function createEmptyRecord(email) { return { email: email.trim().toLowerCase(), allowed: true, joinedAt: new Date().toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}), kenaliDiri: null, comparisons: [], plans: [], consultations: [] }; }
         function normalizeRecord(email, d = {}) { return { email: email || d.email || '', allowed: d.allowed !== false, joinedAt: d.joinedAt || '-', kenaliDiri: d.kenaliDiri || null, comparisons: Array.isArray(d.comparisons)?d.comparisons:[], plans: Array.isArray(d.plans)?d.plans:[], consultations: Array.isArray(d.consultations)?d.consultations:[] }; }
-        function showToast(msg) { const el = document.getElementById('toastEl'); el.innerText = msg; el.classList.add('show'); clearTimeout(window._t); window._t = setTimeout(()=>el.classList.remove('show'), 4200); }
+
+        function showToast(msg, type = 'info') {
+            const el = document.getElementById('toastEl');
+            el.innerText = msg;
+            el.className = `toast ${type==='error'?'toast-error':(type==='success'?'toast-success':'')} show`;
+            clearTimeout(window._t); window._t = setTimeout(()=>el.classList.remove('show'), 4200);
+        }
+        function setSectionAlert(id, msg, type = 'error') {
+            const el = document.getElementById(id); if (!el) return;
+            if (!msg) { el.className = 'alert-box'; el.innerText = ''; return; }
+            el.innerText = msg; el.className = `alert-box ${type}`;
+        }
+        function validateFields(fields, alertId) {
+            setSectionAlert(alertId, '');
+            const missing = []; let firstEl = null;
+            fields.forEach(f => {
+                const el = document.getElementById(f.id); if (!el) return;
+                el.classList.remove('field-error');
+                if (!el.value.trim()) { el.classList.add('field-error'); missing.push(f.label); if (!firstEl) firstEl = el; }
+            });
+            if (missing.length) {
+                if (firstEl) firstEl.focus();
+                const msg = `Data belum diisi lengkap! Harap isi: ${missing.join(', ')}.`;
+                setSectionAlert(alertId, msg, 'error'); showToast(msg, 'error'); return false;
+            }
+            return true;
+        }
+        document.addEventListener('input', e => { if (e.target.classList?.contains('field-error') && e.target.value.trim()) e.target.classList.remove('field-error'); });
+
+        function getMissingSections(u) {
+            const miss = [];
+            if (!u.kenaliDiri) miss.push({ label: 'Kenali Diri', page: 'kenali' });
+            if (!u.comparisons?.length) miss.push({ label: 'Bandingkan Pilihan', page: 'bandingkan' });
+            if (!u.plans?.length) miss.push({ label: 'Rencana Langkah', page: 'rencana' });
+            if (!u.consultations?.length) miss.push({ label: 'Konsultasi BK', page: 'konsultasi' });
+            return miss;
+        }
 
         function resetAllStudentForms() {
             kenaliSyncedForEmail = null;
+            ['alert-kenali','alert-compare','alert-plan','alert-consult'].forEach(id => setSectionAlert(id, ''));
             ['formKenali','formCompare','formPlan','formConsult'].forEach(id => document.getElementById(id)?.reset());
+            document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
             ['kdMinat','kdAktivitas','kdKekuatan','kdKembang'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-            document.getElementById('kenaliSummaryCard').style.display = 'none';
-            document.getElementById('kenaliSummaryContent').innerHTML = '';
-            document.getElementById('compareTableContainer').innerHTML = '';
-            document.getElementById('planListContainer').innerHTML = '';
-            document.getElementById('consultHistoryContainer').innerHTML = '';
-            document.getElementById('pikoHomeQuote').innerText = 'Klik aku ya kalau lagi butuh penyemangat memilih masa depan!';
-            document.getElementById('sideLumiQuote').innerText = '"Satu langkah kecil hari ini sudah sangat berarti!"';
+            ['saved-kenali-box','compareTableContainer','planListContainer','consultHistoryContainer','finalCompletenessBanner','finalSavedListContainer'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
+            document.getElementById('rakaHomeQuote').innerText = 'Klik kami ya kalau lagi butuh penyemangat memilih masa depan!';
+            document.getElementById('sideNisaQuote').innerText = '"Satu langkah kecil hari ini sudah sangat berarti!"';
             document.querySelectorAll('#exploreFilters .pill-btn').forEach((b,i) => b.classList.toggle('active', i===0));
             document.querySelectorAll('#articleFilters .pill-btn').forEach((b,i) => b.classList.toggle('active', i===0));
         }
@@ -843,22 +915,15 @@
             if (!currentStudentEmail || !currentStudentData) return false;
             try {
                 await usersCol.doc(currentStudentEmail).set({
-                    email: currentStudentEmail,
-                    allowed: currentStudentData.allowed !== false,
-                    joinedAt: currentStudentData.joinedAt || '-',
-                    kenaliDiri: currentStudentData.kenaliDiri,
-                    comparisons: currentStudentData.comparisons,
-                    plans: currentStudentData.plans,
-                    consultations: currentStudentData.consultations
+                    email: currentStudentEmail, allowed: currentStudentData.allowed !== false, joinedAt: currentStudentData.joinedAt || '-',
+                    kenaliDiri: currentStudentData.kenaliDiri, comparisons: currentStudentData.comparisons,
+                    plans: currentStudentData.plans, consultations: currentStudentData.consultations
                 }, { merge: true });
                 return true;
-            } catch (err) {
-                console.error('Firebase save error:', err);
-                showToast(formatFirebaseError(err));
-                return false;
-            }
+            } catch (err) { console.error(err); showToast(formatFirebaseError(err), 'error'); return false; }
         }
 
+        // AUTH
         function switchAuthTab(m) {
             document.getElementById('tabBtnStudent').classList.toggle('active', m==='student');
             document.getElementById('tabBtnAdmin').classList.toggle('active', m==='admin');
@@ -875,7 +940,10 @@
             const btn = document.getElementById('btnStuLogin');
             const email = document.getElementById('stuEmail').value.trim().toLowerCase();
             const pass = document.getElementById('stuPass').value.trim();
+            if (!email || !email.includes('@')) { showAuthAlert('studentAlert', 'Harap masukkan alamat email yang valid.', 'error'); return; }
+            if (!pass) { showAuthAlert('studentAlert', 'Kata sandi belum diisi.', 'error'); return; }
             if (pass !== STUDENT_REQUIRED_PASS) { showAuthAlert('studentAlert', 'Password salah.', 'error'); return; }
+
             btn.disabled = true; btn.innerText = 'Menghubungkan...';
             try {
                 const snap = await usersCol.doc(email).get();
@@ -885,34 +953,30 @@
                     record = normalizeRecord(email, snap.data());
                 } else {
                     const allSnap = await usersCol.get();
-                    const activeCount = allSnap.docs.filter(d => d.data().allowed !== false).length;
-                    if (activeCount >= MAX_USERS) { showAuthAlert('studentAlert', `Kuota penuh (${MAX_USERS} siswa). Hubungi Admin BK.`, 'error'); return; }
+                    if (allSnap.docs.filter(d => d.data().allowed !== false).length >= MAX_USERS) {
+                        showAuthAlert('studentAlert', `Kuota penuh (${MAX_USERS} siswa). Hubungi Admin BK.`, 'error'); return;
+                    }
                     record = createEmptyRecord(email);
                     await usersCol.doc(email).set(record);
                 }
                 localStorage.setItem(SESSION_STU_KEY, email);
                 document.getElementById('formStudentLogin').reset();
                 launchStudentApp(email, record);
-            } catch (err) {
-                console.error('Firebase login error:', err);
-                showAuthAlert('studentAlert', formatFirebaseError(err), 'error');
-            } finally { btn.disabled = false; btn.innerText = 'Mulai Rencanakan Masa Depanmu'; }
+            } catch (err) { showAuthAlert('studentAlert', formatFirebaseError(err), 'error'); }
+            finally { btn.disabled = false; btn.innerText = 'Mulai Rencanakan Masa Depanmu'; }
         }
 
         function handleAdminLogin(e) {
             e.preventDefault();
-            const u = document.getElementById('admUser').value.trim();
-            const p = document.getElementById('admPass').value;
+            const u = document.getElementById('admUser').value.trim(), p = document.getElementById('admPass').value;
+            if (!u || !p) { showAuthAlert('adminAlert', 'Username dan password belum diisi.', 'error'); return; }
             if (u.toLowerCase() === ADMIN_USERNAME.toLowerCase() && p === ADMIN_PASSWORD) {
-                localStorage.setItem(SESSION_ADM_KEY, 'true');
-                document.getElementById('formAdminLogin').reset();
-                launchAdminApp();
+                localStorage.setItem(SESSION_ADM_KEY, 'true'); document.getElementById('formAdminLogin').reset(); launchAdminApp();
             } else { showAuthAlert('adminAlert', 'Username atau password salah.', 'error'); }
         }
 
         function launchStudentApp(email, initialRecord) {
-            currentStudentEmail = email;
-            currentStudentData = normalizeRecord(email, initialRecord);
+            currentStudentEmail = email; currentStudentData = normalizeRecord(email, initialRecord);
             resetAllStudentForms();
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('admin-app').classList.remove('active');
@@ -926,10 +990,7 @@
                 if (!doc.exists || doc.data().allowed === false) { forceLogoutByAdmin(); return; }
                 currentStudentData = normalizeRecord(email, doc.data());
                 renderStudentAll();
-            }, err => {
-                console.error('Student snapshot error:', err);
-                showToast(formatFirebaseError(err));
-            });
+            }, err => showToast(formatFirebaseError(err), 'error'));
         }
 
         function forceLogoutByAdmin() {
@@ -941,7 +1002,6 @@
             document.getElementById('auth-screen').style.display = 'flex';
             switchAuthTab('student'); showAuthAlert('studentAlert', 'Sesi dihentikan! Akses akunmu dinonaktifkan oleh Admin Cera.', 'error');
         }
-
         function logoutStudent() {
             if (unsubStudent) { unsubStudent(); unsubStudent = null; }
             localStorage.removeItem(SESSION_STU_KEY); currentStudentEmail = null; currentStudentData = null;
@@ -964,13 +1024,10 @@
                 renderAdminDashboard();
                 if (currentInspectEmail) renderInspectModal();
             }, err => {
-                console.error('Admin snapshot error:', err);
-                const msg = formatFirebaseError(err);
-                showToast(msg);
+                const msg = formatFirebaseError(err); showToast(msg, 'error');
                 document.getElementById('admMonitorList').innerHTML = `<div class="alert-box error" style="display:block;">${esc(msg)}</div>`;
             });
         }
-
         function logoutAdmin() {
             if (unsubAdmin) { unsubAdmin(); unsubAdmin = null; }
             localStorage.removeItem(SESSION_ADM_KEY); closeAllDrawers(); closeModal('inspectModal');
@@ -995,14 +1052,28 @@
         }
         function closeModal(id) { document.getElementById(id).classList.remove('open'); if (id==='inspectModal') currentInspectEmail = null; }
 
+        // AKTIVITAS SISWA + VALIDASI
         async function saveKenaliDiri(e) {
             e.preventDefault(); if (!currentStudentData) return;
-            const minat = document.getElementById('kdMinat').value.trim(), aktivitas = document.getElementById('kdAktivitas').value.trim(),
-                  kekuatan = document.getElementById('kdKekuatan').value.trim(), kembang = document.getElementById('kdKembang').value.trim();
-            if (!minat && !aktivitas && !kekuatan && !kembang) { showToast('Isi minimal satu pertanyaan refleksi dulu ya!'); return; }
-            currentStudentData.kenaliDiri = { minat: minat||'-', aktivitas: aktivitas||'-', kekuatan: kekuatan||'-', kembang: kembang||'-', updatedAt: new Date().toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}) };
+            const ok = validateFields([
+                { id: 'kdMinat', label: 'Minat Utama' }, { id: 'kdAktivitas', label: 'Aktivitas Disukai' },
+                { id: 'kdKekuatan', label: 'Kekuatan Diri' }, { id: 'kdKembang', label: 'Hal yang Ingin Dikembangkan' }
+            ], 'alert-kenali');
+            if (!ok) return;
+            currentStudentData.kenaliDiri = {
+                minat: document.getElementById('kdMinat').value.trim(), aktivitas: document.getElementById('kdAktivitas').value.trim(),
+                kekuatan: document.getElementById('kdKekuatan').value.trim(), kembang: document.getElementById('kdKembang').value.trim(),
+                updatedAt: new Date().toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})
+            };
             renderStudentAll();
-            if (await saveCurrentStudentToCloud()) showToast('Refleksi Kenali Diri tersimpan ke Firebase!');
+            if (await saveCurrentStudentToCloud()) showToast('Refleksi Kenali Diri tersimpan ke Firebase!', 'success');
+        }
+        function nextFromKenali() {
+            if (!currentStudentData?.kenaliDiri) {
+                const msg = 'Data Kenali Diri belum diisi atau belum disimpan! Lengkapi dan klik "Simpan Refleksi Diri" dulu ya.';
+                setSectionAlert('alert-kenali', msg, 'error'); showToast(msg, 'error'); return;
+            }
+            openStudentPage('jelajahi');
         }
 
         function filterExplore(cat, btn) { document.querySelectorAll('#exploreFilters .pill-btn').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); renderExplore(cat); }
@@ -1021,26 +1092,52 @@
 
         async function addComparison(e) {
             e.preventDefault(); if (!currentStudentData) return;
+            const ok = validateFields([
+                { id: 'cmpNama', label: 'Nama Pilihan / Jalur' }, { id: 'cmpLokasi', label: 'Lokasi' },
+                { id: 'cmpSyarat', label: 'Persyaratan Utama' }, { id: 'cmpBiaya', label: 'Biaya / Sumber Daya' },
+                { id: 'cmpTenggat', label: 'Tenggat Pendaftaran' }, { id: 'cmpInfo', label: 'Informasi Perlu Dicari' }
+            ], 'alert-compare');
+            if (!ok) return;
             currentStudentData.comparisons.unshift({
                 id: Date.now(), nama: document.getElementById('cmpNama').value.trim(), minat: document.getElementById('cmpMinat').value,
-                lokasi: document.getElementById('cmpLokasi').value.trim()||'-', syarat: document.getElementById('cmpSyarat').value.trim()||'-',
-                biaya: document.getElementById('cmpBiaya').value.trim()||'-', tenggat: document.getElementById('cmpTenggat').value.trim()||'-',
-                info: document.getElementById('cmpInfo').value.trim()||'-'
+                lokasi: document.getElementById('cmpLokasi').value.trim(), syarat: document.getElementById('cmpSyarat').value.trim(),
+                biaya: document.getElementById('cmpBiaya').value.trim(), tenggat: document.getElementById('cmpTenggat').value.trim(),
+                info: document.getElementById('cmpInfo').value.trim()
             });
             e.target.reset(); renderStudentAll();
-            if (await saveCurrentStudentToCloud()) showToast('Pilihan ditambahkan ke perbandingan!');
+            if (await saveCurrentStudentToCloud()) showToast('Pilihan ditambahkan ke perbandingan!', 'success');
+        }
+        function nextFromCompare() {
+            if (!currentStudentData?.comparisons?.length) {
+                const msg = 'Belum ada pilihan yang disimpan! Isi formulir di atas lalu klik "Tambahkan ke Perbandingan".';
+                setSectionAlert('alert-compare', msg, 'error'); showToast(msg, 'error'); return;
+            }
+            openStudentPage('rencana');
         }
         async function deleteComparison(id) { currentStudentData.comparisons = currentStudentData.comparisons.filter(c=>c.id!==id); renderStudentAll(); await saveCurrentStudentToCloud(); }
 
         async function addPlan(e) {
             e.preventDefault(); if (!currentStudentData) return;
+            const ok = validateFields([
+                { id: 'plnTujuan', label: 'Tujuan Sementara' }, { id: 'plnTenggat', label: 'Tenggat Waktu' },
+                { id: 'plnTindakan', label: 'Tindakan Terdekat' }, { id: 'plnDukungan', label: 'Dukungan Dibutuhkan' },
+                { id: 'plnAlternatif', label: 'Catatan Alternatif (Plan B)' }
+            ], 'alert-plan');
+            if (!ok) return;
             currentStudentData.plans.unshift({
                 id: Date.now(), tujuan: document.getElementById('plnTujuan').value.trim(), tindakan: document.getElementById('plnTindakan').value.trim(),
-                tenggat: document.getElementById('plnTenggat').value, dukungan: document.getElementById('plnDukungan').value.trim()||'Mandiri',
-                alternatif: document.getElementById('plnAlternatif').value.trim()||'Belum dicatat', done: false
+                tenggat: document.getElementById('plnTenggat').value, dukungan: document.getElementById('plnDukungan').value.trim(),
+                alternatif: document.getElementById('plnAlternatif').value.trim(), done: false
             });
             e.target.reset(); renderStudentAll();
-            if (await saveCurrentStudentToCloud()) showToast('Rencana langkah tersimpan!');
+            if (await saveCurrentStudentToCloud()) showToast('Rencana langkah tersimpan!', 'success');
+        }
+        function nextFromPlan() {
+            if (!currentStudentData?.plans?.length) {
+                const msg = 'Belum ada Rencana Langkah yang disimpan! Isi formulir di atas lalu klik "Simpan Rencana Langkah".';
+                setSectionAlert('alert-plan', msg, 'error'); showToast(msg, 'error'); return;
+            }
+            openStudentPage('artikel');
         }
         async function togglePlanStatus(id) { const p = currentStudentData.plans.find(x=>x.id===id); if(p) p.done=!p.done; renderStudentAll(); await saveCurrentStudentToCloud(); }
         async function deletePlan(id) { currentStudentData.plans = currentStudentData.plans.filter(x=>x.id!==id); renderStudentAll(); await saveCurrentStudentToCloud(); }
@@ -1065,7 +1162,15 @@
 
         async function submitConsult(e) {
             e.preventDefault(); if (!currentStudentData) return;
-            if (!document.getElementById('cnsConsent').checked) { showToast('Centang persetujuan pengiriman dulu ya!'); return; }
+            const ok = validateFields([
+                { id: 'cnsNama', label: 'Nama Panggilan & Kelas' }, { id: 'cnsWaktu', label: 'Usulan Waktu' }, { id: 'cnsCatatan', label: 'Hal yang Dipertimbangkan' }
+            ], 'alert-consult');
+            if (!ok) return;
+            if (!document.getElementById('cnsConsent').checked) {
+                document.getElementById('cnsConsentBox').classList.add('consent-error');
+                const msg = 'Harap centang kotak Persetujuan Pengiriman terlebih dahulu!';
+                setSectionAlert('alert-consult', msg, 'error'); showToast(msg, 'error'); return;
+            }
             currentStudentData.consultations.unshift({
                 id: Date.now(), tanggal: new Date().toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}),
                 nama: document.getElementById('cnsNama').value.trim(), topik: document.getElementById('cnsTopik').value,
@@ -1073,22 +1178,87 @@
                 catatan: document.getElementById('cnsCatatan').value.trim(), consent: true, status: 'Menunggu'
             });
             e.target.reset(); renderStudentAll();
-            if (await saveCurrentStudentToCloud()) showToast('Permintaan konsultasi terkirim ke Guru BK!');
+            if (await saveCurrentStudentToCloud()) showToast('Permintaan konsultasi terkirim ke Guru BK!', 'success');
         }
 
+        // EKSPOR PDF (SEPERTI CLIENT 4)
+        function buildPdfReportHTML(u) {
+            return `
+                <div style="font-family: Arial, Helvetica, sans-serif; color:#162B47; line-height:1.55; font-size:12px; padding:4px;">
+                    <div style="background:#183B6B; color:#fff; padding:16px 20px; border-radius:10px; margin-bottom:14px;">
+                        <h1 style="font-size:18px; margin:0 0 4px 0; color:#fff;">RINGKASAN EKSPLORASI ARAH KARIER</h1>
+                        <div style="font-size:11.5px; color:#E2F0FE;">Akun Siswa: <strong>${esc(u.email)}</strong> &nbsp;|&nbsp; Tanggal: ${new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
+                    </div>
+                    <div style="border:1.5px solid #D8E8F8; border-radius:9px; padding:11px 14px; margin-bottom:10px; page-break-inside:avoid;">
+                        <h3 style="color:#183B6B; font-size:13.5px; margin:0 0 6px 0; border-bottom:1px solid #C6E2FC; padding-bottom:4px;">1. Kenali Diri</h3>
+                        ${u.kenaliDiri ? `<p style="margin:3px 0;"><strong>Minat Utama:</strong> ${esc(u.kenaliDiri.minat)}</p><p style="margin:3px 0;"><strong>Aktivitas Disukai:</strong> ${esc(u.kenaliDiri.aktivitas)}</p><p style="margin:3px 0;"><strong>Kekuatan Diri:</strong> ${esc(u.kenaliDiri.kekuatan)}</p><p style="margin:3px 0;"><strong>Ingin Dikembangkan:</strong> ${esc(u.kenaliDiri.kembang)}</p>` : '<p style="color:#7F95B0;">Belum diisi.</p>'}
+                    </div>
+                    <div style="border:1.5px solid #D8E8F8; border-radius:9px; padding:11px 14px; margin-bottom:10px; page-break-inside:avoid;">
+                        <h3 style="color:#183B6B; font-size:13.5px; margin:0 0 6px 0; border-bottom:1px solid #C6E2FC; padding-bottom:4px;">2. Bandingkan Pilihan</h3>
+                        ${u.comparisons.length ? `<ul style="margin:4px 0 0 18px; padding:0;">${u.comparisons.map(c=>`<li style="margin-bottom:5px;"><strong>${esc(c.nama)}</strong> (${esc(c.minat)}) — Syarat: ${esc(c.syarat)} | Biaya: ${esc(c.biaya)} | Lokasi: ${esc(c.lokasi)} | Tenggat: ${esc(c.tenggat)} | Info dicari: ${esc(c.info)}</li>`).join('')}</ul>` : '<p style="color:#7F95B0;">Belum ada pilihan dibandingkan.</p>'}
+                    </div>
+                    <div style="border:1.5px solid #D8E8F8; border-radius:9px; padding:11px 14px; margin-bottom:10px; page-break-inside:avoid;">
+                        <h3 style="color:#183B6B; font-size:13.5px; margin:0 0 6px 0; border-bottom:1px solid #C6E2FC; padding-bottom:4px;">3. Rencana Langkah</h3>
+                        ${u.plans.length ? `<ul style="margin:4px 0 0 18px; padding:0;">${u.plans.map(p=>`<li style="margin-bottom:5px;"><strong>${esc(p.tujuan)}</strong> [${p.done?'Selesai':'Berjalan'}] — Tindakan: ${esc(p.tindakan)} | Tenggat: ${esc(p.tenggat)} | Dukungan: ${esc(p.dukungan)} | Plan B: ${esc(p.alternatif)}</li>`).join('')}</ul>` : '<p style="color:#7F95B0;">Belum ada rencana langkah.</p>'}
+                    </div>
+                    <div style="border:1.5px solid #D8E8F8; border-radius:9px; padding:11px 14px; margin-bottom:8px; page-break-inside:avoid;">
+                        <h3 style="color:#183B6B; font-size:13.5px; margin:0 0 6px 0; border-bottom:1px solid #C6E2FC; padding-bottom:4px;">4. Riwayat Konsultasi BK</h3>
+                        ${u.consultations.length ? `<ul style="margin:4px 0 0 18px; padding:0;">${u.consultations.map(c=>`<li style="margin-bottom:4px;"><strong>${esc(c.topik)}</strong> [${esc(c.status)}] — ${esc(c.tanggal)}, ${esc(c.metode)} (${esc(c.waktu)}): ${esc(c.catatan)}</li>`).join('')}</ul>` : '<p style="color:#7F95B0;">Belum ada pengajuan konsultasi.</p>'}
+                    </div>
+                    <p style="text-align:center; font-size:10.5px; color:#546B87; margin-top:10px;">&copy; 2026 Arah Karier — Media Bimbingan dan Konseling Bidang Karier</p>
+                </div>`;
+        }
+
+        async function downloadSummaryPDF(btnEl) {
+            const u = currentStudentData; if (!u) return;
+            const miss = getMissingSections(u);
+            if (miss.length === 4) { showToast('Belum ada data yang diisi! Lengkapi minimal satu bagian terlebih dahulu.', 'error'); return; }
+            if (miss.length > 0) showToast(`Catatan: ${miss.length} bagian belum terisi. Mengunduh data yang tersimpan...`, 'info');
+            else showToast('Menyiapkan file PDF lengkapmu...', 'success');
+
+            if (typeof html2pdf === 'undefined') { printSummaryPDF(); return; }
+            const oldText = btnEl ? btnEl.innerHTML : '';
+            if (btnEl) { btnEl.disabled = true; btnEl.innerText = 'Membuat PDF...'; }
+            try {
+                const safeName = u.email.split('@')[0].replace(/[^a-z0-9_-]/gi, '_');
+                await html2pdf().set({
+                    margin: [10, 10, 10, 10], filename: `Arah_Karier_${safeName}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                }).from(buildPdfReportHTML(u)).save();
+                showToast('File PDF berhasil diunduh!', 'success');
+            } catch (err) { printSummaryPDF(); }
+            finally { if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = oldText; } }
+        }
+
+        function printSummaryPDF() {
+            const u = currentStudentData; if (!u) return;
+            if (getMissingSections(u).length === 4) { showToast('Belum ada data yang diisi untuk dicetak!', 'error'); return; }
+            const html = buildPdfReportHTML(u);
+            const win = window.open('', '_blank', 'width=860,height=720');
+            if (win) {
+                win.document.write(`<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Arah Karier - PDF</title></head><body style="margin:20px;">${html}<script>window.onload=function(){window.print();};<\/script></body></html>`);
+                win.document.close();
+            } else { document.getElementById('pdf-print-sheet').innerHTML = html; window.print(); }
+        }
+
+        // RENDER UI SISWA
         function renderStudentAll() {
             const u = currentStudentData; if (!u) return;
-            const steps = (u.kenaliDiri?1:0) + (u.comparisons.length?1:0) + (u.plans.length?1:0) + (u.consultations.length?1:0);
-            const hints = [
-                'Langkah pertama: Coba isi refleksi ringan di menu Kenali Diri yuk!',
-                'Bagus! Lanjutkan dengan membandingkan 2–3 jalur di Bandingkan Pilihan.',
-                'Hebat! Sekarang ubah pilihanmu jadi aksi nyata di Rencana Langkah.',
-                'Hampir lengkap! Kamu bisa diskusikan rencanamu lewat Konsultasi BK.',
-                'Luar biasa! Semua tahap eksplorasi sudah kamu jalani.'
-            ];
+            const miss = getMissingSections(u);
+            const steps = 4 - miss.length;
             document.getElementById('progBarFill').style.width = `${steps*25}%`;
             document.getElementById('progPercentText').innerText = `${steps*25}% Selesai`;
-            document.getElementById('progHintText').innerText = hints[steps];
+            document.getElementById('progHintText').innerText = miss.length === 0
+                ? 'Luar biasa! Seluruh bagian data Arah Karier sudah lengkap dan siap diunduh sebagai PDF.'
+                : `Terisi ${steps} dari 4 bagian. Belum diisi: ${miss.map(m=>m.label).join(', ')}.`;
+
+            document.getElementById('nav-kenali').classList.toggle('done-nav', Boolean(u.kenaliDiri));
+            document.getElementById('nav-bandingkan').classList.toggle('done-nav', u.comparisons.length > 0);
+            document.getElementById('nav-rencana').classList.toggle('done-nav', u.plans.length > 0);
+            document.getElementById('nav-konsultasi').classList.toggle('done-nav', u.consultations.length > 0);
+            document.getElementById('nav-ringkasan').classList.toggle('done-nav', miss.length === 0);
+
             document.getElementById('sumRefleksi').innerText = u.kenaliDiri ? 'Sudah' : 'Belum';
             document.getElementById('sumBanding').innerText = u.comparisons.length;
             document.getElementById('sumRencana').innerText = u.plans.length;
@@ -1101,16 +1271,9 @@
                 document.getElementById('kdKekuatan').value = u.kenaliDiri?.kekuatan && u.kenaliDiri.kekuatan!=='-' ? u.kenaliDiri.kekuatan : '';
                 document.getElementById('kdKembang').value = u.kenaliDiri?.kembang && u.kenaliDiri.kembang!=='-' ? u.kenaliDiri.kembang : '';
             }
-            const kdCard = document.getElementById('kenaliSummaryCard');
-            if (u.kenaliDiri) {
-                kdCard.style.display = 'block';
-                document.getElementById('kenaliUpdatedAt').innerText = `Diperbarui ${u.kenaliDiri.updatedAt}`;
-                document.getElementById('kenaliSummaryContent').innerHTML = `
-                    <div class="stat-tile" style="text-align:left;"><div class="lbl">Minat</div><p style="font-size:13px;margin-top:4px;">${esc(u.kenaliDiri.minat)}</p></div>
-                    <div class="stat-tile" style="text-align:left;"><div class="lbl">Aktivitas</div><p style="font-size:13px;margin-top:4px;">${esc(u.kenaliDiri.aktivitas)}</p></div>
-                    <div class="stat-tile" style="text-align:left;"><div class="lbl">Kekuatan</div><p style="font-size:13px;margin-top:4px;">${esc(u.kenaliDiri.kekuatan)}</p></div>
-                    <div class="stat-tile" style="text-align:left;"><div class="lbl">Dikembangkan</div><p style="font-size:13px;margin-top:4px;">${esc(u.kenaliDiri.kembang)}</p></div>`;
-            } else { kdCard.style.display = 'none'; }
+
+            document.getElementById('saved-kenali-box').innerHTML = u.kenaliDiri
+                ? `<div class="saved-panel"><div class="saved-panel-head"><h4>✓ Catatan Kenali Diri Tersimpan</h4><span class="tag tag-green">Diperbarui ${esc(u.kenaliDiri.updatedAt)}</span></div><ul><li><strong>Minat:</strong> ${esc(u.kenaliDiri.minat)}</li><li><strong>Aktivitas Disukai:</strong> ${esc(u.kenaliDiri.aktivitas)}</li><li><strong>Kekuatan Diri:</strong> ${esc(u.kenaliDiri.kekuatan)}</li><li><strong>Ingin Dikembangkan:</strong> ${esc(u.kenaliDiri.kembang)}</li></ul></div>` : '';
 
             document.getElementById('compareTableContainer').innerHTML = !u.comparisons.length
                 ? `<p style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">Belum ada pilihan yang dibandingkan.</p>`
@@ -1123,6 +1286,17 @@
             document.getElementById('consultHistoryContainer').innerHTML = !u.consultations.length
                 ? `<p style="text-align:center;padding:18px;color:var(--text-muted);font-size:13px;">Belum ada pengajuan konsultasi.</p>`
                 : u.consultations.map(c=>`<div class="row-card ${c.status==='Selesai'?'done':''}"><div><strong>${esc(c.topik)}</strong> <span class="tag tag-navy">${esc(c.status)}</span><p style="font-size:12px;color:var(--text-sub);">${esc(c.tanggal)} • ${esc(c.metode)} (${esc(c.waktu)})</p><p style="font-size:13px;margin-top:5px;">${esc(c.catatan)}</p></div></div>`).join('');
+
+            // Ringkasan Lengkap & Kelengkapan Data
+            document.getElementById('finalCompletenessBanner').innerHTML = miss.length === 0
+                ? `<div class="alert-box success" style="display:block;">Selamat! Seluruh 4 bagian data Arah Karier sudah terisi lengkap dan siap diunduh sebagai PDF.</div>`
+                : `<div class="alert-box warn" style="display:block;">Masih ada <strong>${miss.length} bagian data yang belum diisi</strong>. Klik untuk melengkapi:<div class="missing-chip-list">${miss.map(m => `<button type="button" class="missing-chip" onclick="openStudentPage('${m.page}')">+ ${esc(m.label)}</button>`).join('')}</div></div>`;
+
+            document.getElementById('finalSavedListContainer').innerHTML = `
+                <div class="summary-block"><h4>1. Kenali Diri <span class="tag ${u.kenaliDiri?'tag-green':'tag-red'}">${u.kenaliDiri?'Tersimpan':'Belum Diisi'}</span></h4>${u.kenaliDiri ? `<p><strong>Minat:</strong> ${esc(u.kenaliDiri.minat)}<br><strong>Aktivitas:</strong> ${esc(u.kenaliDiri.aktivitas)}<br><strong>Kekuatan:</strong> ${esc(u.kenaliDiri.kekuatan)}<br><strong>Dikembangkan:</strong> ${esc(u.kenaliDiri.kembang)}</p>` : '<p style="color:var(--text-muted);">Belum diisi.</p>'}</div>
+                <div class="summary-block"><h4>2. Bandingkan Pilihan <span class="tag ${u.comparisons.length?'tag-green':'tag-red'}">${u.comparisons.length ? u.comparisons.length + ' Pilihan' : 'Belum Diisi'}</span></h4>${u.comparisons.length ? `<ul style="padding-left:18px;">${u.comparisons.map(c=>`<li><strong>${esc(c.nama)}</strong> (${esc(c.minat)}) — Syarat: ${esc(c.syarat)} | Biaya: ${esc(c.biaya)} | Lokasi: ${esc(c.lokasi)} (${esc(c.tenggat)})</li>`).join('')}</ul>` : '<p style="color:var(--text-muted);">Belum ada pilihan yang dibandingkan.</p>'}</div>
+                <div class="summary-block"><h4>3. Rencana Langkah <span class="tag ${u.plans.length?'tag-green':'tag-red'}">${u.plans.length ? u.plans.length + ' Rencana' : 'Belum Diisi'}</span></h4>${u.plans.length ? `<ul style="padding-left:18px;">${u.plans.map(p=>`<li><strong>${esc(p.tujuan)}</strong> [${p.done?'Selesai':'Berjalan'}] — Tindakan: ${esc(p.tindakan)} | Tenggat: ${esc(p.tenggat)} | Plan B: ${esc(p.alternatif)}</li>`).join('')}</ul>` : '<p style="color:var(--text-muted);">Belum ada rencana langkah.</p>'}</div>
+                <div class="summary-block" style="margin-bottom:0;"><h4>4. Konsultasi BK <span class="tag ${u.consultations.length?'tag-green':'tag-red'}">${u.consultations.length ? u.consultations.length + ' Pengajuan' : 'Belum Diisi'}</span></h4>${u.consultations.length ? `<ul style="padding-left:18px;">${u.consultations.map(c=>`<li><strong>${esc(c.topik)}</strong> [${esc(c.status)}] — ${esc(c.tanggal)}, ${esc(c.metode)} (${esc(c.waktu)})</li>`).join('')}</ul>` : '<p style="color:var(--text-muted);">Belum ada pengajuan konsultasi.</p>'}</div>`;
         }
 
         // ADMIN
@@ -1130,30 +1304,30 @@
             e.preventDefault();
             const btn = document.getElementById('btnAdmAdd');
             const email = document.getElementById('admNewEmail').value.trim().toLowerCase();
+            if (!email || !email.includes('@')) { showToast('Masukkan alamat email siswa yang valid.', 'error'); return; }
             btn.disabled = true; btn.innerText = 'Menyimpan...';
             try {
                 const existing = await usersCol.doc(email).get();
-                if (existing.exists) { showToast('Email sudah terdaftar.'); return; }
-                if (cachedAdminUsers.filter(u=>u.allowed!==false).length >= MAX_USERS) { showToast('Kuota penuh.'); return; }
+                if (existing.exists) { showToast('Email sudah terdaftar.', 'error'); return; }
+                if (cachedAdminUsers.filter(u=>u.allowed!==false).length >= MAX_USERS) { showToast('Kuota penuh.', 'error'); return; }
                 await usersCol.doc(email).set(createEmptyRecord(email));
-                e.target.reset(); showToast(`Akses ${email} ditambahkan.`);
-            } catch (err) {
-                console.error(err); showToast(formatFirebaseError(err));
-            } finally { btn.disabled = false; btn.innerText = 'Tambahkan Akses'; }
+                e.target.reset(); showToast(`Akses ${email} ditambahkan.`, 'success');
+            } catch (err) { showToast(formatFirebaseError(err), 'error'); }
+            finally { btn.disabled = false; btn.innerText = 'Tambahkan Akses'; }
         }
         async function adminToggleAccess(email, allow) {
-            try { await usersCol.doc(email).update({ allowed: allow }); showToast(allow?'Akses diaktifkan.':'Akses dinonaktifkan.'); }
-            catch (err) { showToast(formatFirebaseError(err)); }
+            try { await usersCol.doc(email).update({ allowed: allow }); showToast(allow?'Akses diaktifkan.':'Akses dinonaktifkan.', 'success'); }
+            catch (err) { showToast(formatFirebaseError(err), 'error'); }
         }
         async function adminDeleteStudent(email) {
             if(!confirm(`Hapus permanen akun ${email}?`)) return;
             try { if(currentInspectEmail===email) closeModal('inspectModal'); await usersCol.doc(email).delete(); showToast('Akun dihapus.'); }
-            catch (err) { showToast(formatFirebaseError(err)); }
+            catch (err) { showToast(formatFirebaseError(err), 'error'); }
         }
         async function adminUpdateConsultStatus(email, id, status) {
             const u = cachedAdminUsers.find(x=>x.email===email); if(!u) return;
-            try { await usersCol.doc(email).update({ consultations: u.consultations.map(c=>c.id===id?{...c,status}:c) }); showToast(`Status diubah ke ${status}.`); }
-            catch (err) { showToast(formatFirebaseError(err)); }
+            try { await usersCol.doc(email).update({ consultations: u.consultations.map(c=>c.id===id?{...c,status}:c) }); showToast(`Status diubah ke ${status}.`, 'success'); }
+            catch (err) { showToast(formatFirebaseError(err), 'error'); }
         }
 
         function openInspectModal(email) { currentInspectEmail = email; switchInspectTab('kenali'); renderInspectModal(); document.getElementById('inspectModal').classList.add('open'); }
@@ -1174,8 +1348,7 @@
         }
 
         function renderAdminDashboard() {
-            const users = cachedAdminUsers;
-            const active = users.filter(u=>u.allowed!==false), blocked = users.filter(u=>u.allowed===false);
+            const users = cachedAdminUsers, active = users.filter(u=>u.allowed!==false), blocked = users.filter(u=>u.allowed===false);
             const allConsults = []; users.forEach(u=>(u.consultations||[]).forEach(c=>allConsults.push({...c,email:u.email})));
             document.getElementById('admStatActive').innerText = active.length;
             document.getElementById('admStatBlocked').innerText = blocked.length;
