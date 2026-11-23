@@ -192,6 +192,7 @@
         .modal-head { background: linear-gradient(135deg,#183B6B,#2B62A8); color: #fff; padding: 18px 22px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
         .modal-close { background: rgba(255,255,255,0.2); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; font-size: 17px; font-weight: 800; cursor: pointer; }
         .modal-body { padding: 20px 22px; overflow-y: auto; background: var(--pastel-50); flex: 1; }
+        .modal-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
         .modal-pane { display: none; }
         .modal-pane.active { display: block; }
 
@@ -324,7 +325,7 @@
 
                 <div class="auth-panel" id="panelAdmin">
                     <h2 style="font-size:23px; color:var(--navy-950); margin-bottom:4px;">Portal Admin & Guru BK</h2>
-                    <p style="font-size:13px; color:var(--text-sub); margin-bottom:16px;">Pantau progres tiap siswa, kelola akses, dan cek konsultasi masuk.</p>
+                    <p style="font-size:13px; color:var(--text-sub); margin-bottom:16px;">Pantau progres tiap siswa, unduh laporan PDF, kelola akses, dan cek konsultasi masuk.</p>
                     <div id="adminAlert" class="alert-box"></div>
                     <form id="formAdminLogin" novalidate onsubmit="handleAdminLogin(event)">
                         <div class="field"><label for="admUser">Username Admin</label><input type="text" id="admUser" placeholder="Masukkan username admin"></div>
@@ -692,7 +693,7 @@
         <main class="main-area">
             <section id="aview-adm-overview" class="admin-view active">
                 <div class="hero-banner" style="padding:24px 28px;">
-                    <div><div class="auth-chip">Real-Time Cloud Monitoring BK</div><h2 style="font-size:25px; margin-bottom:4px;">Halo, Admin Cera!</h2><p style="margin-bottom:0;">Klik <strong>Cek Progres</strong> pada masing-masing akun siswa untuk memantau seluruh hasil eksplorasinya.</p></div>
+                    <div><div class="auth-chip">Real-Time Cloud Monitoring BK</div><h2 style="font-size:25px; margin-bottom:4px;">Halo, Admin Cera!</h2><p style="margin-bottom:0;">Klik <strong>Cek Progres</strong> untuk melihat detail isian siswa, atau langsung klik <strong>Unduh PDF</strong> untuk menyimpan laporannya.</p></div>
                 </div>
                 <div class="grid-4" style="margin-bottom:18px;">
                     <div class="stat-tile"><div class="val" id="admStatActive">0</div><div class="lbl">Akun Aktif</div></div>
@@ -753,7 +754,7 @@
         </div>
     </div>
 
-    <!-- MODAL DETAIL PROGRES SISWA -->
+    <!-- MODAL DETAIL PROGRES SISWA (ADMIN) -->
     <div class="modal-overlay" id="inspectModal" onclick="if(event.target===this) closeModal('inspectModal')">
         <div class="modal-card">
             <div class="modal-head">
@@ -767,11 +768,20 @@
                 <button class="modal-close" onclick="closeModal('inspectModal')">✕</button>
             </div>
             <div class="modal-body">
-                <div class="pill-group">
-                    <button class="pill-btn active" id="itab-kenali" onclick="switchInspectTab('kenali')">Kenali Diri</button>
-                    <button class="pill-btn" id="itab-banding" onclick="switchInspectTab('banding')">Bandingkan (<span id="icnt-banding">0</span>)</button>
-                    <button class="pill-btn" id="itab-rencana" onclick="switchInspectTab('rencana')">Rencana (<span id="icnt-rencana">0</span>)</button>
-                    <button class="pill-btn" id="itab-konsul" onclick="switchInspectTab('konsul')">Konsultasi (<span id="icnt-konsul">0</span>)</button>
+                <div class="modal-toolbar">
+                    <div class="pill-group" style="margin-bottom:0;">
+                        <button class="pill-btn active" id="itab-kenali" onclick="switchInspectTab('kenali')">Kenali Diri</button>
+                        <button class="pill-btn" id="itab-banding" onclick="switchInspectTab('banding')">Bandingkan (<span id="icnt-banding">0</span>)</button>
+                        <button class="pill-btn" id="itab-rencana" onclick="switchInspectTab('rencana')">Rencana (<span id="icnt-rencana">0</span>)</button>
+                        <button class="pill-btn" id="itab-konsul" onclick="switchInspectTab('konsul')">Konsultasi (<span id="icnt-konsul">0</span>)</button>
+                    </div>
+                    <div style="display:flex; gap:7px; flex-wrap:wrap;">
+                        <button class="btn btn-gold btn-sm" onclick="adminDownloadStudentPDF(currentInspectEmail, this)">
+                            <svg class="ico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Unduh PDF Siswa
+                        </button>
+                        <button class="btn btn-outline btn-sm" onclick="adminPrintStudentPDF(currentInspectEmail)">Cetak PDF</button>
+                    </div>
                 </div>
                 <div id="ipane-kenali" class="modal-pane active"></div>
                 <div id="ipane-banding" class="modal-pane"></div>
@@ -1181,7 +1191,7 @@
             if (await saveCurrentStudentToCloud()) showToast('Permintaan konsultasi terkirim ke Guru BK!', 'success');
         }
 
-        // EKSPOR PDF (SEPERTI CLIENT 4)
+        // EKSPOR PDF (SISWA & ADMIN)
         function buildPdfReportHTML(u) {
             return `
                 <div style="font-family: Arial, Helvetica, sans-serif; color:#162B47; line-height:1.55; font-size:12px; padding:4px;">
@@ -1209,14 +1219,17 @@
                 </div>`;
         }
 
-        async function downloadSummaryPDF(btnEl) {
-            const u = currentStudentData; if (!u) return;
+        async function downloadSummaryPDF(btnEl, targetUser = null, isAdmin = false) {
+            const u = targetUser || currentStudentData; if (!u) return;
             const miss = getMissingSections(u);
-            if (miss.length === 4) { showToast('Belum ada data yang diisi! Lengkapi minimal satu bagian terlebih dahulu.', 'error'); return; }
+            if (miss.length === 4) {
+                showToast(isAdmin ? 'Siswa ini belum mengisi data apa pun untuk diunduh.' : 'Belum ada data yang diisi! Lengkapi minimal satu bagian terlebih dahulu.', 'error');
+                return;
+            }
             if (miss.length > 0) showToast(`Catatan: ${miss.length} bagian belum terisi. Mengunduh data yang tersimpan...`, 'info');
-            else showToast('Menyiapkan file PDF lengkapmu...', 'success');
+            else showToast(isAdmin ? `Menyiapkan file PDF untuk ${u.email}...` : 'Menyiapkan file PDF lengkapmu...', 'success');
 
-            if (typeof html2pdf === 'undefined') { printSummaryPDF(); return; }
+            if (typeof html2pdf === 'undefined') { printSummaryPDF(u, isAdmin); return; }
             const oldText = btnEl ? btnEl.innerHTML : '';
             if (btnEl) { btnEl.disabled = true; btnEl.innerText = 'Membuat PDF...'; }
             try {
@@ -1227,19 +1240,34 @@
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 }).from(buildPdfReportHTML(u)).save();
                 showToast('File PDF berhasil diunduh!', 'success');
-            } catch (err) { printSummaryPDF(); }
+            } catch (err) { printSummaryPDF(u, isAdmin); }
             finally { if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = oldText; } }
         }
 
-        function printSummaryPDF() {
-            const u = currentStudentData; if (!u) return;
-            if (getMissingSections(u).length === 4) { showToast('Belum ada data yang diisi untuk dicetak!', 'error'); return; }
+        function printSummaryPDF(targetUser = null, isAdmin = false) {
+            const u = targetUser || currentStudentData; if (!u) return;
+            if (getMissingSections(u).length === 4) {
+                showToast(isAdmin ? 'Siswa ini belum mengisi data apa pun untuk dicetak.' : 'Belum ada data yang diisi untuk dicetak!', 'error');
+                return;
+            }
             const html = buildPdfReportHTML(u);
             const win = window.open('', '_blank', 'width=860,height=720');
             if (win) {
-                win.document.write(`<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Arah Karier - PDF</title></head><body style="margin:20px;">${html}<script>window.onload=function(){window.print();};<\/script></body></html>`);
+                win.document.write(`<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Arah Karier - ${esc(u.email)}</title></head><body style="margin:20px;">${html}<script>window.onload=function(){window.print();};<\/script></body></html>`);
                 win.document.close();
             } else { document.getElementById('pdf-print-sheet').innerHTML = html; window.print(); }
+        }
+
+        function adminDownloadStudentPDF(email, btnEl) {
+            const u = cachedAdminUsers.find(x => x.email === email);
+            if (!u) { showToast('Data siswa tidak ditemukan.', 'error'); return; }
+            downloadSummaryPDF(btnEl, u, true);
+        }
+
+        function adminPrintStudentPDF(email) {
+            const u = cachedAdminUsers.find(x => x.email === email);
+            if (!u) { showToast('Data siswa tidak ditemukan.', 'error'); return; }
+            printSummaryPDF(u, true);
         }
 
         // RENDER UI SISWA
@@ -1287,7 +1315,6 @@
                 ? `<p style="text-align:center;padding:18px;color:var(--text-muted);font-size:13px;">Belum ada pengajuan konsultasi.</p>`
                 : u.consultations.map(c=>`<div class="row-card ${c.status==='Selesai'?'done':''}"><div><strong>${esc(c.topik)}</strong> <span class="tag tag-navy">${esc(c.status)}</span><p style="font-size:12px;color:var(--text-sub);">${esc(c.tanggal)} • ${esc(c.metode)} (${esc(c.waktu)})</p><p style="font-size:13px;margin-top:5px;">${esc(c.catatan)}</p></div></div>`).join('');
 
-            // Ringkasan Lengkap & Kelengkapan Data
             document.getElementById('finalCompletenessBanner').innerHTML = miss.length === 0
                 ? `<div class="alert-box success" style="display:block;">Selamat! Seluruh 4 bagian data Arah Karier sudah terisi lengkap dan siap diunduh sebagai PDF.</div>`
                 : `<div class="alert-box warn" style="display:block;">Masih ada <strong>${miss.length} bagian data yang belum diisi</strong>. Klik untuk melengkapi:<div class="missing-chip-list">${miss.map(m => `<button type="button" class="missing-chip" onclick="openStudentPage('${m.page}')">+ ${esc(m.label)}</button>`).join('')}</div></div>`;
@@ -1360,7 +1387,10 @@
             document.getElementById('admMonitorList').innerHTML = users.filter(u=>!qMon||u.email.toLowerCase().includes(qMon)).map((u,i)=>`
                 <div class="row-card ${u.allowed===false?'blocked':''}">
                     <div><strong>${i+1}. ${esc(u.email)}</strong> <span class="tag ${u.allowed!==false?'tag-green':'tag-red'}">${u.allowed!==false?'Aktif':'Dinonaktifkan'}</span> <span class="tag tag-navy">Kenali Diri: ${u.kenaliDiri?'Sudah':'Belum'}</span><p style="font-size:12px;color:var(--text-sub);margin-top:3px;">Bandingkan: ${u.comparisons.length} • Rencana: ${u.plans.length} • Konsultasi: ${u.consultations.length}</p></div>
-                    <button class="btn btn-navy btn-sm" onclick="openInspectModal('${esc(u.email)}')">Cek Progres</button>
+                    <div style="display:flex; gap:7px; flex-wrap:wrap;">
+                        <button class="btn btn-navy btn-sm" onclick="openInspectModal('${esc(u.email)}')">Cek Progres</button>
+                        <button class="btn btn-gold btn-sm" onclick="adminDownloadStudentPDF('${esc(u.email)}', this)">Unduh PDF</button>
+                    </div>
                 </div>`).join('') || `<p style="text-align:center;padding:20px;color:var(--text-muted);">Belum ada siswa.</p>`;
 
             document.getElementById('admConsultList').innerHTML = allConsults.map(c=>`
@@ -1373,7 +1403,7 @@
             document.getElementById('admAccessList').innerHTML = users.filter(u=>!qAcc||u.email.toLowerCase().includes(qAcc)).map(u=>`
                 <div class="row-card ${u.allowed===false?'blocked':''}">
                     <div><strong>${esc(u.email)}</strong> <span class="tag ${u.allowed!==false?'tag-green':'tag-red'}">${u.allowed!==false?'Aktif':'Dinonaktifkan'}</span><p style="font-size:12px;color:var(--text-sub);">Terdaftar: ${esc(u.joinedAt)}</p></div>
-                    <div style="display:flex;gap:7px;flex-wrap:wrap;"><button class="btn btn-pastel btn-sm" onclick="openInspectModal('${esc(u.email)}')">Cek Progres</button>${u.allowed!==false?`<button class="btn btn-danger-soft btn-sm" onclick="adminToggleAccess('${esc(u.email)}',false)">Nonaktifkan</button>`:`<button class="btn btn-success-soft btn-sm" onclick="adminToggleAccess('${esc(u.email)}',true)">Aktifkan</button>`}<button class="btn btn-outline btn-sm" onclick="adminDeleteStudent('${esc(u.email)}')">Hapus</button></div>
+                    <div style="display:flex;gap:7px;flex-wrap:wrap;"><button class="btn btn-pastel btn-sm" onclick="openInspectModal('${esc(u.email)}')">Cek Progres</button><button class="btn btn-gold btn-sm" onclick="adminDownloadStudentPDF('${esc(u.email)}', this)">PDF</button>${u.allowed!==false?`<button class="btn btn-danger-soft btn-sm" onclick="adminToggleAccess('${esc(u.email)}',false)">Nonaktifkan</button>`:`<button class="btn btn-success-soft btn-sm" onclick="adminToggleAccess('${esc(u.email)}',true)">Aktifkan</button>`}<button class="btn btn-outline btn-sm" onclick="adminDeleteStudent('${esc(u.email)}')">Hapus</button></div>
                 </div>`).join('') || `<p style="text-align:center;padding:20px;color:var(--text-muted);">Belum ada akun.</p>`;
         }
 
