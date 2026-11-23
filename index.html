@@ -1191,61 +1191,141 @@
             if (await saveCurrentStudentToCloud()) showToast('Permintaan konsultasi terkirim ke Guru BK!', 'success');
         }
 
-        // EKSPOR PDF (SISWA & ADMIN)
+        // EKSPOR PDF (SISWA & ADMIN) — RENDER KANVAS TERLIHAT AGAR TIDAK PERNAH LEMBAR PUTIH
         function buildPdfReportHTML(u) {
+            const missCount = getMissingSections(u).length;
+            const doneCount = 4 - missCount;
             return `
-                <div style="font-family: Arial, Helvetica, sans-serif; color:#162B47; line-height:1.55; font-size:12px; padding:4px;">
-                    <div style="background:#183B6B; color:#fff; padding:16px 20px; border-radius:10px; margin-bottom:14px;">
-                        <h1 style="font-size:18px; margin:0 0 4px 0; color:#fff;">RINGKASAN EKSPLORASI ARAH KARIER</h1>
-                        <div style="font-size:11.5px; color:#E2F0FE;">Akun Siswa: <strong>${esc(u.email)}</strong> &nbsp;|&nbsp; Tanggal: ${new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
+                <div style="font-family: Arial, Helvetica, sans-serif; color:#162B47; background:#FFFFFF; line-height:1.55; font-size:12px;">
+                    <div style="background:#183B6B; color:#FFFFFF; padding:16px 20px; border-radius:10px; margin-bottom:14px;">
+                        <h1 style="font-size:18px; margin:0 0 5px 0; color:#FFFFFF;">RINGKASAN EKSPLORASI ARAH KARIER</h1>
+                        <div style="font-size:11.5px; color:#E2F0FE;">Akun Siswa: <strong>${esc(u.email)}</strong> &nbsp;|&nbsp; Status: ${u.allowed!==false?'Aktif':'Dinonaktifkan'} &nbsp;|&nbsp; Progres: ${doneCount}/4 Bagian</div>
+                        <div style="font-size:11px; color:#C6E2FC; margin-top:2px;">Terdaftar: ${esc(u.joinedAt)} &nbsp;|&nbsp; Tanggal Cetak: ${new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
                     </div>
-                    <div style="border:1.5px solid #D8E8F8; border-radius:9px; padding:11px 14px; margin-bottom:10px; page-break-inside:avoid;">
-                        <h3 style="color:#183B6B; font-size:13.5px; margin:0 0 6px 0; border-bottom:1px solid #C6E2FC; padding-bottom:4px;">1. Kenali Diri</h3>
-                        ${u.kenaliDiri ? `<p style="margin:3px 0;"><strong>Minat Utama:</strong> ${esc(u.kenaliDiri.minat)}</p><p style="margin:3px 0;"><strong>Aktivitas Disukai:</strong> ${esc(u.kenaliDiri.aktivitas)}</p><p style="margin:3px 0;"><strong>Kekuatan Diri:</strong> ${esc(u.kenaliDiri.kekuatan)}</p><p style="margin:3px 0;"><strong>Ingin Dikembangkan:</strong> ${esc(u.kenaliDiri.kembang)}</p>` : '<p style="color:#7F95B0;">Belum diisi.</p>'}
+
+                    <div style="border:1.5px solid #D8E8F8; background:#FFFFFF; border-radius:9px; padding:12px 14px; margin-bottom:11px; page-break-inside:avoid;">
+                        <h3 style="color:#183B6B; font-size:13.5px; margin:0 0 7px 0; border-bottom:1px solid #C6E2FC; padding-bottom:4px;">1. Kenali Diri</h3>
+                        ${u.kenaliDiri ? `
+                            <p style="margin:3px 0;"><strong>Minat Utama:</strong> ${esc(u.kenaliDiri.minat)}</p>
+                            <p style="margin:3px 0;"><strong>Aktivitas Disukai:</strong> ${esc(u.kenaliDiri.aktivitas)}</p>
+                            <p style="margin:3px 0;"><strong>Kekuatan Diri:</strong> ${esc(u.kenaliDiri.kekuatan)}</p>
+                            <p style="margin:3px 0;"><strong>Ingin Dikembangkan:</strong> ${esc(u.kenaliDiri.kembang)}</p>
+                            <p style="margin:4px 0 0 0; font-size:10.5px; color:#546B87;">Terakhir diperbarui: ${esc(u.kenaliDiri.updatedAt || '-')}</p>
+                        ` : '<p style="margin:3px 0; color:#7F95B0;">Belum diisi oleh siswa.</p>'}
                     </div>
-                    <div style="border:1.5px solid #D8E8F8; border-radius:9px; padding:11px 14px; margin-bottom:10px; page-break-inside:avoid;">
-                        <h3 style="color:#183B6B; font-size:13.5px; margin:0 0 6px 0; border-bottom:1px solid #C6E2FC; padding-bottom:4px;">2. Bandingkan Pilihan</h3>
-                        ${u.comparisons.length ? `<ul style="margin:4px 0 0 18px; padding:0;">${u.comparisons.map(c=>`<li style="margin-bottom:5px;"><strong>${esc(c.nama)}</strong> (${esc(c.minat)}) — Syarat: ${esc(c.syarat)} | Biaya: ${esc(c.biaya)} | Lokasi: ${esc(c.lokasi)} | Tenggat: ${esc(c.tenggat)} | Info dicari: ${esc(c.info)}</li>`).join('')}</ul>` : '<p style="color:#7F95B0;">Belum ada pilihan dibandingkan.</p>'}
+
+                    <div style="border:1.5px solid #D8E8F8; background:#FFFFFF; border-radius:9px; padding:12px 14px; margin-bottom:11px; page-break-inside:avoid;">
+                        <h3 style="color:#183B6B; font-size:13.5px; margin:0 0 7px 0; border-bottom:1px solid #C6E2FC; padding-bottom:4px;">2. Bandingkan Pilihan (${u.comparisons.length} Pilihan)</h3>
+                        ${u.comparisons.length ? `
+                            <table style="width:100%; border-collapse:collapse; font-size:11px; margin-top:4px;">
+                                <thead>
+                                    <tr style="background:#E2F0FE; color:#0F2544;">
+                                        <th style="border:1px solid #C6E2FC; padding:6px; text-align:left;">Pilihan / Jalur</th>
+                                        <th style="border:1px solid #C6E2FC; padding:6px; text-align:left;">Minat</th>
+                                        <th style="border:1px solid #C6E2FC; padding:6px; text-align:left;">Syarat & Biaya</th>
+                                        <th style="border:1px solid #C6E2FC; padding:6px; text-align:left;">Lokasi & Tenggat</th>
+                                        <th style="border:1px solid #C6E2FC; padding:6px; text-align:left;">Info Perlu Dicari</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${u.comparisons.map(c => `
+                                        <tr>
+                                            <td style="border:1px solid #D8E8F8; padding:6px;"><strong>${esc(c.nama)}</strong></td>
+                                            <td style="border:1px solid #D8E8F8; padding:6px;">${esc(c.minat)}</td>
+                                            <td style="border:1px solid #D8E8F8; padding:6px;">Syarat: ${esc(c.syarat)}<br>Biaya: ${esc(c.biaya)}</td>
+                                            <td style="border:1px solid #D8E8F8; padding:6px;">${esc(c.lokasi)}<br>(${esc(c.tenggat)})</td>
+                                            <td style="border:1px solid #D8E8F8; padding:6px;">${esc(c.info)}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        ` : '<p style="margin:3px 0; color:#7F95B0;">Belum ada pilihan yang dibandingkan.</p>'}
                     </div>
-                    <div style="border:1.5px solid #D8E8F8; border-radius:9px; padding:11px 14px; margin-bottom:10px; page-break-inside:avoid;">
-                        <h3 style="color:#183B6B; font-size:13.5px; margin:0 0 6px 0; border-bottom:1px solid #C6E2FC; padding-bottom:4px;">3. Rencana Langkah</h3>
-                        ${u.plans.length ? `<ul style="margin:4px 0 0 18px; padding:0;">${u.plans.map(p=>`<li style="margin-bottom:5px;"><strong>${esc(p.tujuan)}</strong> [${p.done?'Selesai':'Berjalan'}] — Tindakan: ${esc(p.tindakan)} | Tenggat: ${esc(p.tenggat)} | Dukungan: ${esc(p.dukungan)} | Plan B: ${esc(p.alternatif)}</li>`).join('')}</ul>` : '<p style="color:#7F95B0;">Belum ada rencana langkah.</p>'}
+
+                    <div style="border:1.5px solid #D8E8F8; background:#FFFFFF; border-radius:9px; padding:12px 14px; margin-bottom:11px; page-break-inside:avoid;">
+                        <h3 style="color:#183B6B; font-size:13.5px; margin:0 0 7px 0; border-bottom:1px solid #C6E2FC; padding-bottom:4px;">3. Rencana Langkah (${u.plans.length} Rencana)</h3>
+                        ${u.plans.length ? `<ul style="margin:4px 0 0 18px; padding:0;">${u.plans.map(p=>`<li style="margin-bottom:6px;"><strong>${esc(p.tujuan)}</strong> [${p.done?'Selesai':'Berjalan'}]<br>Tindakan Terdekat: ${esc(p.tindakan)} | Tenggat: ${esc(p.tenggat)}<br>Dukungan: ${esc(p.dukungan)} | Alternatif (Plan B): ${esc(p.alternatif)}</li>`).join('')}</ul>` : '<p style="margin:3px 0; color:#7F95B0;">Belum ada rencana langkah.</p>'}
                     </div>
-                    <div style="border:1.5px solid #D8E8F8; border-radius:9px; padding:11px 14px; margin-bottom:8px; page-break-inside:avoid;">
-                        <h3 style="color:#183B6B; font-size:13.5px; margin:0 0 6px 0; border-bottom:1px solid #C6E2FC; padding-bottom:4px;">4. Riwayat Konsultasi BK</h3>
-                        ${u.consultations.length ? `<ul style="margin:4px 0 0 18px; padding:0;">${u.consultations.map(c=>`<li style="margin-bottom:4px;"><strong>${esc(c.topik)}</strong> [${esc(c.status)}] — ${esc(c.tanggal)}, ${esc(c.metode)} (${esc(c.waktu)}): ${esc(c.catatan)}</li>`).join('')}</ul>` : '<p style="color:#7F95B0;">Belum ada pengajuan konsultasi.</p>'}
+
+                    <div style="border:1.5px solid #D8E8F8; background:#FFFFFF; border-radius:9px; padding:12px 14px; margin-bottom:8px; page-break-inside:avoid;">
+                        <h3 style="color:#183B6B; font-size:13.5px; margin:0 0 7px 0; border-bottom:1px solid #C6E2FC; padding-bottom:4px;">4. Riwayat Konsultasi BK (${u.consultations.length} Pengajuan)</h3>
+                        ${u.consultations.length ? `<ul style="margin:4px 0 0 18px; padding:0;">${u.consultations.map(c=>`<li style="margin-bottom:6px;"><strong>${esc(c.nama)}</strong> — <strong>${esc(c.topik)}</strong> [${esc(c.status)}]<br>Tanggal: ${esc(c.tanggal)} | Layanan: ${esc(c.metode)} (${esc(c.waktu)})<br>Pertimbangan: ${esc(c.catatan)}</li>`).join('')}</ul>` : '<p style="margin:3px 0; color:#7F95B0;">Belum ada pengajuan konsultasi.</p>'}
                     </div>
+
                     <p style="text-align:center; font-size:10.5px; color:#546B87; margin-top:10px;">&copy; 2026 Arah Karier — Media Bimbingan dan Konseling Bidang Karier</p>
                 </div>`;
         }
 
+        async function getFreshUserRecordForExport(fallbackUser, isAdmin) {
+            if (!fallbackUser?.email) return fallbackUser;
+            if (!isAdmin) return fallbackUser;
+            try {
+                const snap = await usersCol.doc(fallbackUser.email).get();
+                if (snap.exists) return normalizeRecord(fallbackUser.email, snap.data());
+            } catch (e) { console.warn('Menggunakan data cache lokal:', e); }
+            return fallbackUser;
+        }
+
         async function downloadSummaryPDF(btnEl, targetUser = null, isAdmin = false) {
-            const u = targetUser || currentStudentData; if (!u) return;
+            const rawUser = targetUser || currentStudentData;
+            if (!rawUser) return;
+
+            const oldText = btnEl ? btnEl.innerHTML : '';
+            if (btnEl) { btnEl.disabled = true; btnEl.innerText = 'Memuat Data...'; }
+
+            const u = await getFreshUserRecordForExport(rawUser, isAdmin);
             const miss = getMissingSections(u);
+
             if (miss.length === 4) {
+                if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = oldText; }
                 showToast(isAdmin ? 'Siswa ini belum mengisi data apa pun untuk diunduh.' : 'Belum ada data yang diisi! Lengkapi minimal satu bagian terlebih dahulu.', 'error');
                 return;
             }
+
             if (miss.length > 0) showToast(`Catatan: ${miss.length} bagian belum terisi. Mengunduh data yang tersimpan...`, 'info');
             else showToast(isAdmin ? `Menyiapkan file PDF untuk ${u.email}...` : 'Menyiapkan file PDF lengkapmu...', 'success');
 
-            if (typeof html2pdf === 'undefined') { printSummaryPDF(u, isAdmin); return; }
-            const oldText = btnEl ? btnEl.innerHTML : '';
-            if (btnEl) { btnEl.disabled = true; btnEl.innerText = 'Membuat PDF...'; }
+            if (typeof html2pdf === 'undefined') {
+                if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = oldText; }
+                printSummaryPDF(u, isAdmin);
+                return;
+            }
+
+            if (btnEl) btnEl.innerText = 'Membuat PDF...';
+
+            // Buat overlay kanvas aktif di posisi (0,0) agar html2canvas selalu merender penuh (tidak pernah lembar putih)
+            const host = document.createElement('div');
+            host.style.cssText = 'position:fixed; inset:0; z-index:99999; background:rgba(15,37,68,0.68); display:flex; justify-content:center; align-items:flex-start; overflow-y:auto; padding:24px 12px;';
+            const renderTarget = document.createElement('div');
+            renderTarget.style.cssText = 'width:720px; max-width:100%; background:#FFFFFF; color:#162B47; padding:20px; border-radius:12px; box-shadow:0 20px 50px rgba(0,0,0,0.3);';
+            renderTarget.innerHTML = buildPdfReportHTML(u);
+            host.appendChild(renderTarget);
+            document.body.appendChild(host);
+
             try {
+                await new Promise(resolve => setTimeout(resolve, 150));
                 const safeName = u.email.split('@')[0].replace(/[^a-z0-9_-]/gi, '_');
                 await html2pdf().set({
-                    margin: [10, 10, 10, 10], filename: `Arah_Karier_${safeName}.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true },
+                    margin: [10, 10, 10, 10],
+                    filename: `Arah_Karier_${safeName}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, scrollX: 0, scrollY: 0, backgroundColor: '#FFFFFF' },
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                }).from(buildPdfReportHTML(u)).save();
+                }).from(renderTarget).save();
                 showToast('File PDF berhasil diunduh!', 'success');
-            } catch (err) { printSummaryPDF(u, isAdmin); }
-            finally { if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = oldText; } }
+            } catch (err) {
+                console.error('Gagal membuat PDF via html2pdf:', err);
+                printSummaryPDF(u, isAdmin);
+            } finally {
+                host.remove();
+                if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = oldText; }
+            }
         }
 
-        function printSummaryPDF(targetUser = null, isAdmin = false) {
-            const u = targetUser || currentStudentData; if (!u) return;
+        async function printSummaryPDF(targetUser = null, isAdmin = false) {
+            const rawUser = targetUser || currentStudentData;
+            if (!rawUser) return;
+            const u = await getFreshUserRecordForExport(rawUser, isAdmin);
             if (getMissingSections(u).length === 4) {
                 showToast(isAdmin ? 'Siswa ini belum mengisi data apa pun untuk dicetak.' : 'Belum ada data yang diisi untuk dicetak!', 'error');
                 return;
@@ -1253,9 +1333,12 @@
             const html = buildPdfReportHTML(u);
             const win = window.open('', '_blank', 'width=860,height=720');
             if (win) {
-                win.document.write(`<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Arah Karier - ${esc(u.email)}</title></head><body style="margin:20px;">${html}<script>window.onload=function(){window.print();};<\/script></body></html>`);
+                win.document.write(`<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Arah Karier - ${esc(u.email)}</title></head><body style="margin:20px; background:#fff;">${html}<script>window.onload=function(){window.print();};<\/script></body></html>`);
                 win.document.close();
-            } else { document.getElementById('pdf-print-sheet').innerHTML = html; window.print(); }
+            } else {
+                document.getElementById('pdf-print-sheet').innerHTML = html;
+                window.print();
+            }
         }
 
         function adminDownloadStudentPDF(email, btnEl) {
@@ -1361,17 +1444,18 @@
         function switchInspectTab(t) { ['kenali','banding','rencana','konsul'].forEach(k=>{ document.getElementById(`itab-${k}`).classList.toggle('active',k===t); document.getElementById(`ipane-${k}`).classList.toggle('active',k===t); }); }
         function renderInspectModal() {
             const u = cachedAdminUsers.find(x=>x.email===currentInspectEmail); if(!u) return;
+            const filledCount = 4 - getMissingSections(u).length;
             document.getElementById('insEmail').innerText = u.email;
             document.getElementById('insStatusTag').className = `tag ${u.allowed!==false?'tag-green':'tag-red'}`;
             document.getElementById('insStatusTag').innerText = u.allowed!==false?'Akses Aktif':'Dinonaktifkan';
-            document.getElementById('insMeta').innerText = `Bergabung ${u.joinedAt} • ${u.comparisons.length} perbandingan • ${u.plans.length} rencana`;
+            document.getElementById('insMeta').innerText = `Bergabung ${u.joinedAt} • Progres ${filledCount}/4 bagian • ${u.comparisons.length} perbandingan • ${u.plans.length} rencana`;
             document.getElementById('icnt-banding').innerText = u.comparisons.length;
             document.getElementById('icnt-rencana').innerText = u.plans.length;
             document.getElementById('icnt-konsul').innerText = u.consultations.length;
             document.getElementById('ipane-kenali').innerHTML = u.kenaliDiri ? `<div class="grid-2"><div class="stat-tile" style="text-align:left;"><div class="lbl">Minat</div><p style="font-size:13px;margin-top:4px;">${esc(u.kenaliDiri.minat)}</p></div><div class="stat-tile" style="text-align:left;"><div class="lbl">Aktivitas</div><p style="font-size:13px;margin-top:4px;">${esc(u.kenaliDiri.aktivitas)}</p></div><div class="stat-tile" style="text-align:left;"><div class="lbl">Kekuatan</div><p style="font-size:13px;margin-top:4px;">${esc(u.kenaliDiri.kekuatan)}</p></div><div class="stat-tile" style="text-align:left;"><div class="lbl">Dikembangkan</div><p style="font-size:13px;margin-top:4px;">${esc(u.kenaliDiri.kembang)}</p></div></div>` : `<p style="text-align:center;padding:20px;color:var(--text-muted);">Belum mengisi Kenali Diri.</p>`;
             document.getElementById('ipane-banding').innerHTML = u.comparisons.length ? u.comparisons.map(c=>`<div class="row-card" style="background:#fff;"><div><strong>${esc(c.nama)}</strong> (${esc(c.minat)})<p style="font-size:12.5px;color:var(--text-sub);">Syarat: ${esc(c.syarat)} • Biaya: ${esc(c.biaya)} • Lokasi: ${esc(c.lokasi)} • Tenggat: ${esc(c.tenggat)} • Info: ${esc(c.info)}</p></div></div>`).join('') : `<p style="text-align:center;padding:20px;color:var(--text-muted);">Belum ada perbandingan.</p>`;
-            document.getElementById('ipane-rencana').innerHTML = u.plans.length ? u.plans.map(p=>`<div class="row-card" style="background:#fff;"><div><strong>${esc(p.tujuan)}</strong> (${p.done?'Selesai':'Berjalan'})<p style="font-size:12.5px;color:var(--text-sub);">Tindakan: ${esc(p.tindakan)} • Tenggat: ${esc(p.tenggat)} • Plan B: ${esc(p.alternatif)}</p></div></div>`).join('') : `<p style="text-align:center;padding:20px;color:var(--text-muted);">Belum ada rencana.</p>`;
-            document.getElementById('ipane-konsul').innerHTML = u.consultations.length ? u.consultations.map(c=>`<div class="row-card" style="background:#fff;"><div style="flex:1;"><strong>${esc(c.topik)}</strong><p style="font-size:12px;color:var(--text-sub);">${esc(c.nama)} • ${esc(c.tanggal)} (${esc(c.waktu)})</p><p style="font-size:13px;margin-top:4px;">${esc(c.catatan)}</p></div><select onchange="adminUpdateConsultStatus('${esc(u.email)}',${c.id},this.value)" style="padding:6px 9px;border-radius:9px;border:2px solid var(--border);font-size:12px;font-weight:700;"><option value="Menunggu" ${c.status==='Menunggu'?'selected':''}>Menunggu</option><option value="Dijadwalkan" ${c.status==='Dijadwalkan'?'selected':''}>Dijadwalkan</option><option value="Selesai" ${c.status==='Selesai'?'selected':''}>Selesai</option></select></div>`).join('') : `<p style="text-align:center;padding:20px;color:var(--text-muted);">Belum ada konsultasi.</p>`;
+            document.getElementById('ipane-rencana').innerHTML = u.plans.length ? u.plans.map(p=>`<div class="row-card ${p.done?'done':''}" style="background:#fff;"><div><strong>${esc(p.tujuan)}</strong> (${p.done?'Selesai':'Berjalan'})<p style="font-size:12.5px;color:var(--text-sub);">Tindakan: ${esc(p.tindakan)} • Tenggat: ${esc(p.tenggat)} • Dukungan: ${esc(p.dukungan)} • Plan B: ${esc(p.alternatif)}</p></div></div>`).join('') : `<p style="text-align:center;padding:20px;color:var(--text-muted);">Belum ada rencana.</p>`;
+            document.getElementById('ipane-konsul').innerHTML = u.consultations.length ? u.consultations.map(c=>`<div class="row-card ${c.status==='Selesai'?'done':''}" style="background:#fff;"><div style="flex:1;"><strong>${esc(c.topik)}</strong> <span class="tag tag-navy">${esc(c.status)}</span><p style="font-size:12px;color:var(--text-sub);">${esc(c.nama)} • ${esc(c.tanggal)} (${esc(c.waktu)})</p><p style="font-size:13px;margin-top:4px;">${esc(c.catatan)}</p></div><select onchange="adminUpdateConsultStatus('${esc(u.email)}',${c.id},this.value)" style="padding:6px 9px;border-radius:9px;border:2px solid var(--border);font-size:12px;font-weight:700;"><option value="Menunggu" ${c.status==='Menunggu'?'selected':''}>Menunggu</option><option value="Dijadwalkan" ${c.status==='Dijadwalkan'?'selected':''}>Dijadwalkan</option><option value="Selesai" ${c.status==='Selesai'?'selected':''}>Selesai</option></select></div>`).join('') : `<p style="text-align:center;padding:20px;color:var(--text-muted);">Belum ada konsultasi.</p>`;
         }
 
         function renderAdminDashboard() {
@@ -1384,14 +1468,16 @@
             document.getElementById('admQuotaLabel').innerText = `${active.length}/${MAX_USERS}`;
 
             const qMon = (document.getElementById('admSearchMonitor')?.value||'').toLowerCase();
-            document.getElementById('admMonitorList').innerHTML = users.filter(u=>!qMon||u.email.toLowerCase().includes(qMon)).map((u,i)=>`
-                <div class="row-card ${u.allowed===false?'blocked':''}">
-                    <div><strong>${i+1}. ${esc(u.email)}</strong> <span class="tag ${u.allowed!==false?'tag-green':'tag-red'}">${u.allowed!==false?'Aktif':'Dinonaktifkan'}</span> <span class="tag tag-navy">Kenali Diri: ${u.kenaliDiri?'Sudah':'Belum'}</span><p style="font-size:12px;color:var(--text-sub);margin-top:3px;">Bandingkan: ${u.comparisons.length} • Rencana: ${u.plans.length} • Konsultasi: ${u.consultations.length}</p></div>
+            document.getElementById('admMonitorList').innerHTML = users.filter(u=>!qMon||u.email.toLowerCase().includes(qMon)).map((u,i)=>{
+                const filledCount = 4 - getMissingSections(u).length;
+                return `<div class="row-card ${u.allowed===false?'blocked':''}">
+                    <div><strong>${i+1}. ${esc(u.email)}</strong> <span class="tag ${u.allowed!==false?'tag-green':'tag-red'}">${u.allowed!==false?'Aktif':'Dinonaktifkan'}</span> <span class="tag ${filledCount===4?'tag-green':'tag-navy'}">Progres: ${filledCount}/4</span><p style="font-size:12px;color:var(--text-sub);margin-top:3px;">Kenali Diri: ${u.kenaliDiri?'Sudah':'Belum'} • Bandingkan: ${u.comparisons.length} • Rencana: ${u.plans.length} • Konsultasi: ${u.consultations.length}</p></div>
                     <div style="display:flex; gap:7px; flex-wrap:wrap;">
                         <button class="btn btn-navy btn-sm" onclick="openInspectModal('${esc(u.email)}')">Cek Progres</button>
                         <button class="btn btn-gold btn-sm" onclick="adminDownloadStudentPDF('${esc(u.email)}', this)">Unduh PDF</button>
                     </div>
-                </div>`).join('') || `<p style="text-align:center;padding:20px;color:var(--text-muted);">Belum ada siswa.</p>`;
+                </div>`;
+            }).join('') || `<p style="text-align:center;padding:20px;color:var(--text-muted);">Belum ada siswa.</p>`;
 
             document.getElementById('admConsultList').innerHTML = allConsults.map(c=>`
                 <div class="row-card ${c.status==='Selesai'?'done':''}">
